@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace aMAZEing
 {
-    public class DatabaseContext : Microsoft.EntityFrameworkCore.DbContext
+    public class DatabaseContext : DbContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {

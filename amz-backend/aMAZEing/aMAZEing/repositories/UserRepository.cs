@@ -47,5 +47,11 @@ namespace aMAZEing.repositories
         {
             return _context.Users.ToList();
         }
+
+        public void Delete(Guid id)
+        {
+            _context.Users.Remove(FindById(id));
+            _context.SaveChanges();
+        }
     }
 }
