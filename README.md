@@ -6,10 +6,10 @@
 
 #### Developers:
 - Razvan Gabriel Apostu
-- Olariu Leonard
-- Badarau Bogdan
-- Popa Dorian
-- Mocanu Alexandru
+- Leonard Olariu
+- Bogdan Badarau
+- Dorian Popa
+- Alexandru Mocanu
 
 #### Description:
 To be added
