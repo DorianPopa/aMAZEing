@@ -7,8 +7,8 @@
 #### Developers:
 - Razvan Gabriel Apostu
 - Leonard Olariu
-- Bogdan Badarau
 - Dorian Popa
+- Bogdan Badarau
 - Alexandru Mocanu
 
 #### Description:
