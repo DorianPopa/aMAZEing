@@ -15,7 +15,7 @@ namespace aMAZEing.repositories.Tests
         [ClassInitialize()]
         public static void ClassSetUp(TestContext context)
         {
-            var logger = getUserRepositoryLogger();
+            var logger = GetUserRepositoryLogger();
             sutUserRepository = GetInMemoryUserRepository(logger);
         }
 
@@ -31,7 +31,7 @@ namespace aMAZEing.repositories.Tests
             return new UserRepository(logger, databaseContext);
         }
 
-        private static ILogger<UserRepository> getUserRepositoryLogger()
+        private static ILogger<UserRepository> GetUserRepositoryLogger()
         {
             var serviceProvider = new ServiceCollection()
                 .AddLogging()

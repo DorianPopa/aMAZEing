@@ -25,7 +25,7 @@ namespace aMAZEing.models
         }
 
         [Required]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [Required]
         [Index(IsUnique = true)]

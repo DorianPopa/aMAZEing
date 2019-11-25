@@ -11,13 +11,18 @@ namespace aMAZEing.repositories
         private readonly ILogger<UserRepository> _logger;
         private readonly DatabaseContext _context;
 
+        public UserRepository()
+        {
+
+        }
+
         public UserRepository(ILogger<UserRepository> logger, DatabaseContext context)
         {
             _logger = logger;
             _context = context;
         }
 
-        public User Create(User user)
+        public virtual User Create(User user)
         {
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -33,22 +38,22 @@ namespace aMAZEing.repositories
             return null;
         }
 
-        public User FindById(Guid id)
+        public virtual User FindById(Guid id)
         {
             return _context.Users.FirstOrDefault(u => u.Id == id);
         }
 
-        public User FindByUsername(String username)
+        public virtual User FindByUsername(String username)
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }
 
-        public List<User> GetAll()
+        public virtual List<User> GetAll()
         {
             return _context.Users.ToList();
         }
 
-        public void Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
             _context.Users.Remove(FindById(id));
             _context.SaveChanges();
