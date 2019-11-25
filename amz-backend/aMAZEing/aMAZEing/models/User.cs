@@ -29,9 +29,9 @@ namespace aMAZEing.models
 
         [Required]
         [Index(IsUnique = true)]
-        public string Username { get; set; }
+        public String Username { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public String Password { get; set; }
     }
 }

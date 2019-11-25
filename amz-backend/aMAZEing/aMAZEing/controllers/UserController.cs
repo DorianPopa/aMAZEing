@@ -1,4 +1,5 @@
 ﻿using System;
+using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +21,14 @@ namespace aMAZEing.controllers
         }
 
         [HttpPost]
-        public ActionResult<Guid> CreateUser([FromBody] User user)
+        public ActionResult<UserDTO> CreateUser([FromBody] User user)
         {
             Console.WriteLine(user.Username);
             _logger.LogInformation("POST request for saving user with username {0}\n\n", user.Username);
-            Guid id = _userService.CreateUser(user);
+            UserDTO retUserDTO = _userService.CreateUser(user);
 
-            if (id != Guid.Empty)
-                return Ok(id);
+            if (retUserDTO != null)
+                return Ok(retUserDTO);
 
             return BadRequest("Username already in database");
         }

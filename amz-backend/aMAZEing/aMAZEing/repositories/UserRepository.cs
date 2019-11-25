@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using aMAZEing.DTOs;
 using aMAZEing.models;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,7 @@ namespace aMAZEing.repositories
             _context = context;
         }
 
-        public Guid CreateUser(User user)
+        public User CreateUser(User user)
         {
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -25,11 +26,11 @@ namespace aMAZEing.repositories
             if (new Guid(FindById(user.Id).Id.ToString()) == user.Id)
             {
                 _logger.LogInformation("User with id {0} saved into database\n\n", user.Id);
-                return user.Id;
+                return user;
             }
 
             _logger.LogError("Server error! User with id {0} not saved into database\n\n", user.Id);
-            return Guid.Empty;
+            return null;
         }
 
         public User FindById(Guid id)

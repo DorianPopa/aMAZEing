@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.repositories;
 using Microsoft.Extensions.Logging;
@@ -18,15 +19,25 @@ namespace aMAZEing.services
             _userRepository = userRepository;
         }
 
-        public Guid CreateUser(User user)
+        public UserDTO CreateUser(User user)
         {
             User storedUser = User.Create(user.Username, HashPassword(user.Password));
 
             if (_userRepository.FindByUsername(storedUser.Username) == null)
-                return _userRepository.CreateUser(storedUser);
+            {
+                User retUser = _userRepository.CreateUser(storedUser);
+
+                if (retUser == null)
+                    return null;
+
+                return UserDTO.Builder()
+                    .Id(retUser.Id)
+                    .Username(retUser.Username)
+                    .Build();
+            }
 
             _logger.LogError("Username {0} already in database\n\n", storedUser.Username);
-            return Guid.Empty;
+            return null;
         }
 
         private String HashPassword(String password)
