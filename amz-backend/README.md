@@ -1,3 +1,0 @@
-# amz-backend
-
-### .NET API
