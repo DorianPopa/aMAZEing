@@ -11,5 +11,4 @@
 - Bogdan Badarau
 - Alexandru Mocanu
 
-#### Description:
-To be added
+#### Description
