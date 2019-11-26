@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
-  publish="/amz-frontend/build"
-  base = "/amz-frontend/"
+  publish="build"
+  base = "amz-frontend/"
   
 [[redirects]]
   from = "/*"
