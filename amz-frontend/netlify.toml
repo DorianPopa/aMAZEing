@@ -2,3 +2,8 @@
   command = "npm run build"
   publish=""
   base = "/amz-frontend/"
+  
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
