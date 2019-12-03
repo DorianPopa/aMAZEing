@@ -42,7 +42,10 @@ namespace aMAZEing.services.Tests
 
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindByUsername("already.in.db")).Returns(storedUser);
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
+
+            var mazeRepositoryMock = new Mock<MazeRepository>();
+            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
             //Act
             var retUserDto = _sutUserService.CreateUser(user);
@@ -60,7 +63,10 @@ namespace aMAZEing.services.Tests
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindByUsername("server.error")).Returns((User) null);
             userRepositoryMock.Setup(repo => repo.Create(It.IsAny<User>())).Returns((User) null);
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
+
+            var mazeRepositoryMock = new Mock<MazeRepository>();
+            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
             //Act
             var retUserDTO = _sutUserService.CreateUser(userNotSavedIntoDb);
@@ -80,7 +86,10 @@ namespace aMAZEing.services.Tests
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindByUsername("not.in.db")).Returns((User)null);
             userRepositoryMock.Setup(repo => repo.Create(It.IsAny<User>())).Returns(storedUser);
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
+
+            var mazeRepositoryMock = new Mock<MazeRepository>();
+            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
             UserDTO expectUserDto = UserDTO.Builder()
                 .Id(user.UserId)
@@ -102,7 +111,10 @@ namespace aMAZEing.services.Tests
 
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindById(storedUser.UserId)).Returns((User)null);
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
+
+            var mazeRepositoryMock = new Mock<MazeRepository>();
+            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
             //Act
             var retUserDto = _sutUserService.GetUserById(storedUser.UserId);
@@ -119,11 +131,16 @@ namespace aMAZEing.services.Tests
 
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindById(storedUser.UserId)).Returns(storedUser);
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
+
+            var mazeRepositoryMock = new Mock<MazeRepository>();
+            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+            userMazeRepositoryMock.Setup(repo => repo.FindOwnMazesByUserId(It.IsAny<Guid>())).Returns(new List<UserMaze>());
+            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
             UserDTO expectUserDto = UserDTO.Builder()
                 .Id(storedUser.UserId)
                 .Username(storedUser.Username)
+                .OwnMazes(new List<MazeDTO>())
                 .Build();
 
             //Act

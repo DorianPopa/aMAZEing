@@ -27,7 +27,7 @@ namespace aMAZEing.services
 
         public Maze CreateMaze(Maze maze)
         {
-            Maze storedMaze = Maze.Create(maze.Name, maze.Width, maze.Height, maze.State.CompressString(), maze.Solution);
+            Maze storedMaze = Maze.Create(maze.Name, maze.Width, maze.Height, maze.State, maze.Solution);
             Maze retMaze = _mazeRepository.Create(storedMaze);
             
             return retMaze;

@@ -6,6 +6,7 @@ using System.Text;
 using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.repositories;
+using aMAZEing.utils;
 using Microsoft.Extensions.Logging;
 
 namespace aMAZEing.services
@@ -13,12 +14,17 @@ namespace aMAZEing.services
     public class UserService
     {
         private readonly ILogger<UserService> _logger;
-        private readonly UserRepository _userRepository;
 
-        public UserService(ILogger<UserService> logger, UserRepository userRepository)
+        private readonly UserRepository _userRepository;
+        private readonly MazeRepository _mazeRepository;
+        private readonly UserMazeRepository _userMazeRepository;
+
+        public UserService(ILogger<UserService> logger, UserRepository userRepository, MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
+            _mazeRepository = mazeRepository;
+            _userMazeRepository = userMazeRepository;
         }
 
         public UserDTO CreateUser(User user)
@@ -45,10 +51,7 @@ namespace aMAZEing.services
         public List<UserDTO> GetAllUsers()
         {
             return _userRepository.GetAll()
-                .Select(user => UserDTO.Builder()
-                    .Id(user.UserId)
-                    .Username(user.Username)
-                    .Build())
+                .Select(BuildUserDTOFromUser)
                 .ToList();
         }
 
@@ -59,9 +62,37 @@ namespace aMAZEing.services
             if (retUser == null)
                 return null;
 
+            return BuildUserDTOFromUser(retUser);
+        }
+
+        private UserDTO BuildUserDTOFromUser(User user)
+        {
+            user.UserMazes = _userMazeRepository.FindOwnMazesByUserId(user.UserId);
+            List<MazeDTO> ownMazes = new List<MazeDTO>();
+
+            foreach (UserMaze um in user.UserMazes)
+            {
+                Maze m = _mazeRepository.FindById(um.MazeId); 
+                int playersCount = _userMazeRepository.PlayersCountByMazeId(m.MazeId);
+
+                MazeDTO mDTO = MazeDTO.Builder()
+                    .Id(m.MazeId)
+                    .Name(m.Name)
+                    .PlayersCount(playersCount)
+                    .Width(m.Width)
+                    .Height(m.Height)
+                    .State(m.State.DecompressString())
+                    .Solution(m.Solution.DecompressString())
+                    .CreationTime(m.CreationTime)
+                    .Build();
+
+                ownMazes.Add(mDTO);
+            }
+
             return UserDTO.Builder()
-                .Id(retUser.UserId)
-                .Username(retUser.Username)
+                .Id(user.UserId)
+                .Username(user.Username)
+                .OwnMazes(ownMazes)
                 .Build();
         }
 

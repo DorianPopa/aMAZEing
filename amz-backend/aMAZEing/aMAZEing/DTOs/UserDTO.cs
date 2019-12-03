@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace aMAZEing.DTOs
 {
@@ -8,10 +9,13 @@ namespace aMAZEing.DTOs
 
         public String Username { get; private set; }
 
-        public UserDTO(Guid id, String username)
+        public List<MazeDTO> OwnMazes { get; private set; }
+
+        public UserDTO(Guid id, String username, List<MazeDTO> ownMazes)
         {
             Id = id;
             Username = username;
+            OwnMazes = ownMazes;
         }
 
         public static UserBuilder Builder()
@@ -25,9 +29,11 @@ namespace aMAZEing.DTOs
 
             private String BuilderUsername { get; set; }
 
+            public List<MazeDTO> BuilderOwnMazes { get; private set; }
+
             public UserBuilder()
             {
-
+                BuilderOwnMazes = new List<MazeDTO>();
             }
 
             public UserBuilder Id(Guid id)
@@ -42,9 +48,15 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
+            public UserBuilder OwnMazes(List<MazeDTO> ownMazes)
+            {
+                BuilderOwnMazes = ownMazes;
+                return this;
+            }
+
             public UserDTO Build()
             {
-                return new UserDTO(BuilderId, BuilderUsername);
+                return new UserDTO(BuilderId, BuilderUsername, BuilderOwnMazes);
             }
         }
     }

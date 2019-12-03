@@ -35,6 +35,6 @@ namespace aMAZEing.models
         [Required]
         public bool Solved { get; set; }
 
-        public Nullable<int> Accuracy { get; set; }
+        public int? Accuracy { get; set; }
     }
 }
