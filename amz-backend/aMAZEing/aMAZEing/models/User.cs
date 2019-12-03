@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,14 +19,14 @@ namespace aMAZEing.models
 
             return new User
             {
-                Id = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
                 Username = username,
                 Password = password
             };
         }
 
         [Required]
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         [Index(IsUnique = true)]
@@ -33,5 +34,7 @@ namespace aMAZEing.models
 
         [Required]
         public String Password { get; set; }
+
+        public virtual ICollection<UserMaze> UserMazes { get; set; }
     }
 }

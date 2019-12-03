@@ -28,7 +28,12 @@ namespace aMAZEing
             services.AddControllers();
 
             services.AddScoped<UserService>();
+            services.AddScoped<MazeService>();
+            services.AddScoped<IAlgorithmService, BFS_Service>();
+
             services.AddScoped<UserRepository>();
+            services.AddScoped<MazeRepository>();
+            services.AddScoped<UserMazeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

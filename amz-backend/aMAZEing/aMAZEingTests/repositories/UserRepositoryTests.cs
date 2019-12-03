@@ -60,9 +60,9 @@ namespace aMAZEing.repositories.Tests
         public void Create_ShoulSaveAndReturnGivenUser()
         {
             User user = sutUserRepository.Create(User.Create("_testUsername", "_testPassword"));
-            Assert.AreEqual(user, sutUserRepository.FindById(user.Id));
+            Assert.AreEqual(user, sutUserRepository.FindById(user.UserId));
 
-            sutUserRepository.Delete(user.Id);
+            sutUserRepository.Delete(user.UserId);
         }
 
         [TestMethod()]
@@ -80,8 +80,8 @@ namespace aMAZEing.repositories.Tests
         [TestCleanup()]
         public void TestCleanUp()
         {
-            sutUserRepository.Delete(user1.Id);
-            sutUserRepository.Delete(user2.Id);
+            sutUserRepository.Delete(user1.UserId);
+            sutUserRepository.Delete(user2.UserId);
         }
     }
 }

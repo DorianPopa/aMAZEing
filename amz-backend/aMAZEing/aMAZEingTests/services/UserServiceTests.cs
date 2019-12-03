@@ -38,7 +38,7 @@ namespace aMAZEing.services.Tests
             //Arrange
             User user = User.Create("user.in.db", "my_Pass");
             User storedUser = User.Create("user.in.db", "8F59105B5953EF266DD8E1429C9EA5EDC8BCD0B4BECB4404C15A606EE5373520");
-            storedUser.Id = user.Id;
+            storedUser.UserId = user.UserId;
 
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindByUsername("already.in.db")).Returns(storedUser);
@@ -75,7 +75,7 @@ namespace aMAZEing.services.Tests
             //Arrange
             User user = User.Create("not.in.db", "my_Pass");
             User storedUser = User.Create("not.in.db", "8F59105B5953EF266DD8E1429C9EA5EDC8BCD0B4BECB4404C15A606EE5373520");
-            storedUser.Id = user.Id;
+            storedUser.UserId = user.UserId;
 
             var userRepositoryMock = new Mock<UserRepository>();
             userRepositoryMock.Setup(repo => repo.FindByUsername("not.in.db")).Returns((User)null);
@@ -83,7 +83,7 @@ namespace aMAZEing.services.Tests
             _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
 
             UserDTO expectUserDto = UserDTO.Builder()
-                .Id(user.Id)
+                .Id(user.UserId)
                 .Username(user.Username)
                 .Build();
 
@@ -101,11 +101,11 @@ namespace aMAZEing.services.Tests
             User storedUser = User.Create("not.in.db", "8F59105B5953EF266DD8E1429C9EA5EDC8BCD0B4BECB4404C15A606EE5373520");
 
             var userRepositoryMock = new Mock<UserRepository>();
-            userRepositoryMock.Setup(repo => repo.FindById(storedUser.Id)).Returns((User)null);
+            userRepositoryMock.Setup(repo => repo.FindById(storedUser.UserId)).Returns((User)null);
             _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
 
             //Act
-            var retUserDto = _sutUserService.GetUserById(storedUser.Id);
+            var retUserDto = _sutUserService.GetUserById(storedUser.UserId);
 
             //Assert
             Assert.AreEqual(null, retUserDto);
@@ -118,16 +118,16 @@ namespace aMAZEing.services.Tests
             User storedUser = User.Create("user.in.db", "8F59105B5953EF266DD8E1429C9EA5EDC8BCD0B4BECB4404C15A606EE5373520");
 
             var userRepositoryMock = new Mock<UserRepository>();
-            userRepositoryMock.Setup(repo => repo.FindById(storedUser.Id)).Returns(storedUser);
+            userRepositoryMock.Setup(repo => repo.FindById(storedUser.UserId)).Returns(storedUser);
             _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object);
 
             UserDTO expectUserDto = UserDTO.Builder()
-                .Id(storedUser.Id)
+                .Id(storedUser.UserId)
                 .Username(storedUser.Username)
                 .Build();
 
             //Act
-            var retUserDto = _sutUserService.GetUserById(storedUser.Id);
+            var retUserDto = _sutUserService.GetUserById(storedUser.UserId);
 
             //Assert
             Assert.AreEqual(expectUserDto.ToString(), retUserDto.ToString());

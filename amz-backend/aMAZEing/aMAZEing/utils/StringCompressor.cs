@@ -3,11 +3,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 
-namespace aMAZEing.utility
+namespace aMAZEing.utils
 {
     internal static class StringCompressor
     {
-        public static string CompressString(string text)
+        public static string CompressString(this string text)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
             var memoryStream = new MemoryStream();
@@ -27,7 +27,7 @@ namespace aMAZEing.utility
             return Convert.ToBase64String(gZipBuffer);
         }
 
-        public static string DecompressString(string compressedText)
+        public static string DecompressString(this string compressedText)
         {
             byte[] gZipBuffer = Convert.FromBase64String(compressedText);
             using (var memoryStream = new MemoryStream())

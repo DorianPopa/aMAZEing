@@ -28,19 +28,19 @@ namespace aMAZEing.repositories
             _context.SaveChanges();
 
             // ensure user saved to db
-            if (new Guid(FindById(user.Id).Id.ToString()) == user.Id)
+            if (new Guid(FindById(user.UserId).UserId.ToString()) == user.UserId)
             {
-                _logger.LogInformation("User with Id {0} saved into database\n\n", user.Id);
+                _logger.LogInformation("User with Id {0} saved into database\n\n", user.UserId);
                 return user;
             }
 
-            _logger.LogError("Server error! User with Id {0} not saved into database\n\n", user.Id);
+            _logger.LogError("Server error! User with Id {0} not saved into database\n\n", user.UserId);
             return null;
         }
 
         public virtual User FindById(Guid id)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == id);
+            return _context.Users.FirstOrDefault(u => u.UserId == id);
         }
 
         public virtual User FindByUsername(String username)

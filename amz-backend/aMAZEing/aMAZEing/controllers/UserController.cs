@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.services;
+using aMAZEing.utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,11 +15,13 @@ namespace aMAZEing.controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly UserService _userService;
+        private readonly MazeService _mazeService;
 
-        public UserController(ILogger<UserController> logger, UserService userService)
+        public UserController(ILogger<UserController> logger, UserService userService, MazeService mazeService)
         {
             _logger = logger;
             _userService = userService;
+            _mazeService = mazeService;
         }
 
         [HttpPost]
@@ -28,7 +31,7 @@ namespace aMAZEing.controllers
             UserDTO retUserDto = _userService.CreateUser(user);
 
             if (retUserDto != null)
-                return Ok(retUserDto);
+                return Created("User created", retUserDto);
 
             return BadRequest("Username already in database");
         }
@@ -53,6 +56,19 @@ namespace aMAZEing.controllers
                 return Ok(retUserDto);
 
             return BadRequest("Id not in database");
+        }
+
+        [HttpPost]
+        [Route("{userId}/build/save")]
+        // TODO return MazeDTO
+        public ActionResult<UserMaze> CreateMaze(Guid userId, [FromBody] MazeFE maze)
+        {
+            _logger.LogInformation("POST request for saving maze from user with id {0}\n\n", userId.ToString());
+            UserMaze retUserMaze = _mazeService.CreateMazeByUserId(userId, maze);
+            if(retUserMaze != null)
+                return Created("Maze created", maze);
+            
+            return BadRequest("Invalid maze or userId");
         }
     }
 }

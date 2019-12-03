@@ -7,10 +7,15 @@ namespace aMAZEing
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Maze> Mazes { get; set; }
+
+        public DbSet<UserMaze> UserMazes { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -20,9 +25,15 @@ namespace aMAZEing
         //    }
         //}
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<UserMaze>().HasKey(u => new
+            {
+                u.UserId,
+                u.MazeId
+            });
         }
     }
 }

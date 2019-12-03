@@ -33,7 +33,7 @@ namespace aMAZEing.services
                     return null;
 
                 return UserDTO.Builder()
-                    .Id(retUser.Id)
+                    .Id(retUser.UserId)
                     .Username(retUser.Username)
                     .Build();
             }
@@ -46,7 +46,7 @@ namespace aMAZEing.services
         {
             return _userRepository.GetAll()
                 .Select(user => UserDTO.Builder()
-                    .Id(user.Id)
+                    .Id(user.UserId)
                     .Username(user.Username)
                     .Build())
                 .ToList();
@@ -60,7 +60,7 @@ namespace aMAZEing.services
                 return null;
 
             return UserDTO.Builder()
-                .Id(retUser.Id)
+                .Id(retUser.UserId)
                 .Username(retUser.Username)
                 .Build();
         }
