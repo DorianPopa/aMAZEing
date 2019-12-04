@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.repositories;
 using aMAZEing.utils;
@@ -15,7 +18,8 @@ namespace aMAZEing.services
         private readonly MazeRepository _mazeRepository;
         private readonly UserMazeRepository _userMazeRepository;
 
-        public MazeService(ILogger<MazeService> logger, IAlgorithmService bfs_Service, UserRepository userRepository, MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
+        public MazeService(ILogger<MazeService> logger, IAlgorithmService bfs_Service, UserRepository userRepository,
+            MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
         {
             _logger = logger;
             _bfs_Service = bfs_Service;
@@ -29,7 +33,7 @@ namespace aMAZEing.services
         {
             Maze storedMaze = Maze.Create(maze.Name, maze.Width, maze.Height, maze.State, maze.Solution);
             Maze retMaze = _mazeRepository.Create(storedMaze);
-            
+
             return retMaze;
         }
 
@@ -64,9 +68,47 @@ namespace aMAZEing.services
             {
                 state += point.Value;
             }
-            
-            Maze maze = Maze.Create(mazeFE.Name, mazeFE.Width, mazeFE.Height, state.CompressString(), solution.CompressString());
+
+            Maze maze = Maze.Create(mazeFE.Name, mazeFE.Width, mazeFE.Height, state.CompressString(),
+                solution.CompressString());
             return maze;
+        }
+
+        public List<MazeDTO> GetAllMazes()
+        {
+            return _mazeRepository.GetAll()
+                .Select(BuildMazeDTOFromMaze)
+                .ToList();
+        }
+
+        public MazeDTO GetMazeById(Guid id)
+        {
+            Maze retMaze = _mazeRepository.FindById(id);
+
+            if (retMaze == null)
+                return null;
+
+            return BuildMazeDTOFromMaze(retMaze);
+        }
+
+        private MazeDTO BuildMazeDTOFromMaze(Maze maze)
+        {
+            int playersCount = _userMazeRepository.PlayersCountByMazeId(maze.MazeId);
+            UserMaze userMaze = _userMazeRepository.FindOwnByMazeId(maze.MazeId);
+            User user = _userRepository.FindById(userMaze.UserId);
+
+            return MazeDTO.Builder()
+                .Id(maze.MazeId)
+                .Name(maze.Name)
+                .OwnerId(user.UserId)
+                .Owner(user.Username)
+                .PlayersCount(playersCount)
+                .Width(maze.Width)
+                .Height(maze.Height)
+                .State(maze.State.DecompressString())
+                .Solution(maze.Solution.DecompressString())
+                .CreationTime(maze.CreationTime)
+                .Build();
         }
     }
 }

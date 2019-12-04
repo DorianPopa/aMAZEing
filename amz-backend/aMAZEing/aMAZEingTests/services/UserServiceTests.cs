@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using aMAZEing.services;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.repositories;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;

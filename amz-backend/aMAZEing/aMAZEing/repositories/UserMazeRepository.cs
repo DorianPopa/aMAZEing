@@ -44,6 +44,11 @@ namespace aMAZEing.repositories
             return _context.UserMazes.FirstOrDefault(um => (um.MazeId == mazeId && um.UserId == userId));
         }
 
+        public virtual UserMaze FindOwnByMazeId(Guid mazeId)
+        {
+            return _context.UserMazes.FirstOrDefault(um => (um.MazeId == mazeId && um.State.Equals("OWN")));
+        }
+
         public virtual List<UserMaze> FindOwnMazesByUserId(Guid id)
         {
             return _context.UserMazes.Where(um => um.UserId == id && um.State.Equals("OWN")).ToList();

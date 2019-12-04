@@ -40,9 +40,9 @@ namespace aMAZEing.controllers
         public ActionResult<List<UserDTO>> GetAllUsers()
         {
             _logger.LogInformation("GET request for users list\n\n");
-            List<UserDTO> retListUserDto = _userService.GetAllUsers();
+            List<UserDTO> retListUserDTO = _userService.GetAllUsers();
 
-            return Ok(retListUserDto);
+            return Ok(retListUserDTO);
         }
 
         [HttpGet]
@@ -50,10 +50,10 @@ namespace aMAZEing.controllers
         public ActionResult<UserDTO> GetUserById(Guid id)
         {
             _logger.LogInformation("GET request for user with Id {0}\n\n", id);
-            UserDTO retUserDto = _userService.GetUserById(id);
+            UserDTO retUserDTO = _userService.GetUserById(id);
 
-            if (retUserDto != null)
-                return Ok(retUserDto);
+            if (retUserDTO != null)
+                return Ok(retUserDTO);
 
             return BadRequest("Id not in database");
         }

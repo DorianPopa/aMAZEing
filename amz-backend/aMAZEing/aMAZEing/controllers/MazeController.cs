@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using aMAZEing.DTOs;
 using aMAZEing.models;
 using aMAZEing.services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,22 +22,25 @@ namespace aMAZEing.controllers
         }
 
         [HttpGet]
-        // TODO return List<MazeDTO>
-        // flow not implemented 
-        public ActionResult<List<Maze>> GetAllMazes()
+        public ActionResult<List<MazeDTO>> GetAllMazes()
         {
             _logger.LogInformation("GET request for mazes list\n\n");
-            return Ok();
+            List<MazeDTO> retListMazeDTO = _mazeService.GetAllMazes();
+
+            return Ok(retListMazeDTO);
         }
 
         [HttpGet]
         [Route("{id}")]
-        // TODO return MazeDTO
-        // flow not implemented
-        public ActionResult<List<Maze>> GetMazeById(Guid id)
+        public ActionResult<List<MazeDTO>> GetMazeById(Guid id)
         {
             _logger.LogInformation("GET request for maze with Id {0}\n\n", id);
-            return Ok();
+            MazeDTO retMazeDTO = _mazeService.GetMazeById(id);
+
+            if (retMazeDTO != null)
+                return Ok(retMazeDTO);
+
+            return BadRequest("Id not in database");
         }
     }
 }

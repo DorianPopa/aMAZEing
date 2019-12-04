@@ -10,7 +10,7 @@ namespace aMAZEing.DTOs
 
         public String Name { get; private set; }
 
-        private Guid OwnerId { get; set; }
+        public Guid OwnerId { get; private set; }
 
         public String Owner { get; private set; }
 
