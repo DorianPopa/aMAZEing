@@ -37,8 +37,7 @@ namespace aMAZEing.services
             return retMaze;
         }
 
-        // TODO return MazeDTO
-        public UserMaze CreateMazeByUserId(Guid userId, MazeFE maze)
+        public MazeDTO CreateMazeByUserId(Guid userId, MazeFE maze)
         {
             User user = _userRepository.FindById(userId);
             if (user == null)
@@ -58,7 +57,31 @@ namespace aMAZEing.services
             Maze storedMaze = CreateMaze(mazeBE);
 
             UserMaze userMaze = UserMaze.Create(user, storedMaze);
-            return _userMazeRepository.Create(userMaze);
+            UserMaze retUserMaze = _userMazeRepository.Create(userMaze);
+
+            return MazeDTO.Builder()
+                .Id(storedMaze.MazeId)
+                .Name(storedMaze.Name)
+                .OwnerId(user.UserId)
+                .Owner(user.Username)
+                .PlayersCount(0)
+                .Width(storedMaze.Width)
+                .Height(storedMaze.Height)
+                .State(storedMaze.State.DecompressString())
+                .Solution(storedMaze.Solution.DecompressString())
+                .CreationTime(storedMaze.CreationTime)
+                .Build();
+        }
+
+        public List<Point> Visualize(MazeFE maze, String algorithm)
+        {
+            if (algorithm.ToUpper().Equals("BFS"))
+                return _bfs_Service.Visualize(maze);
+            else
+            {
+                // to be updated
+                return _bfs_Service.Visualize(maze);
+            }
         }
 
         private Maze BuildMazeFromMazeFE(MazeFE mazeFE, String solution)

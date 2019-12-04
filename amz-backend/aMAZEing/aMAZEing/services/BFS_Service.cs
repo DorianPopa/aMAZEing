@@ -10,6 +10,12 @@ namespace aMAZEing.services
     {
         public String ValidateMaze(MazeFE mazeFE)
         {
+            if (mazeFE.PointList.Count() != mazeFE.Width * mazeFE.Height)
+                return null;
+
+            if (mazeFE.PointList.Count(p => p.Value == 1) != 1 || mazeFE.PointList.Count(p => p.Value == 2) != 1)
+                return null;
+
             Point startPoint = new Point();
             Point endPoint = new Point();
 
@@ -81,7 +87,52 @@ namespace aMAZEing.services
 
         public List<Point> Visualize(MazeFE mazeFE)
         {
-            throw new NotImplementedException();
+            if (mazeFE.PointList.Count() != mazeFE.Width * mazeFE.Height)
+                return null;
+
+            if (mazeFE.PointList.Count(p => p.Value == 1) != 1 || mazeFE.PointList.Count(p => p.Value == 2) != 1)
+                return null;
+
+            Point startPoint = new Point();
+            Point endPoint = new Point();
+
+            // generate matrix from mazeFE
+            int[,] matrix = new int[mazeFE.Height, mazeFE.Width];
+            foreach (Point p in mazeFE.PointList)
+            {
+                matrix[p.I, p.J] = 0;
+
+                if (p.Value == 1)
+                {
+                    startPoint.I = p.I;
+                    startPoint.J = p.J;
+                    startPoint.Value = 1;
+                    matrix[p.I, p.J] = 1;
+                }
+                else if (p.Value == 2)
+                {
+                    endPoint.I = p.I;
+                    endPoint.J = p.J;
+                }
+                else if (p.Value == 3)
+                {
+                    matrix[p.I, p.J] = -1;
+                }
+            }
+
+            int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
+            List<Point> visitedPoints = new List<Point>();
+
+            if (matrix[endPoint.I, endPoint.J] == 0)
+                return null; // sol not found
+
+            for (int i = 0; i < mazeFE.Height; ++i)
+                for (int j = 0; j < mazeFE.Width; ++j)
+                    if (res[i, j] > 1 && !(i == endPoint.I && j == endPoint.J))
+                        visitedPoints.Add(new Point(i, j, res[i, j]));
+            
+            visitedPoints.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
+            return visitedPoints;
         }
 
         private int[,] solve(int[,] matrix, Point startPoint, Point endPoint, int matrixWidth, int matrixHeight)

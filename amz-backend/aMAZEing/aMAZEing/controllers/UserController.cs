@@ -60,15 +60,26 @@ namespace aMAZEing.controllers
 
         [HttpPost]
         [Route("{userId}/build/save")]
-        // TODO return MazeDTO
-        public ActionResult<UserMaze> CreateMaze(Guid userId, [FromBody] MazeFE maze)
+        public ActionResult<MazeDTO> CreateMaze(Guid userId, [FromBody] MazeFE maze)
         {
             _logger.LogInformation("POST request for saving maze from user with id {0}\n\n", userId.ToString());
-            UserMaze retUserMaze = _mazeService.CreateMazeByUserId(userId, maze);
-            if(retUserMaze != null)
-                return Created("Maze created", maze);
+            MazeDTO retMazeDTO = _mazeService.CreateMazeByUserId(userId, maze);
+            if(retMazeDTO != null)
+                return Created("Maze created", retMazeDTO);
             
             return BadRequest("Invalid maze or userId");
+        }
+
+        [HttpGet]
+        [Route("{userId}/build/visualize/{algorithm}")]
+        public ActionResult<List<Point>> CreateMaze(Guid userId, String algorithm, [FromBody] MazeFE maze)
+        {
+            _logger.LogInformation("GET request for {0} maze visualizer from user with id {1}\n\n", algorithm, userId.ToString());
+            List<Point> visitedPoints = _mazeService.Visualize(maze, algorithm);
+            if (visitedPoints != null)
+                return Ok(visitedPoints);
+
+            return BadRequest("Invalid maze");
         }
     }
 }

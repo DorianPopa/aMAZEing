@@ -1,4 +1,6 @@
-﻿namespace aMAZEing.utils
+﻿using System;
+
+namespace aMAZEing.utils
 {
     public class Point
     {
