@@ -6,6 +6,8 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+  background-color: $cardBackground;
+  border: 1px solid #f2f2f2;
 
   & > .header {
     display: flex;
@@ -14,21 +16,36 @@
       height: 100%;
       width: 50px;
       background-color: $colorPrimary;
+      clip-path: polygon(0 0, 100% 0, 75% 100%, 0% 100%);
       & > p {
         margin-bottom: 0;
+        text-align: center;
+        color: white;
+        font-weight: 700;
       }
     }
 
     & > .title {
       flex: 1;
+      & > p {
+        margin-bottom: 0;
+        text-align: left;
+        margin-left: 1em;
+        font-weight: 600;
+      }
     }
     & > .playerCount {
       color: $colorPrimary;
+      margin-right: 1em;
     }
   }
 
   & > .footer {
     width: 100%;
     display: flex;
+
+    & > .myButton {
+      flex: 1;
+    }
   }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import Card from "../../components/Maze/Card";
 import PropTypes from "prop-types";
+import Card from "../../components/Maze/Card";
+import Button from "../../components/Button";
+import DashNavBar from "../../components/DashNavBar";
 import "./Dashboard.scss";
 
 class Dashboard extends Component {
@@ -17,7 +19,22 @@ class Dashboard extends Component {
     let i = 0;
     return (
       <div className="dashboard">
-        <p>Sal</p>
+        <DashNavBar />
+        <div className="welcome">
+          <p>Welcome, {this.props.player.name}</p>
+          <div className="stat-card">
+            <p>Your score</p>
+            <p>{this.props.player.points}</p>
+            <p>
+              See Leaderboards <i className="material-icons">right</i>
+            </p>
+          </div>
+          <div className="stat-card">
+            <p>Your mazes</p>
+            <p>{this.props.player.mazeCount}</p>
+            <p>played by {this.props.player.playedCount} users</p>
+          </div>
+        </div>
         <div className="user_mazes">
           {this.getUserMazes(1)
             .slice(0, 4)
