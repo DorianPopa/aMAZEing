@@ -1,0 +1,34 @@
+@import "../../config";
+
+.card {
+  height: 100%;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+
+  & > .header {
+    display: flex;
+
+    & > .number {
+      height: 100%;
+      width: 50px;
+      background-color: $colorPrimary;
+      & > p {
+        margin-bottom: 0;
+      }
+    }
+
+    & > .title {
+      flex: 1;
+    }
+    & > .playerCount {
+      color: $colorPrimary;
+    }
+  }
+
+  & > .footer {
+    width: 100%;
+    display: flex;
+  }
+}
