@@ -4,4 +4,12 @@
     height: 100%;
     object-fit: fill;
   }
+
+  &.left {
+    margin-right: -1px;
+  }
+
+  &.right {
+    margin-left: -1px;
+  }
 }

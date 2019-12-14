@@ -19,7 +19,7 @@ const EdgeLeft = (props) => {
   return (
     <div className="Edge edge left">
       <svg viewBox={`0 0 ${width} ${height}`}>
-        <path d={`M 0 ${height} L ${width} 0 L ${width} ${height}`} />
+        <path d={`M 0 ${height} L ${width - 2} 0 L ${width} 0 L ${width} ${height}`} />
       </svg>
     </div>
   );
@@ -31,7 +31,7 @@ const EdgeRight = (props) => {
   return (
     <div className="Edge edge right">
       <svg viewBox={`0 0 ${width} ${height}`}>
-        <path d={`M 0 ${height} L 0 0 L ${width} 0`} />
+        <path d={`M 0 ${height} L 0 0 L ${width} 0 L 2 ${height}`} />
       </svg>
     </div>
   );

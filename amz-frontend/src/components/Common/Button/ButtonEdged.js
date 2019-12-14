@@ -29,6 +29,7 @@ const ButtonEdged = (props) => {
       data-theme={props.theme}
       data-animate-edge={props.isEdgeAnimated}
       onClick={props.onClick}
+      style={props.style}
     >
       {content}
     </Link>
@@ -38,6 +39,7 @@ const ButtonEdged = (props) => {
       data-theme={props.theme}
       data-animate-edge={props.isEdgeAnimated}
       onClick={props.onClick}
+      style={props.style}
     >
       {content}
     </div>
@@ -58,6 +60,8 @@ ButtonEdged.propTypes = {
   isEdgeAnimated: PropTypes.bool,
 
   to: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.string]),
+
+  style: PropTypes.shape({}),
 };
 
 ButtonEdged.defaultProps = {
@@ -73,6 +77,7 @@ ButtonEdged.defaultProps = {
   isEdgeAnimated: true,
 
   to: null,
+  style: {},
 };
 
 export default ButtonEdged;

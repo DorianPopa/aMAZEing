@@ -45,6 +45,7 @@ class Dashboard extends Component {
             <p>Welcome, {this.state.player.name}</p>
 
             <Button
+              style={{ marginBottom: 10 }}
               type="edged"
               icon={{
                 icon: true,
