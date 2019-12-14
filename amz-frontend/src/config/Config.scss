@@ -1,0 +1,173 @@
+/**
+ * Project values
+ */
+
+$colorPrimary: #5c70d4;
+$colorSecondary: #292b45;
+$colorDark: #1a1b2b;
+$colorBackground: #ffffff;
+$colorBorder: #eeeeee;
+$colorBackgroundCanvas: #fafafa;
+
+$sizeCanvasMaxWidth: 1260px;
+$sizeNavHeight: 76px;
+$sizeCanvasPaddingDashboard: 20px;
+$sizeCanvasPaddingMobile: 30px;
+$sizeSideBarWidth: 80px;
+
+$sizeFooterHeight: 340px;
+$sizeFooterMiniHeight: 80px;
+
+$sizeButtonHeight: 42px;
+
+$sizePiece: 30px;
+
+$fontPrimary: "Ubuntu", sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto";
+$fontSecondary: "Roboto Mono", monospace, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto";
+
+$zIndexPage: 0;
+$zIndexNav: 100;
+
+/**
+ * General Colors
+ */
+
+$colorTable_Blue1: #04befe;
+$colorTable_Blue2: #03a0dc;
+$colorTable_Purple1: #7f00ff;
+$colorTable_Purple2: #e100ff;
+$colorTable_Red1: #f44336;
+$colorTable_Green1: #4caf50;
+$colorTable_Yellow1: #ffeb3b;
+$colorTable_Orange1: #ff9800;
+
+$colorTable_GrayBlue_Black: #40474f;
+$colorTable_GrayBlue_Dark: #8b9aac;
+$colorTable_GrayBlue_Light: #e4e8f0;
+$colorTable_GrayBlue_DarkText: $colorTable_GrayBlue_Dark;
+
+$colorProfileCanvasBorder: lighten($colorTable_GrayBlue_Light, 5%); //#f5f5f5;
+
+@mixin gradient($primary: $colorPrimary, $secondary: $colorSecondary, $angle: -25deg) {
+  background: $primary;
+  background: linear-gradient($angle, $primary, $secondary);
+  background: -webkit-linear-gradient($angle, $primary, $secondary);
+  background: -moz-linear-gradient($angle, $primary, $secondary);
+  background: -o-linear-gradient($angle, $primary, $secondary);
+}
+
+/**
+ * Sizes
+ */
+$col-canvas: $sizeCanvasMaxWidth;
+$col-lg-extended: 1100px;
+$col-lg: 992px;
+$col-md: 768px;
+$col-sm: 500px;
+
+$tablet-big: "all and (max-width : #{$col-lg-extended}) and (min-width : #{$col-lg  + 1})";
+$tablet: "all and (max-width : #{$col-lg}) and (min-width : #{$col-md  + 1})";
+$mobile-big: "all and (max-width : #{$col-md}) and (min-width : #{$col-sm  + 1})";
+$mobile: "all and (max-width : #{$col-sm})";
+
+$top-canvas-big: "all and (max-width : #{$col-canvas})";
+$top-tablet-big: "all and (max-width : #{$col-lg-extended})";
+$top-tablet: "all and (max-width : #{$col-lg})";
+$top-mobile-big: "all and (max-width : #{$col-md})";
+$bottom-mobile-big: "all and (min-width : #{$col-md + 1})";
+$top-mobile: "all and (max-width : #{$col-sm})";
+
+/**
+ * Templates
+ */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@mixin fade-in($duration: 0.2s, $delay: 0s) {
+  animation-name: fade-in;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-duration: $duration;
+  animation-delay: $delay;
+}
+
+@mixin fade-out($duration: 0.2s, $delay: 0s) {
+  animation-name: fade-out;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-duration: $duration;
+  animation-delay: $delay;
+}
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin Container {
+  width: 100%;
+  display: flex;
+
+  & > .content {
+    z-index: 1;
+    width: 100%;
+    max-width: $sizeCanvasMaxWidth;
+    margin: 0 auto;
+    display: flex;
+  }
+}
+
+@mixin Page {
+  @include Container;
+
+  min-height: 100vh;
+  flex-direction: column;
+  background: $colorBackground;
+  z-index: $zIndexPage;
+
+  & > .content {
+    padding: calc(#{$sizeNavHeight} + 25px) $sizeCanvasPaddingDashboard $sizeCanvasPaddingDashboard
+      $sizeCanvasPaddingDashboard;
+  }
+}
+
+/**
+ * Exports
+ */
+
+:export {
+  colorPrimary: $colorPrimary;
+  colorSecondary: $colorSecondary;
+  colorDark: $colorDark;
+  colorBackground: $colorBackground;
+  colorBorder: $colorBorder;
+  colorBackgroundCanvas: $colorBackgroundCanvas;
+
+  colorTable_Blue1: $colorTable_Blue1;
+  colorTable_Blue2: $colorTable_Blue2;
+  colorTable_Purple1: $colorTable_Purple1;
+  colorTable_Purple2: $colorTable_Purple2;
+  colorTable_Red1: $colorTable_Red1;
+  colorTable_Green1: $colorTable_Green1;
+  colorTable_Yellow1: $colorTable_Yellow1;
+  colorTable_Orange1: $colorTable_Orange1;
+
+  sizePiece: $sizePiece;
+}

@@ -1,0 +1,74 @@
+@import "../../../config/Config.scss";
+.Block {
+  grid-column: span 1;
+  grid-row: span 1;
+  position: relative;
+
+  .overlay {
+    fill: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+  }
+
+  &[data-hover="true"] {
+    .overlay {
+      opacity: 1;
+    }
+  }
+
+  .triangle-left {
+    fill: rgba(0, 0, 0, 0);
+  }
+  .triangle-top {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  .triangle-right {
+    fill: rgba(0, 0, 0, 0.2);
+  }
+  .triangle-bottom {
+    fill: rgba(0, 0, 0, 0.3);
+  }
+
+  @mixin type($base: $colorPrimary) {
+    border: 1px solid $base;
+    .main {
+      fill: $base;
+    }
+  }
+
+  @include type($colorPrimary);
+
+  &[data-type="simple"] {
+    @include type($colorPrimary);
+  }
+
+  &[data-type="forbidden"] {
+    @include type($colorTable_Red1);
+  }
+  &[data-type="empty"] {
+    opacity: 0;
+  }
+  &[data-type="start"] {
+    @include type($colorTable_Green1);
+  }
+  &[data-type="finish"] {
+    @include type($colorTable_Yellow1);
+  }
+  &[data-type="solution"] {
+    @include type($colorTable_Orange1);
+  }
+  &[data-type="air"] {
+    @include type(#eeeeee);
+  }
+  &[data-type="map"] {
+    border: 0.5px solid $colorBorder;
+    .main {
+      fill: #ffffff;
+    }
+    .triangle-left,
+    .triangle-bottom,
+    .triangle-right,
+    .triangle-top {
+      display: none;
+    }
+  }
+}

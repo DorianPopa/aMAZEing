@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import CardButton from "./CardButton";
-import Button from "../../components/Button";
 import "./Card.scss";
 
 class Card extends Component {
@@ -27,9 +25,9 @@ class Card extends Component {
           <p>This is a picture of a maze.</p>
         </div>
         <div className="footer">
-          <Button text="View solution" color="white" />
+          {/* <Button text="View solution" color="white" />
           <Button text="Edit" color="white" />
-          <Button text="Remove" color="white" />
+          <Button text="Remove" color="white" /> */}
         </div>
       </div>
     );
