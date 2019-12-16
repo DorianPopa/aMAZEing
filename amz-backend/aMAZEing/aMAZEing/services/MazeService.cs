@@ -73,7 +73,7 @@ namespace aMAZEing.services
                 .Build();
         }
 
-        public List<Point> Visualize(MazeFE maze, String algorithm)
+        public MazeVisualizerDTO Visualize(MazeFE maze, String algorithm)
         {
             if (algorithm.ToUpper().Equals("BFS"))
                 return _bfs_Service.Visualize(maze);

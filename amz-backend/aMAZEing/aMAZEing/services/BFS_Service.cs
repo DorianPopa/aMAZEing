@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using aMAZEing.DTOs;
 using aMAZEing.utils;
 
 namespace aMAZEing.services
@@ -42,19 +43,20 @@ namespace aMAZEing.services
             }
 
             int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
+
+            if (matrix[endPoint.I, endPoint.J] == 0)
+                return null; // sol not found
+
             List<Point> solution = new List<Point>();
 
             int[] di = { -1, 0, 1, 0 };
             int[] dj = { 0, 1, 0, -1 };
 
-            if (endPoint.Value == 0)
-                return null;
-
             // parse solution
             Point currPoint = endPoint;
-            while (!(currPoint.I == startPoint.I && currPoint.J == startPoint.J))
+            while (true)
             {
-                Point nextPoint;
+                Point nextPoint, bestNextPoint = null;
                 for (int i = 0; i <= 3; ++i)
                 {
                     int next_i = currPoint.I + di[i];
@@ -65,9 +67,13 @@ namespace aMAZEing.services
                         nextPoint = new Point(next_i, next_j, res[next_i, next_j]);
 
                         if (nextPoint.Value > 0 && nextPoint.Value < currPoint.Value)
-                            currPoint = nextPoint;
+                            bestNextPoint = nextPoint;
                     }
                 }
+
+                currPoint = bestNextPoint;
+                if (currPoint.I == startPoint.I && currPoint.J == startPoint.J)
+                    break;
 
                 solution.Add(currPoint);
             }
@@ -75,9 +81,6 @@ namespace aMAZEing.services
             StringBuilder retSolution = new StringBuilder(new String('0', mazeFE.Width * mazeFE.Height));
             foreach (Point p in solution)
             {
-                if (p.I == startPoint.I && p.J == startPoint.J)
-                    continue;
-
                 retSolution.Remove(p.I * mazeFE.Width + p.J, 1);
                 retSolution.Insert(p.I * mazeFE.Width + p.J, '1');
             }
@@ -85,7 +88,7 @@ namespace aMAZEing.services
             return retSolution.ToString();
         }
 
-        public List<Point> Visualize(MazeFE mazeFE)
+        public MazeVisualizerDTO Visualize(MazeFE mazeFE)
         {
             if (mazeFE.PointList.Count() != mazeFE.Width * mazeFE.Height)
                 return null;
@@ -121,18 +124,51 @@ namespace aMAZEing.services
             }
 
             int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
-            List<Point> visitedPoints = new List<Point>();
 
             if (matrix[endPoint.I, endPoint.J] == 0)
                 return null; // sol not found
 
+            List<Point> visitedPoints = new List<Point>();
+            List<Point> solution = new List<Point>();
+
+            int[] di = { -1, 0, 1, 0 };
+            int[] dj = { 0, 1, 0, -1 };
+
+            // build visited points list
             for (int i = 0; i < mazeFE.Height; ++i)
-                for (int j = 0; j < mazeFE.Width; ++j)
-                    if (res[i, j] > 1 && !(i == endPoint.I && j == endPoint.J))
-                        visitedPoints.Add(new Point(i, j, res[i, j]));
-            
+            for (int j = 0; j < mazeFE.Width; ++j)
+                if (res[i, j] > 1 && !(i == endPoint.I && j == endPoint.J))
+                    visitedPoints.Add(new Point(i, j, res[i, j]));
+
             visitedPoints.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
-            return visitedPoints;
+
+            // parse solution
+            Point currPoint = endPoint;
+            while (true)
+            {
+                Point nextPoint, bestNextPoint = null;
+                for (int i = 0; i <= 3; ++i)
+                {
+                    int next_i = currPoint.I + di[i];
+                    int next_j = currPoint.J + dj[i];
+
+                    if (next_i >= 0 && next_i < mazeFE.Height && next_j >= 0 && next_j < mazeFE.Width)
+                    {
+                        nextPoint = new Point(next_i, next_j, res[next_i, next_j]);
+
+                        if (nextPoint.Value > 0 && nextPoint.Value < currPoint.Value)
+                            bestNextPoint = nextPoint;
+                    }
+                }
+
+                currPoint = bestNextPoint;
+                if (currPoint.I == startPoint.I && currPoint.J == startPoint.J)
+                    break;
+
+                solution.Add(currPoint);
+            }
+
+            return new MazeVisualizerDTO(visitedPoints, solution);
         }
 
         private int[,] solve(int[,] matrix, Point startPoint, Point endPoint, int matrixWidth, int matrixHeight)
@@ -156,9 +192,8 @@ namespace aMAZEing.services
                         if (matrix[next_i, next_j] == 0)
                         {
                             queue.Enqueue(new Point(next_i, next_j, currPoint.Value + 1));
-                            matrix[next_i, next_j] = currPoint.Value + 1;
+                            matrix[next_i, next_j] = matrix[currPoint.I, currPoint.J] + 1;
                         }
-
                     }
                 }
             }

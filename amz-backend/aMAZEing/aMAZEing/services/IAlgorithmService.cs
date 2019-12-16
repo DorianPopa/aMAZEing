@@ -1,6 +1,6 @@
 ﻿using aMAZEing.utils;
 using System;
-using System.Collections.Generic;
+using aMAZEing.DTOs;
 
 namespace aMAZEing.services
 {
@@ -8,6 +8,6 @@ namespace aMAZEing.services
     {
         String ValidateMaze(MazeFE mazeFE);
 
-        List<Point> Visualize(MazeFE mazeFE);
+        MazeVisualizerDTO Visualize(MazeFE mazeFE);
     }
 }

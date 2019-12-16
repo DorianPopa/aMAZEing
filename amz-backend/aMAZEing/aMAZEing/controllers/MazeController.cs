@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using aMAZEing.DTOs;
-using aMAZEing.models;
 using aMAZEing.services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -26,6 +25,9 @@ namespace aMAZEing.controllers
         {
             _logger.LogInformation("GET request for mazes list\n\n");
             List<MazeDTO> retListMazeDTO = _mazeService.GetAllMazes();
+
+            // sort from latest to oldest
+            retListMazeDTO.Sort((m1, m2) => m2.CreationTime.CompareTo(m1.CreationTime));
 
             return Ok(retListMazeDTO);
         }

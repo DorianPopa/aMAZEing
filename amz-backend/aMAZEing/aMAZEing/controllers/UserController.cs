@@ -72,12 +72,12 @@ namespace aMAZEing.controllers
 
         [HttpGet]
         [Route("{userId}/build/visualize/{algorithm}")]
-        public ActionResult<List<Point>> CreateMaze(Guid userId, String algorithm, [FromBody] MazeFE maze)
+        public ActionResult<MazeVisualizerDTO> VisualizeMazeSolution(Guid userId, String algorithm, [FromBody] MazeFE maze)
         {
             _logger.LogInformation("GET request for {0} maze visualizer from user with id {1}\n\n", algorithm, userId.ToString());
-            List<Point> visitedPoints = _mazeService.Visualize(maze, algorithm);
-            if (visitedPoints != null)
-                return Ok(visitedPoints);
+            MazeVisualizerDTO mazeVisualizerData = _mazeService.Visualize(maze, algorithm);
+            if (mazeVisualizerData != null)
+                return Ok(mazeVisualizerData);
 
             return BadRequest("Invalid maze");
         }
