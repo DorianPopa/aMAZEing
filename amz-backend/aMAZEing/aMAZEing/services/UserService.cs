@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using aMAZEing.DTOs;
+using aMAZEing.errors;
 using aMAZEing.models;
 using aMAZEing.repositories;
 using aMAZEing.utils;
@@ -36,7 +37,7 @@ namespace aMAZEing.services
                 User retUser = _userRepository.Create(storedUser);
 
                 if (retUser == null)
-                    return null;
+                    throw new ApiException(500, "Username could not be created");
 
                 return UserDTO.Builder()
                     .Id(retUser.UserId)
@@ -45,7 +46,7 @@ namespace aMAZEing.services
             }
 
             _logger.LogError("Username {0} already in database\n\n", storedUser.Username);
-            return null;
+            throw new ApiException(400, "Username " + storedUser.Username + " already in database");
         }
 
         public List<UserDTO> GetAllUsers()

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using aMAZEing.DTOs;
+using aMAZEing.errors;
 using aMAZEing.models;
 using aMAZEing.services;
 using aMAZEing.utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -28,12 +30,18 @@ namespace aMAZEing.controllers
         public ActionResult<UserDTO> CreateUser([FromBody] User user)
         {
             _logger.LogInformation("POST request for saving user with Username {0}\n\n", user.Username);
-            UserDTO retUserDto = _userService.CreateUser(user);
-
-            if (retUserDto != null)
+            try
+            {
+                UserDTO retUserDto = _userService.CreateUser(user);
                 return Created("User created", retUserDto);
+            }
+            catch (ApiException e)
+            {
+                if (e.StatusCode == 400)
+                    return BadRequest(new BadRequestError(e.Message));
 
-            return BadRequest("Username already in database");
+                return StatusCode(StatusCodes.Status500InternalServerError, new InternalServerError(e.Message));
+            }
         }
 
         [HttpGet]
@@ -55,7 +63,7 @@ namespace aMAZEing.controllers
             if (retUserDTO != null)
                 return Ok(retUserDTO);
 
-            return BadRequest("Id not in database");
+            return NotFound(new NotFoundError("User with id " + id.ToString() + " not in database"));
         }
 
         [HttpPost]
@@ -63,11 +71,18 @@ namespace aMAZEing.controllers
         public ActionResult<MazeDTO> CreateMaze(Guid userId, [FromBody] MazeFE maze)
         {
             _logger.LogInformation("POST request for saving maze from user with id {0}\n\n", userId.ToString());
-            MazeDTO retMazeDTO = _mazeService.CreateMazeByUserId(userId, maze);
-            if(retMazeDTO != null)
+            try
+            {
+                MazeDTO retMazeDTO = _mazeService.CreateMazeByUserId(userId, maze);
                 return Created("Maze created", retMazeDTO);
-            
-            return BadRequest("Invalid maze or userId");
+            }
+            catch (ApiException e)
+            {
+                if (e.StatusCode == 400)
+                    return BadRequest(new BadRequestError(e.Message));
+
+                return NotFound(new NotFoundError(e.Message));
+            }
         }
 
         [HttpGet]
@@ -75,11 +90,18 @@ namespace aMAZEing.controllers
         public ActionResult<MazeVisualizerDTO> VisualizeMazeSolution(Guid userId, String algorithm, [FromBody] MazeFE maze)
         {
             _logger.LogInformation("GET request for {0} maze visualizer from user with id {1}\n\n", algorithm, userId.ToString());
-            MazeVisualizerDTO mazeVisualizerData = _mazeService.Visualize(maze, algorithm);
-            if (mazeVisualizerData != null)
+            try
+            {
+                MazeVisualizerDTO mazeVisualizerData = _mazeService.Visualize(maze, algorithm);
                 return Ok(mazeVisualizerData);
-
-            return BadRequest("Invalid maze");
+            }
+            catch (ApiException e)
+            {
+                if (e.StatusCode == 400)
+                    return BadRequest(new BadRequestError(e.Message));
+                
+                return NotFound(new NotFoundError(e.Message));
+            }
         }
     }
 }

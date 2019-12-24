@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using aMAZEing.DTOs;
+using aMAZEing.errors;
 using aMAZEing.utils;
 
 namespace aMAZEing.services
@@ -12,10 +13,13 @@ namespace aMAZEing.services
         public String ValidateMaze(MazeFE mazeFE)
         {
             if (mazeFE.PointList.Count() != mazeFE.Width * mazeFE.Height)
-                return null;
+                throw new ApiException(400, "Invalid maze. Width and height don't match the number of points given");
 
-            if (mazeFE.PointList.Count(p => p.Value == 1) != 1 || mazeFE.PointList.Count(p => p.Value == 2) != 1)
-                return null;
+            if (mazeFE.PointList.Count(p => p.Value == 1) != 1)
+                throw new ApiException(400, "Invalid maze. No start point given");
+
+            if (mazeFE.PointList.Count(p => p.Value == 2) != 1)
+                throw new ApiException(400, "Invalid maze. No end point given");
 
             Point startPoint = new Point();
             Point endPoint = new Point();
@@ -45,7 +49,7 @@ namespace aMAZEing.services
             int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
             if (matrix[endPoint.I, endPoint.J] == 0)
-                return null; // sol not found
+                throw new ApiException(400, "Invalid maze. No solution found");
 
             List<Point> solution = new List<Point>();
 
@@ -91,10 +95,13 @@ namespace aMAZEing.services
         public MazeVisualizerDTO Visualize(MazeFE mazeFE)
         {
             if (mazeFE.PointList.Count() != mazeFE.Width * mazeFE.Height)
-                return null;
+                throw new ApiException(400, "Invalid maze. Width and height don't match the number of points given");
 
-            if (mazeFE.PointList.Count(p => p.Value == 1) != 1 || mazeFE.PointList.Count(p => p.Value == 2) != 1)
-                return null;
+            if (mazeFE.PointList.Count(p => p.Value == 1) != 1)
+                throw new ApiException(400, "Invalid maze. No start point given");
+
+            if (mazeFE.PointList.Count(p => p.Value == 2) != 1)
+                throw new ApiException(400, "Invalid maze. No end point given");
 
             Point startPoint = new Point();
             Point endPoint = new Point();
@@ -126,7 +133,7 @@ namespace aMAZEing.services
             int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
             if (matrix[endPoint.I, endPoint.J] == 0)
-                return null; // sol not found
+                throw new ApiException(400, "Invalid maze. No solution found");
 
             List<Point> visitedPoints = new List<Point>();
             List<Point> solution = new List<Point>();

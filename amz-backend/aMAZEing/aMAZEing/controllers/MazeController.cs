@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using aMAZEing.DTOs;
+using aMAZEing.errors;
 using aMAZEing.services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -42,7 +43,7 @@ namespace aMAZEing.controllers
             if (retMazeDTO != null)
                 return Ok(retMazeDTO);
 
-            return BadRequest("Id not in database");
+            return NotFound(new NotFoundError("Maze with id " + id.ToString() + " not in database"));
         }
     }
 }

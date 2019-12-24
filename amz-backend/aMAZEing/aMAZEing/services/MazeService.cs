@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using aMAZEing.DTOs;
+using aMAZEing.errors;
 using aMAZEing.models;
 using aMAZEing.repositories;
 using aMAZEing.utils;
@@ -42,15 +43,19 @@ namespace aMAZEing.services
             User user = _userRepository.FindById(userId);
             if (user == null)
             {
-                _logger.LogError("User with id {0} not in database\n\n", userId.ToString());
-                return null;
+                _logger.LogError("User with id " + userId.ToString() + " not in database\n\n");
+                throw new ApiException(404, "User with id " + userId.ToString() + " not in database");
             }
 
-            String solution = _bfs_Service.ValidateMaze(maze);
-            if (String.IsNullOrEmpty(solution))
+            String solution;
+            try
             {
-                _logger.LogError("Invalid Solution\n\n");
-                return null;
+                solution = _bfs_Service.ValidateMaze(maze);
+            }
+            catch (ApiException e)
+            {
+                _logger.LogError(e.Message);
+                throw e;
             }
 
             Maze mazeBE = BuildMazeFromMazeFE(maze, solution);
@@ -73,14 +78,18 @@ namespace aMAZEing.services
                 .Build();
         }
 
-        public MazeVisualizerDTO Visualize(MazeFE maze, String algorithm)
+        public MazeVisualizerDTO Visualize(MazeFE maze, String algorithm) 
         {
-            if (algorithm.ToUpper().Equals("BFS"))
-                return _bfs_Service.Visualize(maze);
-            else
+            try
             {
-                // to be updated
-                return _bfs_Service.Visualize(maze);
+                if (algorithm.ToUpper().Equals("BFS"))
+                    return _bfs_Service.Visualize(maze);
+                    
+                throw new ApiException(400, "No such algorithm available");
+            }
+            catch (ApiException e)
+            {
+                throw e;
             }
         }
 

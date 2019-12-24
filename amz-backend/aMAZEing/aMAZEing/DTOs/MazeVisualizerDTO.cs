@@ -14,5 +14,10 @@ namespace aMAZEing.DTOs
             this.VisitedPoints = visitedPoints;
             this.Solution = solution;
         }
+
+        public MazeVisualizerDTO()
+        {
+
+        }
     }
 }
