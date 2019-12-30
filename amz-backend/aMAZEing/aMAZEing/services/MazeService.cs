@@ -47,7 +47,7 @@ namespace aMAZEing.services
                 throw new ApiException(404, "User with id " + userId.ToString() + " not in database");
             }
 
-            String solution;
+            string solution;
             try
             {
                 solution = _bfs_Service.ValidateMaze(maze);
@@ -78,7 +78,7 @@ namespace aMAZEing.services
                 .Build();
         }
 
-        public MazeVisualizerDTO Visualize(MazeFE maze, String algorithm) 
+        public MazeVisualizerDTO Visualize(MazeFE maze, string algorithm)
         {
             try
             {
@@ -93,9 +93,9 @@ namespace aMAZEing.services
             }
         }
 
-        private Maze BuildMazeFromMazeFE(MazeFE mazeFE, String solution)
+        private Maze BuildMazeFromMazeFE(MazeFE mazeFE, string solution)
         {
-            String state = "";
+            string state = "";
             foreach (Point point in mazeFE.PointList)
             {
                 state += point.Value;

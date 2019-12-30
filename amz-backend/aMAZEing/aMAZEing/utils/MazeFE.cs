@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace aMAZEing.utils
 {
     public class MazeFE
     {
-        public String Name { get; set; }
+        public string Name { get; set; }
 
         public int Width { get; set; }
 

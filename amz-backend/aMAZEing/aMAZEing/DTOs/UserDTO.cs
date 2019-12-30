@@ -7,11 +7,11 @@ namespace aMAZEing.DTOs
     {
         public Guid Id { get; private set; }
 
-        public String Username { get; private set; }
+        public string Username { get; private set; }
 
         public List<MazeDTO> OwnMazes { get; private set; }
 
-        public UserDTO(Guid id, String username, List<MazeDTO> ownMazes)
+        public UserDTO(Guid id, string username, List<MazeDTO> ownMazes)
         {
             Id = id;
             Username = username;
@@ -27,7 +27,7 @@ namespace aMAZEing.DTOs
         {
             private Guid BuilderId { get; set; }
 
-            private String BuilderUsername { get; set; }
+            private string BuilderUsername { get; set; }
 
             public List<MazeDTO> BuilderOwnMazes { get; private set; }
 
@@ -42,7 +42,7 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
-            public UserBuilder Username(String username)
+            public UserBuilder Username(string username)
             {
                 BuilderUsername = username;
                 return this;

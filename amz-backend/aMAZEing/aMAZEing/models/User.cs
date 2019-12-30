@@ -12,7 +12,7 @@ namespace aMAZEing.models
 
         }
 
-        public static User Create(String username, String password)
+        public static User Create(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 throw new ArgumentException();
@@ -30,10 +30,10 @@ namespace aMAZEing.models
 
         [Required]
         [Index(IsUnique = true)]
-        public String Username { get; set; }
+        public string Username { get; set; }
 
         [Required]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
         public virtual ICollection<UserMaze> UserMazes { get; set; }
     }

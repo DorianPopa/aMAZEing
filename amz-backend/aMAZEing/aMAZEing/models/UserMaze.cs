@@ -30,7 +30,7 @@ namespace aMAZEing.models
         public virtual Maze Maze { get; set; }
 
         [Required]
-        public String State { get; set; }
+        public string State { get; set; }
 
         [Required]
         public bool Solved { get; set; }

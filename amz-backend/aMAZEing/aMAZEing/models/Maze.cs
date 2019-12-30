@@ -11,7 +11,7 @@ namespace aMAZEing.models
 
         }
 
-        public static Maze Create(String name, int width, int height, String state, String solution)
+        public static Maze Create(string name, int width, int height, string state, string solution)
         {
             if (string.IsNullOrEmpty(name) || width == 0 || height == 0)
                 throw new ArgumentException();
@@ -24,7 +24,7 @@ namespace aMAZEing.models
                 Height = height,
                 State = state,
                 Solution = solution,
-                CreationTime = DateTime.Now
+                CreationTime = DateTime.UtcNow
             };
         }
 
@@ -32,23 +32,31 @@ namespace aMAZEing.models
         public Guid MazeId { get; set; }
 
         [Required]
-        public String Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public int Width { get; set; }
+        public int Width { get; private set; }
 
         [Required]
-        public int Height { get; set; }
+        public int Height { get; private set; }
 
         [Required]
-        public String State { get; set; }
+        public string State { get; set; }
 
         [Required]
-        public String Solution { get; set; }
+        public string Solution { get; set; }
 
         [Required]
         public DateTime CreationTime { get; set; }
 
         public virtual ICollection<UserMaze> UserMazes { get; set; }
+
+        public void SetHeight(int value)
+        {
+            if(value == 0)
+                throw new ArgumentException(nameof(value));
+
+            Height = value;
+        }
     }
 }

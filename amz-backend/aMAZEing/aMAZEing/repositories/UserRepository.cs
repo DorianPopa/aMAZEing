@@ -43,7 +43,7 @@ namespace aMAZEing.repositories
             return _context.Users.FirstOrDefault(u => u.UserId == id);
         }
 
-        public virtual User FindByUsername(String username)
+        public virtual User FindByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }

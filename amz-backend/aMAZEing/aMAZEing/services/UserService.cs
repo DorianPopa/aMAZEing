@@ -97,7 +97,7 @@ namespace aMAZEing.services
                 .Build();
         }
 
-        private String HashPassword(String password)
+        private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
