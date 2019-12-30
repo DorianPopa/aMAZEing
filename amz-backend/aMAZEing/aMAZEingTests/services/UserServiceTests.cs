@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using aMAZEing.DTOs;
+using aMAZEing.errors;
 using aMAZEing.models;
 using aMAZEing.repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,46 +31,64 @@ namespace aMAZEing.services.Tests
         
 
         [TestMethod()]
-        public void CreateUser_ShouldReturnNull_WhenUsernameAlreadyInDatabase()
+        [ExpectedException(typeof(ApiException))]
+        public void CreateUser_ShouldReturnApiException400_WhenUsernameAlreadyInDatabase()
         {
-            //Arrange
-            User user = User.Create("user.in.db", "my_Pass");
-            User storedUser = User.Create("user.in.db", "8F59105B5953EF266DD8E1429C9EA5EDC8BCD0B4BECB4404C15A606EE5373520");
-            storedUser.UserId = user.UserId;
+            try
+            {
+                //Arrange
+                User user = User.Create("user.in.db", "my_Pass");
+                User storedUser = User.Create("user.in.db",
+                    "8F59105B5953EF266DD8E1429C9EA5EDC8BCD0B4BECB4404C15A606EE5373520");
+                storedUser.UserId = user.UserId;
 
-            var userRepositoryMock = new Mock<UserRepository>();
-            userRepositoryMock.Setup(repo => repo.FindByUsername("already.in.db")).Returns(storedUser);
+                var userRepositoryMock = new Mock<UserRepository>();
+                userRepositoryMock.Setup(repo => repo.FindByUsername("user.in.db")).Returns(storedUser);
 
-            var mazeRepositoryMock = new Mock<MazeRepository>();
-            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
+                var mazeRepositoryMock = new Mock<MazeRepository>();
+                var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+                _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object,
+                    mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
-            //Act
-            var retUserDto = _sutUserService.CreateUser(user);
-
-            //Assert
-            Assert.AreEqual(null, retUserDto);
+                //Act
+                var retUserDto = _sutUserService.CreateUser(user);
+            }
+            catch (ApiException e)
+            {
+                Assert.AreEqual(400, e.StatusCode);
+                throw e;
+            }
         }
 
         [TestMethod()]
-        public void CreateUser_ShouldReturnNull_WhenUsernameNotInDatabaseButAddingToDatabaseFails()
+        [ExpectedException(typeof(ApiException))]
+        public void CreateUser_ShouldReturnApiException500_WhenUsernameNotInDatabaseButAddingToDatabaseFails()
         {
-            //Arrange
-            User userNotSavedIntoDb = User.Create("server.error", "my_Pass");
+            try
+            {
+                //Arrange
+                User userNotSavedIntoDb = User.Create("server.error", "my_Pass");
 
-            var userRepositoryMock = new Mock<UserRepository>();
-            userRepositoryMock.Setup(repo => repo.FindByUsername("server.error")).Returns((User) null);
-            userRepositoryMock.Setup(repo => repo.Create(It.IsAny<User>())).Returns((User) null);
+                var userRepositoryMock = new Mock<UserRepository>();
+                userRepositoryMock.Setup(repo => repo.FindByUsername("server.error")).Returns((User) null);
+                userRepositoryMock.Setup(repo => repo.Create(It.IsAny<User>())).Returns((User) null);
 
-            var mazeRepositoryMock = new Mock<MazeRepository>();
-            var userMazeRepositoryMock = new Mock<UserMazeRepository>();
-            _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object, mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
+                var mazeRepositoryMock = new Mock<MazeRepository>();
+                var userMazeRepositoryMock = new Mock<UserMazeRepository>();
+                _sutUserService = new UserService(GetUserServiceLogger(), userRepositoryMock.Object,
+                    mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
-            //Act
-            var retUserDTO = _sutUserService.CreateUser(userNotSavedIntoDb);
+                //Act
+                var retUserDTO = _sutUserService.CreateUser(userNotSavedIntoDb);
 
-            //Assert
-            Assert.AreEqual(null, retUserDTO);
+                //Assert
+                Assert.AreEqual(null, retUserDTO);
+            }
+            catch (ApiException e)
+            {
+                Assert.AreEqual(500, e.StatusCode);
+                throw e;
+            }
         }
 
         [TestMethod()]

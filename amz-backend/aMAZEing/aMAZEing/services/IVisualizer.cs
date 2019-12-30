@@ -1,9 +1,9 @@
-﻿using aMAZEing.utils;
-using aMAZEing.DTOs;
+﻿using aMAZEing.DTOs;
+using aMAZEing.utils;
 
 namespace aMAZEing.services
 {
-    public interface IAlgorithmService
+    public interface IVisualizer
     {
         MazeVisualizerDTO Visualize(MazeFE mazeFE);
     }

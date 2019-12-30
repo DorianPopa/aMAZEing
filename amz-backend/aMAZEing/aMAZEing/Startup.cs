@@ -29,10 +29,10 @@ namespace aMAZEing
 
             services.AddScoped<IBfsService, BFS_Service>();
             services.AddScoped<IAstarService, AStar_Service>();
+            services.AddScoped<IBfsServiceTwoWay, BidirectionalBFS>();
 
             services.AddScoped<UserService>();
             services.AddScoped<IMazeService, MazeService>();
-
 
             services.AddScoped<UserRepository>();
             services.AddScoped<MazeRepository>();

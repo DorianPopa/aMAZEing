@@ -13,19 +13,22 @@ namespace aMAZEing.services
     public class MazeService : IMazeService
     {
         private readonly ILogger<MazeService> _logger;
+
         private readonly IBfsService _bfs_Service;
         private readonly IAstarService _aStar_Service;
+        private readonly IBfsServiceTwoWay _bfsTwoWay;
 
         private readonly UserRepository _userRepository;
         private readonly MazeRepository _mazeRepository;
         private readonly UserMazeRepository _userMazeRepository;
 
-        public MazeService(ILogger<MazeService> logger, IBfsService bfs_Service, IAstarService aStar_Service,
+        public MazeService(ILogger<MazeService> logger, IBfsService bfs_Service, IAstarService aStar_Service, IBfsServiceTwoWay bfsTwoWay,
             UserRepository userRepository, MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
         {
             _logger = logger;
             _bfs_Service = bfs_Service;
             _aStar_Service = aStar_Service;
+            _bfsTwoWay = bfsTwoWay;
 
             _userRepository = userRepository;
             _mazeRepository = mazeRepository;
@@ -88,6 +91,8 @@ namespace aMAZEing.services
                     return _bfs_Service.Visualize(maze);
                 else if ("ASTAR".Equals(algorithm))
                     return _aStar_Service.Visualize(maze);
+                else if ("BIDIRECTIONAL-BFS".Equals(algorithm))
+                    return _bfsTwoWay.Visualize(maze);
 
                 throw new ApiException(400, "No such algorithm available");
             }
