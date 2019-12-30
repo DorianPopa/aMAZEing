@@ -10,20 +10,22 @@ using Microsoft.Extensions.Logging;
 
 namespace aMAZEing.services
 {
-    public class MazeService
+    public class MazeService : IMazeService
     {
         private readonly ILogger<MazeService> _logger;
-        private readonly IAlgorithmService _bfs_Service;
+        private readonly IBfsService _bfs_Service;
+        private readonly IAstarService _aStar_Service;
 
         private readonly UserRepository _userRepository;
         private readonly MazeRepository _mazeRepository;
         private readonly UserMazeRepository _userMazeRepository;
 
-        public MazeService(ILogger<MazeService> logger, IAlgorithmService bfs_Service, UserRepository userRepository,
-            MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
+        public MazeService(ILogger<MazeService> logger, IBfsService bfs_Service, IAstarService aStar_Service,
+            UserRepository userRepository, MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
         {
             _logger = logger;
             _bfs_Service = bfs_Service;
+            _aStar_Service = aStar_Service;
 
             _userRepository = userRepository;
             _mazeRepository = mazeRepository;
@@ -82,9 +84,11 @@ namespace aMAZEing.services
         {
             try
             {
-                if (algorithm.ToUpper().Equals("BFS"))
+                if ("BFS".Equals(algorithm))
                     return _bfs_Service.Visualize(maze);
-                    
+                else if ("ASTAR".Equals(algorithm))
+                    return _aStar_Service.Visualize(maze);
+
                 throw new ApiException(400, "No such algorithm available");
             }
             catch (ApiException e)
@@ -143,4 +147,5 @@ namespace aMAZEing.services
                 .Build();
         }
     }
+
 }

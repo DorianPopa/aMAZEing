@@ -27,9 +27,12 @@ namespace aMAZEing
 
             services.AddControllers();
 
+            services.AddScoped<IBfsService, BFS_Service>();
+            services.AddScoped<IAstarService, AStar_Service>();
+
             services.AddScoped<UserService>();
-            services.AddScoped<MazeService>();
-            services.AddScoped<IAlgorithmService, BFS_Service>();
+            services.AddScoped<IMazeService, MazeService>();
+
 
             services.AddScoped<UserRepository>();
             services.AddScoped<MazeRepository>();

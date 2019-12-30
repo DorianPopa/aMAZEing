@@ -17,9 +17,9 @@ namespace aMAZEing.controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly UserService _userService;
-        private readonly MazeService _mazeService;
+        private readonly IMazeService _mazeService;
 
-        public UserController(ILogger<UserController> logger, UserService userService, MazeService mazeService)
+        public UserController(ILogger<UserController> logger, UserService userService, IMazeService mazeService)
         {
             _logger = logger;
             _userService = userService;
@@ -87,12 +87,14 @@ namespace aMAZEing.controllers
 
         [HttpGet]
         [Route("{userId}/build/visualize/{algorithm}")]
-        public ActionResult<MazeVisualizerDTO> VisualizeMazeSolution(Guid userId, String algorithm, [FromBody] MazeFE maze)
+        public ActionResult<MazeVisualizerDTO> VisualizeMazeSolution(Guid userId, string algorithm, [FromBody] MazeFE maze)
         {
             _logger.LogInformation("GET request for {0} maze visualizer from user with id {1}\n\n", algorithm, userId.ToString());
             try
             {
-                MazeVisualizerDTO mazeVisualizerData = _mazeService.Visualize(maze, algorithm);
+                if (algorithm == null)
+                    BadRequest(new BadRequestError("NULL alg string"));
+                MazeVisualizerDTO mazeVisualizerData = _mazeService.Visualize(maze, algorithm.ToUpper());
                 return Ok(mazeVisualizerData);
             }
             catch (ApiException e)

@@ -13,9 +13,9 @@ namespace aMAZEing.controllers
     public class MazeController : ControllerBase
     {
         private readonly ILogger<MazeController> _logger;
-        private readonly MazeService _mazeService;
+        private readonly IMazeService _mazeService;
 
-        public MazeController(ILogger<MazeController> logger, MazeService mazeService)
+        public MazeController(ILogger<MazeController> logger, IMazeService mazeService)
         {
             _logger = logger;
             _mazeService = mazeService;
