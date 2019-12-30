@@ -8,11 +8,11 @@ namespace aMAZEing.DTOs
     {
         public Guid Id { get; private set; }
 
-        public String Name { get; private set; }
+        public string Name { get; private set; }
 
         public Guid OwnerId { get; private set; }
 
-        public String Owner { get; private set; }
+        public string Owner { get; private set; }
 
         public int PlayersCount { get; private set; }
 
@@ -30,7 +30,7 @@ namespace aMAZEing.DTOs
 
         
 
-        public MazeDTO(Guid id, String name, Guid ownerId, String owner, int playersCount, int width, int height, List<Point> state, List<Point> solution, int solutionSize, DateTime creationTime)
+        public MazeDTO(Guid id, string name, Guid ownerId, string owner, int playersCount, int width, int height, List<Point> state, List<Point> solution, int solutionSize, DateTime creationTime)
         {
             Id = id;
             Name = name;
@@ -54,11 +54,11 @@ namespace aMAZEing.DTOs
         {
             private Guid BuilderId { get; set; }
 
-            private String BuilderName { get; set; }
+            private string BuilderName { get; set; }
 
             private Guid BuilderOwnerId { get; set; }
 
-            private String BuilderOwner { get; set; }
+            private string BuilderOwner { get; set; }
 
             public int BuilderPlayersCount { get; private set; }
 
@@ -86,7 +86,7 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
-            public MazeBuilder Name(String name)
+            public MazeBuilder Name(string name)
             {
                 BuilderName = name;
                 return this;
@@ -98,7 +98,7 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
-            public MazeBuilder Owner(String owner)
+            public MazeBuilder Owner(string owner)
             {
                 BuilderOwner = owner;
                 return this;
@@ -122,7 +122,7 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
-            public MazeBuilder State(String state)
+            public MazeBuilder State(string state)
             {
                 for (int i = 0; i < state.Length; ++i)
                 {
@@ -136,7 +136,7 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
-            public MazeBuilder Solution(String solution)
+            public MazeBuilder Solution(string solution)
             {
                 for (int i = 0; i < solution.Length; ++i)
                 {
