@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using aMAZEing.DTOs;
@@ -8,9 +7,9 @@ using aMAZEing.utils;
 
 namespace aMAZEing.services
 {
-    public class BFS_Service : IAlgorithmService
+    public class BFS_Service : IBfsService
     {
-        public String ValidateMaze(MazeFE mazeFE)
+        public string ValidateMaze(MazeFE mazeFE)
         {
             if (mazeFE.PointList.Count() != mazeFE.Width * mazeFE.Height)
                 throw new ApiException(400, "Invalid maze. Width and height don't match the number of points given");
@@ -60,7 +59,7 @@ namespace aMAZEing.services
             Point currPoint = endPoint;
             while (true)
             {
-                Point nextPoint, bestNextPoint = null;
+                Point nextPoint, bestNextPoint = Point.Default;
                 for (int i = 0; i <= 3; ++i)
                 {
                     int next_i = currPoint.I + di[i];
@@ -82,7 +81,7 @@ namespace aMAZEing.services
                 solution.Add(currPoint);
             }
 
-            StringBuilder retSolution = new StringBuilder(new String('0', mazeFE.Width * mazeFE.Height));
+            StringBuilder retSolution = new StringBuilder(new string('0', mazeFE.Width * mazeFE.Height));
             foreach (Point p in solution)
             {
                 retSolution.Remove(p.I * mazeFE.Width + p.J, 1);
@@ -134,6 +133,8 @@ namespace aMAZEing.services
 
             if (matrix[endPoint.I, endPoint.J] == 0)
                 throw new ApiException(400, "Invalid maze. No solution found");
+            else
+                endPoint.Value = matrix[endPoint.I, endPoint.J];
 
             List<Point> visitedPoints = new List<Point>();
             List<Point> solution = new List<Point>();
@@ -153,7 +154,7 @@ namespace aMAZEing.services
             Point currPoint = endPoint;
             while (true)
             {
-                Point nextPoint, bestNextPoint = null;
+                Point nextPoint, bestNextPoint = Point.Default;
                 for (int i = 0; i <= 3; ++i)
                 {
                     int next_i = currPoint.I + di[i];
@@ -204,10 +205,6 @@ namespace aMAZEing.services
                     }
                 }
             }
-
-            if (matrix[endPoint.I, endPoint.J] != 0)
-                endPoint.Value = matrix[endPoint.I, endPoint.J];
-
             return matrix;
         }
     }
