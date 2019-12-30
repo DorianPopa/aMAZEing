@@ -13,17 +13,20 @@ namespace aMAZEing.services
     public class MazeService
     {
         private readonly ILogger<MazeService> _logger;
-        private readonly IAlgorithmService _bfs_Service;
+        private readonly BFS _bfs;
+        private readonly IVisualizer _bfs2, _aStar;
 
         private readonly UserRepository _userRepository;
         private readonly MazeRepository _mazeRepository;
         private readonly UserMazeRepository _userMazeRepository;
 
-        public MazeService(ILogger<MazeService> logger, IAlgorithmService bfs_Service, UserRepository userRepository,
+        public MazeService(ILogger<MazeService> logger, IEnumerable<IVisualizer> visualizers, UserRepository userRepository,
             MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
         {
             _logger = logger;
-            _bfs_Service = bfs_Service;
+            _bfs = (BFS) visualizers.ElementAt(0);
+            _bfs2 = visualizers.ElementAt(1);
+            _aStar = visualizers.ElementAt(2);
 
             _userRepository = userRepository;
             _mazeRepository = mazeRepository;
@@ -50,7 +53,7 @@ namespace aMAZEing.services
             String solution;
             try
             {
-                solution = _bfs_Service.ValidateMaze(maze);
+                solution = _bfs.ValidateMaze(maze);
             }
             catch (ApiException e)
             {
@@ -83,8 +86,14 @@ namespace aMAZEing.services
             try
             {
                 if (algorithm.ToUpper().Equals("BFS"))
-                    return _bfs_Service.Visualize(maze);
-                    
+                    return _bfs.Visualize(maze);
+
+                if (algorithm.ToUpper().Equals("BIDIRECTIONAL-BFS"))
+                    return _bfs2.Visualize(maze);
+
+                if (algorithm.ToUpper().Equals("A-STAR"))
+                    return _aStar.Visualize(maze);
+
                 throw new ApiException(400, "No such algorithm available");
             }
             catch (ApiException e)

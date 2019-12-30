@@ -8,7 +8,7 @@ using aMAZEing.utils;
 
 namespace aMAZEing.services
 {
-    public class BFS_Service : IAlgorithmService
+    public class BFS : IValidator, IVisualizer
     {
         public String ValidateMaze(MazeFE mazeFE)
         {

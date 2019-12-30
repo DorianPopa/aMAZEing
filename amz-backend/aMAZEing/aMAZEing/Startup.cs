@@ -29,7 +29,10 @@ namespace aMAZEing
 
             services.AddScoped<UserService>();
             services.AddScoped<MazeService>();
-            services.AddScoped<IAlgorithmService, BFS_Service>();
+
+            services.AddSingleton<IVisualizer, BFS>();
+            services.AddSingleton<IVisualizer, BidirectionalBFS>();
+            services.AddSingleton<IVisualizer, AStar>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<MazeRepository>();
