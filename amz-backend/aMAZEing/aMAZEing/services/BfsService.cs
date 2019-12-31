@@ -45,7 +45,7 @@ namespace aMAZEing.services
                 }
             }
 
-            int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
+            int[,] res = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
             if (matrix[endPoint.I, endPoint.J] == 0)
                 throw new ApiException(400, "Invalid maze. No solution found");
@@ -129,12 +129,12 @@ namespace aMAZEing.services
                 }
             }
 
-            int[,] res = solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
+            int[,] res = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
             if (matrix[endPoint.I, endPoint.J] == 0)
                 throw new ApiException(400, "Invalid maze. No solution found");
-            else
-                endPoint.Value = matrix[endPoint.I, endPoint.J];
+            
+            endPoint.Value = matrix[endPoint.I, endPoint.J];
 
             List<Point> visitedPoints = new List<Point>();
             List<Point> solution = new List<Point>();
@@ -180,7 +180,7 @@ namespace aMAZEing.services
             return new MazeVisualizerDTO(visitedPoints, solution);
         }
 
-        private int[,] solve(int[,] matrix, Point startPoint, Point endPoint, int matrixWidth, int matrixHeight)
+        private int[,] Solve(int[,] matrix, Point startPoint, Point endPoint, int matrixWidth, int matrixHeight)
         {
             int[] di = { -1, 0, 1, 0 };
             int[] dj = { 0, 1, 0, -1 };
