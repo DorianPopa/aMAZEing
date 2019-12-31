@@ -7,7 +7,7 @@ using aMAZEing.utils;
 
 namespace aMAZEing.services
 {
-    public class AStar_Service : IAstarService
+    public class AStarService : IAStarService
     {
         public string ValidateMaze(MazeFE mazeFE)
         {
@@ -47,7 +47,7 @@ namespace aMAZEing.services
 
             MazeVisualizerDTO solution = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
             
-            if(solution.Solution.Count() == 0)
+            if(!solution.Solution.Any())
                 throw new ApiException(400, "Invalid maze. No solution found");
 
             StringBuilder retSolution = new StringBuilder(new string('0', mazeFE.Width * mazeFE.Height));
@@ -56,6 +56,7 @@ namespace aMAZEing.services
                 retSolution.Remove(p.I * mazeFE.Width + p.J, 1);
                 retSolution.Insert(p.I * mazeFE.Width + p.J, '1');
             }
+
             return retSolution.ToString();
         }
 
@@ -98,7 +99,7 @@ namespace aMAZEing.services
             }
             MazeVisualizerDTO solution = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
-            if (solution.Solution.Count() == 0)
+            if (!solution.Solution.Any())
                 throw new ApiException(400, "Invalid maze. No solution found");
 
             return solution;
@@ -113,14 +114,13 @@ namespace aMAZEing.services
 
             PriorityQueue<double, Point> pQueue = new PriorityQueue<double, Point>(new PriorityQueue_MinComparer());
             Point current = startPoint;
-            visitedPoints.Add(current);
             pQueue.Enqueue(current.DistanceTo(endPoint), current);
 
             while (!pQueue.IsEmpty)
             {
                 current = pQueue.DequeueValue();
 
-                if (current.DistanceTo(endPoint) == 0.0)
+                if (current.DistanceTo(endPoint) <= 1.0) //exclude destination from solution
                 {
                     solution = ParseSolution(current, parentDict, startPoint);
                     break;
@@ -131,7 +131,7 @@ namespace aMAZEing.services
                 {
                     int next_i = current.I + offsets[i];
                     int next_j = current.J + offsets[i + 1];
-                    Point tempPoint = new Point(next_i, next_j, 0);
+                    Point tempPoint = new Point(next_i, next_j, current.Value + 1);
                     parentDict.TryAdd(tempPoint, current);
 
                     bool alreadyVisited = false;
@@ -146,6 +146,9 @@ namespace aMAZEing.services
                     }
                 }
             }
+
+            visitedPoints.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
+            solution.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
             return new MazeVisualizerDTO(visitedPoints, solution);
         }
 
@@ -159,6 +162,7 @@ namespace aMAZEing.services
                 solution.Add(currentPoint);
                 currentPoint = parentDict[currentPoint];
             }
+
             return solution;
         }
     }

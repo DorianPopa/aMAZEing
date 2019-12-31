@@ -8,14 +8,13 @@ namespace aMAZEing.utils
         public int J { get; set; }
         public int Value { get; set; }
 
-        // public Point previous ;
-
-        public Point(int next_i, int next_j, int v):this()
+        public Point(int i, int j, int v) : this()
         {
-            this.I = next_i;
-            this.J = next_j;
+            this.I = i;
+            this.J = j;
             this.Value = v;
         }
+
         public double DistanceTo(Point p2)
         {
             return Math.Sqrt(
@@ -24,6 +23,6 @@ namespace aMAZEing.utils
                 );
         }
 
-        public static Point Default { get { return new Point(); } }
+        public static Point Default => new Point();
     }
 }

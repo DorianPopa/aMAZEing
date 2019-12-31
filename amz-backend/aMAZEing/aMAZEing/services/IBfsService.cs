@@ -1,9 +1,6 @@
-﻿using aMAZEing.utils;
-
-namespace aMAZEing.services
+﻿namespace aMAZEing.services
 {
-    public interface IBfsService : IAlgorithmService
+    public interface IBfsService : IValidator, IVisualizer
     {
-        string ValidateMaze(MazeFE mazeFE);
     }
 }

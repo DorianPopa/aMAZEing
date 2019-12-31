@@ -13,7 +13,6 @@ namespace aMAZEing.repositories
 
         public UserMazeRepository()
         {
-
         }
 
         public UserMazeRepository(ILogger<UserMazeRepository> logger, DatabaseContext context)

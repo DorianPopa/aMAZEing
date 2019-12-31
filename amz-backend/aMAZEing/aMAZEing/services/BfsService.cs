@@ -7,7 +7,7 @@ using aMAZEing.utils;
 
 namespace aMAZEing.services
 {
-    public class BFS_Service : IBfsService
+    public class BfsService : IBfsService
     {
         public string ValidateMaze(MazeFE mazeFE)
         {
@@ -176,6 +176,7 @@ namespace aMAZEing.services
                 solution.Add(currPoint);
             }
 
+            solution.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
             return new MazeVisualizerDTO(visitedPoints, solution);
         }
 
@@ -205,6 +206,7 @@ namespace aMAZEing.services
                     }
                 }
             }
+
             return matrix;
         }
     }

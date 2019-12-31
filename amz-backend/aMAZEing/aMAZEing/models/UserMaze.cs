@@ -7,7 +7,6 @@ namespace aMAZEing.models
     {
         private UserMaze()
         {
-
         }
 
         public static UserMaze Create(User user, Maze maze)

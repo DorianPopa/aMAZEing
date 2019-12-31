@@ -17,9 +17,9 @@ namespace aMAZEing.controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly UserService _userService;
-        private readonly IMazeService _mazeService;
+        private readonly MazeService _mazeService;
 
-        public UserController(ILogger<UserController> logger, UserService userService, IMazeService mazeService)
+        public UserController(ILogger<UserController> logger, UserService userService, MazeService mazeService)
         {
             _logger = logger;
             _userService = userService;

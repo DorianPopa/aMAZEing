@@ -4,11 +4,11 @@ using aMAZEing.utils;
 
 namespace aMAZEing.services
 {
-    public class BidirectionalBFS : IBfsServiceTwoWay
+    public class BfsTwoWayService : IBfsTwoWayService
     {
         public MazeVisualizerDTO Visualize(MazeFE mazeFE)
         {
-            throw new NotImplementedException("pune mana si implementeaza");
+            throw new NotImplementedException();
         }
     }
 }
