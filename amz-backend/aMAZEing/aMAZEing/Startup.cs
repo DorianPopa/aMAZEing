@@ -1,4 +1,5 @@
 using aMAZEing.repositories;
+using aMAZEing.security;
 using aMAZEing.services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace aMAZEing
             services.AddScoped<IAStarService, AStarService>();
             services.AddScoped<IBfsTwoWayService, BfsTwoWayService>();
 
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<UserService>();
             services.AddScoped<MazeService>();
 
