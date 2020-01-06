@@ -27,11 +27,12 @@
       position: absolute;
       z-index: 2;
       cursor: pointer;
-
       display: flex;
       justify-content: center;
       align-items: center;
       user-select: none;
+
+      display: none;
 
       & > .icon {
         height: 30px;

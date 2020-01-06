@@ -1,27 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useDrop } from "react-dnd";
 import "./Block.scss";
+import Config from "../../../config";
 
-const Block = (props) => {
-  const [{ isOver }, drop] = useDrop({
-    accept: "piece",
-    drop: () => {
-      props.handleIsDroppedOnCanvas(props.line, props.column);
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
-
+const Block = ({ type, isHoverEnabled, onClick }) => {
   return (
-    <svg
-      className="Block block"
-      viewBox="0 0 50 50"
-      data-type={props.type}
-      ref={props.canvas ? drop : null}
-      data-hover={props.canvas && isOver}
-    >
+    <svg className="Block block" viewBox="0 0 50 50" data-type={type} data-hover={isHoverEnabled} onClick={onClick}>
       <g>
         <path className="main" d="M 0 0 50 0 50 50 0 50" />
         <path className="triangle-left" d="M 0 0 25 25 0 50" />
@@ -35,19 +19,22 @@ const Block = (props) => {
 };
 
 Block.propTypes = {
-  canvas: PropTypes.bool,
-  type: PropTypes.oneOf(["simple", "forbidden", "empty", "start", "finish", "solution", "air", "map"]),
-  column: PropTypes.number,
-  line: PropTypes.number,
-  handleIsDroppedOnCanvas: PropTypes.func,
+  type: PropTypes.oneOf([
+    Config.BLOCK_TYPE.FORBIDDEN,
+    Config.BLOCK_TYPE.EMPTY,
+    Config.BLOCK_TYPE.SIMPLE,
+    Config.BLOCK_TYPE.START,
+    Config.BLOCK_TYPE.FINISH,
+    Config.BLOCK_TYPE.SOLUTION,
+  ]),
+  isHoverEnabled: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 Block.defaultProps = {
-  canvas: false,
   type: "simple",
-  column: 0,
-  line: 0,
-  handleIsDroppedOnCanvas: () => {},
+  isHoverEnabled: true,
+  onClick: () => {},
 };
 
 export default Block;

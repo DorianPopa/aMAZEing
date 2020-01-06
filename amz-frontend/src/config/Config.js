@@ -22,6 +22,15 @@ class Config {
   static theme = {
     ...style,
   };
+
+  static BLOCK_TYPE = {
+    FORBIDDEN: -1,
+    EMPTY: 0,
+    SIMPLE: 1,
+    START: 2,
+    FINISH: 3,
+    SOLUTION: 4,
+  };
 }
 
 export default Config;

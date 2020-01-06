@@ -149,7 +149,7 @@ $sizeManagerActionsHeight: 120px;
 
       & > .content {
         z-index: 1;
-        width: 100%;
+        width: calc(100% - 15px);
         flex: 1;
         padding-left: 15px;
         display: flex;
@@ -175,17 +175,10 @@ $sizeManagerActionsHeight: 120px;
           width: 100%;
           overflow-x: hidden;
           overflow-y: auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
+          display: flex;
+          flex-direction: column;
           align-items: flex-start;
-
-          & > .item {
-            grid-column: span 1;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-          }
+          justify-content: flex-start;
         }
       }
       & > .actions {

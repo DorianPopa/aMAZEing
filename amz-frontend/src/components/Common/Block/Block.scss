@@ -5,11 +5,11 @@
   position: relative;
 
   .overlay {
-    fill: rgba(0, 0, 0, 0.2);
+    fill: rgba(0, 0, 0, 0.1);
     opacity: 0;
   }
 
-  &[data-hover="true"] {
+  &[data-hover="true"]:hover {
     .overlay {
       opacity: 1;
     }
@@ -37,29 +37,10 @@
 
   @include type($colorPrimary);
 
-  &[data-type="simple"] {
-    @include type($colorPrimary);
-  }
-
-  &[data-type="forbidden"] {
+  &[data-type="-1"] {
     @include type($colorTable_Red1);
   }
-  &[data-type="empty"] {
-    opacity: 0;
-  }
-  &[data-type="start"] {
-    @include type($colorTable_Green1);
-  }
-  &[data-type="finish"] {
-    @include type($colorTable_Yellow1);
-  }
-  &[data-type="solution"] {
-    @include type($colorTable_Orange1);
-  }
-  &[data-type="air"] {
-    @include type(#eeeeee);
-  }
-  &[data-type="map"] {
+  &[data-type="0"] {
     border: 0.5px solid $colorBorder;
     .main {
       fill: #ffffff;
@@ -70,5 +51,17 @@
     .triangle-top {
       display: none;
     }
+  }
+  &[data-type="1"] {
+    @include type($colorPrimary);
+  }
+  &[data-type="2"] {
+    @include type($colorTable_Green1);
+  }
+  &[data-type="3"] {
+    @include type($colorTable_Red1);
+  }
+  &[data-type="4"] {
+    @include type($colorTable_Orange1);
   }
 }
