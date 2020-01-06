@@ -51,15 +51,16 @@ class Manager extends Component {
       const lineMax = Math.min(line + dragged.size, prevState.height);
       const columnMax = Math.min(column + dragged.size, prevState.width);
 
-      for (let i = line; i < lineMax; i++)
+      console.log(line, lineMax, column, columnMax, dragged);
+
+      let l = -1;
+      for (let i = line; i < lineMax; i++) {
+        l++;
+        let c = -1;
         for (let j = column; j < columnMax; j++) {
-          console.log(dragged.size - (lineMax - i) + dragged.size - (columnMax - j));
-          matrix[i][j].type = dragged.matrix[
-            (dragged.size - (lineMax - i)) * dragged.size + dragged.size - (columnMax - j)
-          ]
-            ? "simple"
-            : "map";
+          matrix[i][j].type = dragged.matrix[l * dragged.size + ++c] ? "simple" : matrix[i][j].type;
         }
+      }
 
       return {
         matrix,

@@ -22,6 +22,7 @@ Button.propTypes = {
     "outline",
     "outline-primary",
     "outline-secondary",
+    "outline-gray",
     "icon-only",
     "light",
     "delete",

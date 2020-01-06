@@ -3,11 +3,57 @@
 .Dashboard {
   @include Page;
 
-  .user_mazes {
+  & > header {
+    width: 100%;
+    position: relative;
     display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    @include Container;
 
-    & > .user_maze_card {
-      margin-left: 30px;
+    & > .content {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: calc(#{$sizeNavHeight} + 45px) $sizeCanvasPaddingDashboard $sizeCanvasPaddingDashboard
+        $sizeCanvasPaddingDashboard;
+
+      & > .title {
+        & > h1 {
+          font-size: 30pt;
+          color: $colorDark;
+          font-weight: 600;
+          & > span {
+            color: $colorPrimary;
+          }
+        }
+      }
+    }
+    & > .underlay {
+      position: absolute;
+    }
+  }
+
+  & > .content {
+    & > .top {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      & > .title {
+        & > h2 {
+          font-size: 18pt;
+          color: $colorDark;
+          font-weight: 600;
+        }
+      }
+      & > .actions {
+        margin-left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+    }
+
+    &.self {
     }
   }
 }
