@@ -4,19 +4,43 @@ import "./Dashboard.scss";
 
 import Button from "../../Common/Button";
 import Config from "../../../config/Config";
+import StatCard from "../../Specific/Dashboard/StatCard";
+import Icon from "../../Common/Icon";
+
+import { ReactComponent as DashboardIllustration } from "../../../assets/images/dashboard_illustration.svg";
 
 class Dashboard extends Component {
   render() {
     return (
       <div className="Dashboard">
         <header>
-          <div className="content">
+          <div className="content stats">
             <div className="title">
               <h1>
                 Welcome <span>@player123</span>
               </h1>
             </div>
-            <div className="cards"></div>
+            <div className="cards">
+              <StatCard
+                title="Your Score"
+                value="200 pts"
+                onClick={() => {
+                  console.log("Go to Leaderboards");
+                }}
+              >
+                <div className="statCardButton">
+                  <p className="title">See Leaderboards</p>
+                  <Icon icon source="arrow_forward" family="round" />
+                </div>
+              </StatCard>
+
+              <StatCard title="Your mazes" value="3 mazes">
+                <div className="statCardPlayers">
+                  <p className="title">played by 200 users</p>
+                </div>
+              </StatCard>
+            </div>
+            <DashboardIllustration className="illustration" />
           </div>
 
           <div className="underlay">
@@ -31,14 +55,14 @@ class Dashboard extends Component {
             <div className="actions">
               <Button
                 type="edged"
-                theme="outline-gray"
+                theme="gray"
                 icon={{
                   icon: true,
-                  source: "show_cart",
+                  source: "show_chart",
                   family: "round",
                 }}
                 style={{}}
-                title="Play this"
+                title="See stats"
               />
               <Button
                 type="edged"

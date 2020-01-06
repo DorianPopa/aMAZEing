@@ -135,6 +135,9 @@
     &[data-theme="light"] {
       @include buton-theme(#ffffff, $colorDark);
     }
+    &[data-theme="gray"] {
+      @include buton-theme(#f5f5f5, #aaa);
+    }
 
     &[data-theme="dark"] {
       @include buton-theme($colorDark, #ffffff);

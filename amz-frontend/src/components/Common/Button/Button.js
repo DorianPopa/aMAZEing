@@ -25,6 +25,7 @@ Button.propTypes = {
     "outline-gray",
     "icon-only",
     "light",
+    "gray",
     "delete",
   ]),
   ...ButtonEdged.propTypes,
