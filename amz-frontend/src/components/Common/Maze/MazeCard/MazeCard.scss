@@ -1,1 +1,80 @@
 @import "../../../../config/Config.scss";
+
+$mazeSelfCardHeight: 180px;
+
+.MazeCard {
+  grid-column: span 1;
+  height: $mazeSelfCardHeight;
+  & > .content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    border: 1px solid #eeeeee;
+    background: #fafafa;
+
+    & > .header {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+
+      & > .index {
+        display: flex;
+        height: 40px;
+        & > .number {
+          height: 100%;
+          padding: 0 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: $colorPrimary;
+          & > p {
+            margin-right: -4px;
+            font-size: 12pt;
+            color: #ffffff;
+            font-weight: 600;
+          }
+        }
+        & > .edge {
+          height: 100%;
+          & > svg {
+            fill: $colorPrimary;
+          }
+        }
+      }
+      & > .title {
+        flex: 1;
+        padding-left: 2px;
+        padding-top: 10px;
+        & > p {
+          font-size: 12pt;
+          color: $colorDark;
+          font-weight: 600;
+          @include ellipsis;
+          width: 180px;
+        }
+      }
+      & > .info {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px 0 6px;
+        & > p {
+          font-size: 9pt;
+          color: $colorPrimary;
+          font-weight: 600;
+        }
+      }
+    }
+
+    & > .main {
+    }
+
+    & > .footer {
+    }
+  }
+}

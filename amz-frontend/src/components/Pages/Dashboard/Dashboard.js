@@ -8,6 +8,7 @@ import StatCard from "../../Specific/Dashboard/StatCard";
 import Icon from "../../Common/Icon";
 
 import { ReactComponent as DashboardIllustration } from "../../../assets/images/dashboard_illustration.svg";
+import MazeSelfCard from "../../Common/Maze/MazeSelfCard/MazeSelfCard";
 
 class Dashboard extends Component {
   render() {
@@ -76,7 +77,23 @@ class Dashboard extends Component {
               />
             </div>
           </div>
-          <div className="grid"></div>
+          <div className="grid">
+            <MazeSelfCard index="1" players={1} title="Maze_Name 39 row row row row row row row row row" />
+            <MazeSelfCard index="2" title="Awesome maze" />
+            <MazeSelfCard index="3" players={2201} title="Incredible maze" />
+            <MazeSelfCard index="4" players={3} title="Incredible maze  22222 sadsad sad sa" />
+          </div>
+        </section>
+
+        <section className="content playground">
+          <div className="top">
+            <div className="title">
+              <h2>Playground</h2>
+            </div>
+          </div>
+          <div className="grid">
+            <MazeCard />
+          </div>
         </section>
       </div>
     );

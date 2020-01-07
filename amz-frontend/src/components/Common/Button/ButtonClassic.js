@@ -16,11 +16,17 @@ const ButtonClassic = (props) => {
   );
 
   return props.to ? (
-    <Link to={props.to} className="Button Classic" data-theme={props.theme} onClick={props.onClick}>
+    <Link
+      to={props.to}
+      className="Button Classic"
+      data-theme={props.theme}
+      data-mini={props.mini}
+      onClick={props.onClick}
+    >
       {content}
     </Link>
   ) : (
-    <div className="Button Classic" data-theme={props.theme} onClick={props.onClick}>
+    <div className="Button Classic" data-theme={props.theme} data-mini={props.mini} onClick={props.onClick}>
       {content}
     </div>
   );
@@ -31,6 +37,7 @@ ButtonClassic.propTypes = {
   icon: PropTypes.shape(Icon.propTypes),
   theme: PropTypes.string.isRequired,
   onClick: PropTypes.func,
+  mini: PropTypes.bool,
 
   isDisabled: PropTypes.bool,
   isLoading: PropTypes.bool,
@@ -41,10 +48,11 @@ ButtonClassic.propTypes = {
 
 ButtonClassic.defaultProps = {
   title: "",
-  icon: Icon.defaultProps,
+  icon: null,
 
   onClick: () => {},
 
+  mini: false,
   isDisabled: false,
   isLoading: false,
   isSuccessful: false,

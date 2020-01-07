@@ -18,6 +18,10 @@
     }
   }
 
+  &[data-mini="true"] {
+    height: $sizeButtonHeightMini;
+  }
+
   &.Edged {
     & > .edge {
       height: 100%;
@@ -154,6 +158,149 @@
           transform: scale(1) !important;
         }
       }
+    }
+  }
+
+  &.Classic {
+    & > .content {
+      height: 100%;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s;
+      position: relative;
+      z-index: 1;
+      justify-content: center;
+      flex: 1;
+
+      & > * {
+        z-index: 1;
+      }
+
+      & > .icon {
+        margin-left: -6px;
+        margin-right: 6px;
+        width: 20px;
+        & > i {
+          font-size: 15pt;
+        }
+      }
+
+      & > .title {
+        text-align: center;
+        & > p {
+          font-weight: 500;
+          font-size: 11pt;
+        }
+      }
+    }
+
+    @mixin buton-default-theme($background: $colorPrimary, $color: #eeeeee, $backgroundHover: darken($background, 7%)) {
+      & > .content {
+        background-color: $background;
+        &:before {
+          background-color: $background;
+        }
+        & > .title > p {
+          color: $color;
+        }
+        & > .icon {
+          & > i,
+          & > span {
+            color: $color;
+          }
+        }
+      }
+
+      &:hover {
+        & > .edge > svg {
+          fill: $backgroundHover;
+          transform: scaleY(1.2);
+          transition: fill 0.2s, transform 0.2s;
+        }
+        & > .content {
+          background-color: $backgroundHover;
+          transition: background-color 0.2s;
+          &:before {
+            background-color: $backgroundHover;
+            transform: scaleY(1.2);
+            transition: background-color 0.2s, transform 0.2s;
+          }
+        }
+      }
+    }
+
+    @mixin buton-default-outline-theme(
+      $border: $colorPrimary,
+      $color: $colorPrimary,
+      $background: transparent,
+      $borderHover: $border,
+      $colorHover: $color,
+      $backgroundHover: #eeeeee
+    ) {
+      & > .content {
+        background-color: $background;
+        border: 1px solid $border;
+        transition: border 0.2s, background-color 0.2s;
+
+        & > .title > p {
+          color: $color;
+          transition: color 0.2s;
+        }
+        & > .icon {
+          & > i,
+          & > span {
+            color: $color;
+            transition: color 0.2s;
+          }
+        }
+      }
+
+      &:hover {
+        & > .content {
+          border: 1px solid $borderHover;
+          background-color: $backgroundHover;
+          transition: border 0.2s, background-color 0.2s;
+          & > .title > p {
+            color: $colorHover;
+            transition: color 0.2s;
+          }
+          & > .icon {
+            & > i,
+            & > span {
+              color: $colorHover;
+              transition: color 0.2s;
+            }
+          }
+        }
+      }
+    }
+
+    &[data-theme="primary"] {
+      @include buton-default-theme($colorPrimary, #ffffff);
+    }
+
+    &[data-theme="secondary"] {
+      @include buton-default-theme($colorSecondary, #ffffff);
+    }
+
+    &[data-theme="delete"] {
+      @include buton-default-theme($colorTable_Red1, #ffffff);
+    }
+
+    &[data-theme="light"] {
+      @include buton-default-theme(#ffffff, $colorDark);
+    }
+    &[data-theme="gray"] {
+      @include buton-default-theme(#f5f5f5, #aaa);
+    }
+
+    &[data-theme="dark"] {
+      @include buton-default-theme($colorDark, #ffffff);
+    }
+
+    &[data-theme="outline-dark"] {
+      @include buton-default-outline-theme($colorDark, $colorDark);
     }
   }
 }

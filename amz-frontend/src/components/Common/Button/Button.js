@@ -15,6 +15,7 @@ const Button = (props) => {
 };
 
 Button.propTypes = {
+  mini: PropTypes.bool,
   type: PropTypes.oneOf(["classic", "edged"]),
   theme: PropTypes.oneOf([
     "primary",
@@ -33,6 +34,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  mini: false,
   type: "classic",
   theme: "primary",
   ...ButtonEdged.defaultProps,
