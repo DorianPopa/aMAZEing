@@ -74,15 +74,38 @@ class Leaderboards extends Component {
             </div>
           </div>
           <div className="list">
+            <div className="labels">
+              <div className="placeLabel label">
+                <p>Place</p>
+              </div>
+              <div className="iconLabel label">
+                <p>Icon</p>
+              </div>
+              <div className="nameLabel label">
+                <p>Name</p>
+              </div>
+              <div className="playedLabel label">
+                <p>Played</p>
+              </div>
+              <div className="scoreLabel label">
+                <p>Score</p>
+              </div>
+            </div>
             {this.sortPlayers(this.players, this.sortByScore).map((player) => (
               <div key={++i} className="playerScore">
-                <div className="place">
+                <div className="place cell">
                   <p>{i}</p>
                 </div>
-                <div className="name">
+                <div className="box cell">
+                  <Icon icon source="check" />
+                </div>
+                <div className="name cell">
                   <p>{player.name}</p>
                 </div>
-                <div className="score">
+                <div className="played cell">
+                  <p>2</p>
+                </div>
+                <div className="score cell">
                   <p>{player.score}</p>
                 </div>
               </div>
