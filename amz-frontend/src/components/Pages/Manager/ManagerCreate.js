@@ -105,6 +105,9 @@ class ManagerCreate extends Component {
                   {[...Array(this.state.height).keys()].map((line) =>
                     [...Array(this.state.width).keys()].map((column) => (
                       <Block
+                        isHoverEnabled={[Config.BLOCK_TYPE.EMPTY, Config.BLOCK_TYPE.SOLUTION].includes(
+                          this.state.matrix[line][column],
+                        )}
                         key={`l${line}c${column}`}
                         type={this.state.matrix[line][column]}
                         onClick={() => {

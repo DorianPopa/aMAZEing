@@ -142,6 +142,9 @@
     &[data-theme="gray"] {
       @include buton-theme(#f5f5f5, #aaa);
     }
+    &[data-theme="solution"] {
+      @include buton-theme($colorTable_Orange1, #fff);
+    }
 
     &[data-theme="dark"] {
       @include buton-theme($colorDark, #ffffff);
@@ -297,6 +300,9 @@
 
     &[data-theme="dark"] {
       @include buton-default-theme($colorDark, #ffffff);
+    }
+    &[data-theme="solution"] {
+      @include buton-default-theme($colorTable_Orange1, #ffffff);
     }
 
     &[data-theme="outline-dark"] {
