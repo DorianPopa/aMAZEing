@@ -25,8 +25,9 @@ namespace aMAZEing.repositories
         public virtual UserMaze Create(UserMaze userMaze)
         {
             _context.UserMazes.Add(userMaze);
-            _context.SaveChanges();
+            var result = _context.SaveChanges();
 
+            if(result > 0) { }
             // ensure UserMaze saved to db
             UserMaze retUserMaze = FindById(userMaze.MazeId, userMaze.UserId);
             if (new Guid(retUserMaze.UserId.ToString()) == userMaze.UserId && new Guid(retUserMaze.MazeId.ToString()) == userMaze.MazeId)

@@ -25,17 +25,14 @@ namespace aMAZEing.repositories
         public virtual User Create(User user)
         {
             _context.Users.Add(user);
-            _context.SaveChanges();
+            var result = _context.SaveChanges();
 
-            // ensure user saved to db
-            if (new Guid(FindById(user.UserId).UserId.ToString()) == user.UserId)
-            {
-                _logger.LogInformation("User with Id {0} saved into database\n\n", user.UserId);
-                return user;
+            if (result == 0) {
+                _logger.LogError("Server error! User with Id {0} not saved into database\n\n", user.UserId);
+                throw new Exception($"Server error! User {user.UserId} not saved into database");
             }
-
-            _logger.LogError("Server error! User with Id {0} not saved into database\n\n", user.UserId);
-            return null;
+            _logger.LogInformation("User with Id {0} saved into database\n\n", user.UserId);
+            return user;
         }
 
         public virtual User FindById(Guid id)
