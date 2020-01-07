@@ -13,7 +13,6 @@ namespace aMAZEing.repositories
 
         public UserRepository()
         {
-
         }
 
         public UserRepository(ILogger<UserRepository> logger, DatabaseContext context)

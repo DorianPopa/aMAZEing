@@ -9,7 +9,6 @@ namespace aMAZEing.models
     {
         private User()
         {
-
         }
 
         public static User Create(string username, string password)

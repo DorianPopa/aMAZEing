@@ -9,7 +9,6 @@ namespace aMAZEing.errors
         {
         }
 
-
         public InternalServerError(string message)
             : base(500, HttpStatusCode.InternalServerError.ToString(), message)
         {

@@ -8,7 +8,6 @@ namespace aMAZEing.models
     {
         private Maze()
         {
-
         }
 
         public static Maze Create(string name, int width, int height, string state, string solution)

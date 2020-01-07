@@ -10,25 +10,25 @@ using Microsoft.Extensions.Logging;
 
 namespace aMAZEing.services
 {
-    public class MazeService : IMazeService
+    public class MazeService
     {
         private readonly ILogger<MazeService> _logger;
 
-        private readonly IBfsService _bfs_Service;
-        private readonly IAstarService _aStar_Service;
-        private readonly IBfsServiceTwoWay _bfsTwoWay;
+        private readonly IBfsService _bfsService;
+        private readonly IAStarService _aStarService;
+        private readonly IBfsTwoWayService _bfsTwoWayService;
 
         private readonly UserRepository _userRepository;
         private readonly MazeRepository _mazeRepository;
         private readonly UserMazeRepository _userMazeRepository;
 
-        public MazeService(ILogger<MazeService> logger, IBfsService bfs_Service, IAstarService aStar_Service, IBfsServiceTwoWay bfsTwoWay,
+        public MazeService(ILogger<MazeService> logger, IBfsService bfsService, IAStarService aStarService, IBfsTwoWayService bfsTwoWayService,
             UserRepository userRepository, MazeRepository mazeRepository, UserMazeRepository userMazeRepository)
         {
             _logger = logger;
-            _bfs_Service = bfs_Service;
-            _aStar_Service = aStar_Service;
-            _bfsTwoWay = bfsTwoWay;
+            _bfsService = bfsService;
+            _aStarService = aStarService;
+            _bfsTwoWayService = bfsTwoWayService;
 
             _userRepository = userRepository;
             _mazeRepository = mazeRepository;
@@ -55,7 +55,7 @@ namespace aMAZEing.services
             string solution;
             try
             {
-                solution = _bfs_Service.ValidateMaze(maze);
+                solution = _bfsService.ValidateMaze(maze);
             }
             catch (ApiException e)
             {
@@ -88,11 +88,13 @@ namespace aMAZEing.services
             try
             {
                 if ("BFS".Equals(algorithm))
-                    return _bfs_Service.Visualize(maze);
-                else if ("ASTAR".Equals(algorithm))
-                    return _aStar_Service.Visualize(maze);
-                else if ("BIDIRECTIONAL-BFS".Equals(algorithm))
-                    return _bfsTwoWay.Visualize(maze);
+                    return _bfsService.Visualize(maze);
+                
+                if ("A-STAR".Equals(algorithm))
+                    return _aStarService.Visualize(maze);
+                
+                if ("BIDIRECTIONAL-BFS".Equals(algorithm))
+                    return _bfsTwoWayService.Visualize(maze);
 
                 throw new ApiException(400, "No such algorithm available");
             }
@@ -152,5 +154,4 @@ namespace aMAZEing.services
                 .Build();
         }
     }
-
 }

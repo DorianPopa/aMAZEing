@@ -49,6 +49,21 @@ namespace aMAZEing.services
             throw new ApiException(400, "Username " + storedUser.Username + " already in database");
         }
 
+        public User ValidateCredentials(User user)
+        {
+            User retUser = _userRepository.FindByUsername(user.Username);
+
+            if (retUser == null || !HashPassword(user.Password).Equals(retUser.Password))
+            {
+                _logger.LogError("Invalid credentials\n\n");
+                throw new ApiException(400, "Invalid credentials");
+            }
+
+            return retUser;
+        }
+
+
+
         public List<UserDTO> GetAllUsers()
         {
             return _userRepository.GetAll()

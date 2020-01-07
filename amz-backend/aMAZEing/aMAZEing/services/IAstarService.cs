@@ -1,7 +1,6 @@
 ﻿namespace aMAZEing.services
 {
-    public interface IAstarService : IAlgorithmService 
+    public interface IAStarService : IVisualizer
     {
-        
     }
 }

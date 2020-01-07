@@ -17,7 +17,6 @@ namespace aMAZEing.DTOs
 
         public MazeVisualizerDTO()
         {
-
         }
     }
 }

@@ -51,10 +51,11 @@ namespace aMAZEing.services.Tests
                     mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
                 //Act
-                var retUserDto = _sutUserService.CreateUser(user);
+                _sutUserService.CreateUser(user);
             }
             catch (ApiException e)
             {
+                //Assert
                 Assert.AreEqual(400, e.StatusCode);
                 throw e;
             }
@@ -79,13 +80,11 @@ namespace aMAZEing.services.Tests
                     mazeRepositoryMock.Object, userMazeRepositoryMock.Object);
 
                 //Act
-                var retUserDTO = _sutUserService.CreateUser(userNotSavedIntoDb);
-
-                //Assert
-                Assert.AreEqual(null, retUserDTO);
+                _sutUserService.CreateUser(userNotSavedIntoDb);
             }
             catch (ApiException e)
             {
+                //Assert
                 Assert.AreEqual(500, e.StatusCode);
                 throw e;
             }

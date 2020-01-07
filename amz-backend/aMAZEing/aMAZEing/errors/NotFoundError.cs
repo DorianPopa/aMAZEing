@@ -9,7 +9,6 @@ namespace aMAZEing.errors
         {
         }
 
-
         public NotFoundError(string message)
             : base(404, HttpStatusCode.NotFound.ToString(), message)
         {

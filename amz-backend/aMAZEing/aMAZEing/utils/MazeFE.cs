@@ -14,7 +14,6 @@ namespace aMAZEing.utils
 
         public MazeFE()
         {
-
         }
     }
 }

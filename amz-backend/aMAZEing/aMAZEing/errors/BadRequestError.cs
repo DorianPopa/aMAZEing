@@ -9,7 +9,6 @@ namespace aMAZEing.errors
         {
         }
 
-
         public BadRequestError(string message)
             : base(400, HttpStatusCode.BadRequest.ToString(), message)
         {
