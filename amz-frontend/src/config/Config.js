@@ -17,6 +17,8 @@ class Config {
 
   static ROUTE_PAGE_MAZE_MANAGER_EDIT = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/edit`;
 
+  static ROUTE_PAGE_MAZE_MANAGER_SOLVE = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/solve`;
+
   static REDUX_ACTION_TEST = "REDUX_ACTION_TEST";
 
   static theme = {

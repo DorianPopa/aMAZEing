@@ -1,6 +1,6 @@
 @import "../../../../config/Config.scss";
 
-menu.NavMenuDashboard {
+menu.NavMenuDefault {
   margin: 0 0 0 auto;
   padding: 0;
   height: 100%;
@@ -58,6 +58,18 @@ menu.NavMenuDashboard {
       height: 100%;
       background-color: #ffffff;
       transition: background-color 0.2s;
+
+      &[data-selected="true"] {
+        background-color: #eeeeee;
+        &:first-child {
+          & ~ .edge.left {
+            & > svg {
+              fill: #eeeeee;
+              transition: fill 0.2s;
+            }
+          }
+        }
+      }
 
       &:hover {
         background-color: #eeeeee;

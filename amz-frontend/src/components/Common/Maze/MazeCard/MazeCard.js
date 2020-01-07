@@ -10,7 +10,7 @@ const MazeCard = (props) => {
   const { title, username, index, id } = props;
 
   return (
-    <div className="MazeSelfCard">
+    <div className="MazeCard">
       <div className="content">
         <div className="header">
           <div className="index">
@@ -30,9 +30,16 @@ const MazeCard = (props) => {
         </div>
         <div className="footer">
           <div className="content">
-            <Button type="classic" theme="outline-dark" title="View solution" mini />
-            <Button type="classic" theme="outline-dark" title="Edit" mini />
-            <Button type="classic" theme="outline-dark" title="Remove" mini />
+            <Button
+              type="edged"
+              theme="secondary"
+              icon={{
+                icon: true,
+                source: "play_circle_filled",
+                family: "round",
+              }}
+              title="Play this"
+            />
           </div>
         </div>
       </div>
@@ -48,7 +55,7 @@ MazeCard.propTypes = {
 
 MazeCard.defaultProps = {
   index: "1",
-  username: "@Tanase",
+  username: "Tanase",
 };
 
 export default MazeCard;

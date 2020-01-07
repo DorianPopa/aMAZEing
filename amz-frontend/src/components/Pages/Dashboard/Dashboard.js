@@ -9,6 +9,7 @@ import Icon from "../../Common/Icon";
 
 import { ReactComponent as DashboardIllustration } from "../../../assets/images/dashboard_illustration.svg";
 import MazeSelfCard from "../../Common/Maze/MazeSelfCard/MazeSelfCard";
+import MazeCard from "../../Common/Maze/MazeCard/MazeCard";
 
 class Dashboard extends Component {
   render() {
@@ -92,7 +93,8 @@ class Dashboard extends Component {
             </div>
           </div>
           <div className="grid">
-            <MazeCard />
+            <MazeCard index="34A" username="Tanase" title="Crazy path finder" />
+            <MazeCard index="12" username="Razgraf" title="My maze" />
           </div>
         </section>
       </div>

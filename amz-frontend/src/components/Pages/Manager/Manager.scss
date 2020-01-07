@@ -136,6 +136,20 @@ $sizeManagerActionsHeight: 120px;
       justify-content: flex-start;
       background-color: $colorBackgroundCanvas;
       border-left: 1px solid $colorBorder;
+    }
+  }
+}
+
+.Manager.solve {
+  & > .content {
+    & > .panel {
+    }
+  }
+}
+
+.Manager.create {
+  & > .content {
+    & > .panel {
       &:after {
         content: "";
         position: absolute;

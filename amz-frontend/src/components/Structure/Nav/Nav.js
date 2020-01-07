@@ -7,8 +7,9 @@ import { ReactComponent as Logo } from "../../../assets/images/logo_white.svg";
 import "./Nav.scss";
 
 import Config from "../../../config/Config";
-import NavMenuDashboard from "./NavMenuDashboard/NavMenuDashboard";
-import NavMenuManager from "./NavMenuManager/NavMenuManager";
+
+import NavMenuDefault from "./NavMenuDefault";
+import NavMenuManager from "./NavMenuManager";
 
 const Nav = (props) => {
   const { pathname } = props.location;
@@ -21,8 +22,8 @@ const Nav = (props) => {
         <Link className="logo" to={Config.ROUTE_PAGE_DASHBOARD}>
           <Logo />
         </Link>
-        {pathname === Config.ROUTE_PAGE_DASHBOARD ? (
-          <NavMenuDashboard user={{ username: "player123", id: "AB1" }} />
+        {[Config.ROUTE_PAGE_DASHBOARD, Config.ROUTE_PAGE_LEADERBOARDS].includes(pathname) ? (
+          <NavMenuDefault path={pathname} user={{ username: "player123", id: "AB1" }} />
         ) : (
           <NavMenuManager self user={{ username: "player123", id: "AB1" }} />
         )}

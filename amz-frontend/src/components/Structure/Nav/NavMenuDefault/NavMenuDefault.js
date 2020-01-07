@@ -6,11 +6,11 @@ import { EdgeLeft, EdgeRight } from "../../../Common/Edge/Edge";
 import Icon from "../../../Common/Icon";
 import Config from "../../../../config/Config";
 
-import "./NavMenuDashboard.scss";
+import "./NavMenuDefault.scss";
 
-const NavMenuDashboard = (props) => {
+const NavMenuDefault = (props) => {
   return (
-    <menu className="NavMenuDashboard">
+    <menu className="NavMenuDefault">
       <Button
         type="edged"
         icon={{
@@ -23,14 +23,22 @@ const NavMenuDashboard = (props) => {
         to={Config.ROUTE_PAGE_MAZE_MANAGER_CREATE}
       />
       <div className="content">
-        <Link className="item" to={Config.ROUTE_PAGE_DASHBOARD}>
+        <Link
+          className="item"
+          to={Config.ROUTE_PAGE_DASHBOARD}
+          data-selected={props.path === Config.ROUTE_PAGE_DASHBOARD}
+        >
           <div className="content">
             <Icon icon source="business" family="round" />
             <p>Dashboard</p>
           </div>
         </Link>
         <div className="divider" />
-        <Link className="item" to={Config.ROUTE_PAGE_LEADERBOARDS}>
+        <Link
+          className="item"
+          to={Config.ROUTE_PAGE_LEADERBOARDS}
+          data-selected={props.path === Config.ROUTE_PAGE_LEADERBOARDS}
+        >
           <div className="content">
             <Icon icon source="insert_chart_outlined" family="round" />
             <p>Leaderboards</p>
@@ -54,17 +62,19 @@ const NavMenuDashboard = (props) => {
   );
 };
 
-NavMenuDashboard.propTypes = {
+NavMenuDefault.propTypes = {
+  path: PropTypes.string,
   user: PropTypes.shape({
     username: PropTypes.string,
     id: PropTypes.string,
   }),
 };
-NavMenuDashboard.defaultProps = {
+NavMenuDefault.defaultProps = {
+  path: Config.ROUTE_PAGE_DASHBOARD,
   user: {
     username: "Visitor",
     id: "",
   },
 };
 
-export default NavMenuDashboard;
+export default NavMenuDefault;
