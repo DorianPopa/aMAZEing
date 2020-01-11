@@ -5,12 +5,12 @@ namespace aMAZEing.errors
     public class UnauthorizedError : ApiError
     {
         public UnauthorizedError()
-            : base(400, HttpStatusCode.Unauthorized.ToString())
+            : base(401, HttpStatusCode.Unauthorized.ToString())
         {
         }
 
         public UnauthorizedError(string message)
-            : base(400, HttpStatusCode.Unauthorized.ToString(), message)
+            : base(401, HttpStatusCode.Unauthorized.ToString(), message)
         {
         }
     }

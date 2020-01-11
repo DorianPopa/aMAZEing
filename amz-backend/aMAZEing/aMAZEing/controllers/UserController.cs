@@ -173,7 +173,24 @@ namespace aMAZEing.controllers
             }
         }
 
+        [HttpGet]
+        [Route("leaderboard")]
+        public ActionResult<List<UserDTO>> GetLeaderboard()
+        {
+            _logger.LogInformation("GET request for the leaderboard\n\n");
 
+            try
+            {
+                var accessToken = Request.Headers["Bearer"];
+                var payload = Authorize(accessToken);
+            }
+            catch (ApiException e)
+            {
+                return Unauthorized(new UnauthorizedError(e.Message));
+            }
+
+            throw new NotImplementedException();
+        }
 
         private IDictionary<string, object> Authorize(string accessToken)
         {

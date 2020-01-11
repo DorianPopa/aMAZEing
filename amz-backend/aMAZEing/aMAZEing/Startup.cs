@@ -31,7 +31,8 @@ namespace aMAZEing
             }));
 
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(@"Server=tcp:amazeingdbserver.database.windows.net,1433;Initial Catalog=aMAZEing;Persist Security Info=False;User ID=DBmaster;Password=qwer1234!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")
+                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=aMAZEing;Trusted_Connection=True;")
+                //options.UseSqlServer(@"Server=tcp:amazeingdbserver.database.windows.net,1433;Initial Catalog=aMAZEing;Persist Security Info=False;User ID=DBmaster;Password=qwer1234!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")
             );
 
             services.AddControllers();

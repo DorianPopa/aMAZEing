@@ -29,7 +29,7 @@ namespace aMAZEing.security
                 .AddClaim("userId", userId)
                 .Build();
 
-            return new Jwt(token);
+            return new Jwt(token, userId);
         }
 
         public IDictionary<string, object> ValidateJwt(string token)
