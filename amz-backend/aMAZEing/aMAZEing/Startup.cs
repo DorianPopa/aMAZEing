@@ -22,8 +22,16 @@ namespace aMAZEing
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("Cors", builder =>
+            {
+               builder.
+               AllowAnyOrigin().
+               AllowAnyMethod().
+               AllowAnyHeader();
+            }));
+
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=aMAZEing;Trusted_Connection=True;")
+                options.UseSqlServer(@"Server=tcp:amazeingdbserver.database.windows.net,1433;Initial Catalog=aMAZEing;Persist Security Info=False;User ID=DBmaster;Password=qwer1234!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")
             );
 
             services.AddControllers();
@@ -54,6 +62,8 @@ namespace aMAZEing
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("Cors");
 
             app.UseEndpoints(endpoints =>
             {
