@@ -1,16 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-
 import "./MazeCard.scss";
 import Button from "../../Button";
 import Edge from "../../Edge/Edge";
-import Icon from "../../Icon";
 
 const MazeCard = (props) => {
   const { title, username, index, id } = props;
 
   return (
-    <div className="MazeCard">
+    <div className="MazeCard" data-id={id}>
       <div className="content">
         <div className="header">
           <div className="index">
@@ -48,13 +46,14 @@ const MazeCard = (props) => {
 };
 
 MazeCard.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  index: PropTypes.string,
+  index: PropTypes.number,
   username: PropTypes.string,
 };
 
 MazeCard.defaultProps = {
-  index: "1",
+  index: 0,
   username: "Tanase",
 };
 

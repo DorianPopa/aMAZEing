@@ -1,0 +1,27 @@
+@import "../../../../base/config/Config.scss";
+
+.Label {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  width: 100%;
+
+  & > .label {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+
+    label {
+      color: $colorPrimary;
+      font-size: 10pt;
+      font-weight: 500;
+
+      & > span {
+        font-weight: 400;
+        color: #aaa;
+      }
+    }
+  }
+}

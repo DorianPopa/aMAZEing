@@ -1,10 +1,7 @@
 import React, { Component } from "react";
+import Icon from "../../Common/Icon";
 
 import "./Leaderboards.scss";
-
-import Button from "../../Common/Button";
-import Config from "../../../config/Config";
-import Icon from "../../Common/Icon";
 
 class Leaderboards extends Component {
   players = [

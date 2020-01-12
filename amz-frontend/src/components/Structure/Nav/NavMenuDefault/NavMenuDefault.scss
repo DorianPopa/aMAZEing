@@ -1,4 +1,4 @@
-@import "../../../../config/Config.scss";
+@import "../../../../base/config/Config.scss";
 
 menu.NavMenuDefault {
   margin: 0 0 0 auto;
@@ -109,6 +109,7 @@ menu.NavMenuDefault {
       }
 
       &.profile {
+        cursor: pointer;
         & > .content {
           height: calc(100% - 2 * 4px);
           padding: 4px 0px 4px 8px;

@@ -6,7 +6,6 @@ const Edge = (props) => {
   switch (props.type) {
     case "left":
       return <EdgeLeft {...props} />;
-
     case "right":
     default:
       return <EdgeRight {...props} />;

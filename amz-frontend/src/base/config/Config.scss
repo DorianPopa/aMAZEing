@@ -21,7 +21,7 @@ $sizeFooterMiniHeight: 80px;
 $sizeButtonHeight: 42px;
 $sizeButtonHeightMini: 34px;
 
-$sizePiece: 30px;
+$sizePiece: 36px;
 
 $fontPrimary: "Ubuntu", sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto";
 $fontSecondary: "Roboto Mono", monospace, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto";
@@ -143,9 +143,32 @@ $top-mobile: "all and (max-width : #{$col-sm})";
   background: $colorBackground;
   z-index: $zIndexPage;
 
+  position: relative;
+
   & > .content {
     padding: calc(#{$sizeNavHeight} + 25px) $sizeCanvasPaddingDashboard $sizeCanvasPaddingDashboard
       $sizeCanvasPaddingDashboard;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  &[data-restrict="true"] {
+    &:after {
+      z-index: 100000;
+      display: flex;
+      pointer-events: all;
+      @include fade-in(500ms);
+    }
   }
 }
 

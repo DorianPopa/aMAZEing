@@ -10,7 +10,7 @@ const MazeSelfCard = (props) => {
   const { title, players, index, id } = props;
 
   return (
-    <div className="MazeSelfCard">
+    <div className="MazeSelfCard" data-id={id}>
       <div className="content">
         <div className="header">
           <div className="index">
@@ -43,13 +43,14 @@ const MazeSelfCard = (props) => {
 };
 
 MazeSelfCard.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  index: PropTypes.string,
+  index: PropTypes.number,
   players: PropTypes.number,
 };
 
 MazeSelfCard.defaultProps = {
-  index: "1",
+  index: 0,
   players: 0,
 };
 

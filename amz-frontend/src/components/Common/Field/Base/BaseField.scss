@@ -1,0 +1,126 @@
+@import "../../../../base/config/Config.scss";
+
+.Base {
+  width: 100%;
+  flex: 1;
+
+  & > .container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    & > .FieldLabel {
+      width: 100%;
+      z-index: 4;
+    }
+
+    & > .field {
+      z-index: 3;
+      width: 100%;
+      & > .content {
+        width: calc(100% - 2 * 12px - 2 * 1px);
+        padding: 6px 12px;
+        min-height: 36px;
+        background: #ffffff;
+        border-radius: 2px;
+        border: 1px solid #eeeeee;
+        background-color: #f5f5f5;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        & > input,
+        & > textarea {
+          font-size: 14pt;
+          color: $colorDark;
+          font-weight: 500;
+          outline: none;
+          border: none;
+          flex: 1;
+          background: transparent;
+        }
+
+        @mixin placeholder {
+          -webkit-appearance: none;
+          color: darken($colorTable_GrayBlue_Light, 15%);
+          font-size: 11pt;
+          font-weight: 300;
+          opacity: 1;
+        }
+
+        input::placeholder {
+          @include placeholder;
+        }
+
+        input::-webkit-input-placeholder {
+          @include placeholder;
+        }
+
+        input::-ms-placeholder {
+          @include placeholder;
+        }
+
+        input::-moz-placeholder {
+          @include placeholder;
+        }
+
+        textarea::placeholder {
+          @include placeholder;
+        }
+
+        textarea::-webkit-input-placeholder {
+          @include placeholder;
+        }
+
+        textarea::-ms-placeholder {
+          @include placeholder;
+        }
+
+        textarea::-moz-placeholder {
+          @include placeholder;
+        }
+      }
+    }
+
+    & > .warn {
+      margin-top: 4px;
+      min-height: 0;
+      width: 100%;
+      position: relative;
+      pointer-events: none;
+      & > .content {
+        display: none;
+        width: 100%;
+        justify-content: flex-end;
+        text-align: center;
+        z-index: 4;
+        position: absolute;
+        bottom: 25px;
+        right: 8px;
+
+        & > div {
+          width: 8px;
+          height: 8px;
+          border-radius: 4px;
+          background-color: $colorTable_Red1;
+        }
+      }
+    }
+  }
+
+  &[data-warn="true"] {
+    & > .container {
+      & > .warn {
+        & > .content {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  &[data-visible="false"] {
+    visibility: hidden;
+    z-index: -1;
+    display: none;
+  }
+}

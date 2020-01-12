@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import Button from "../../../Common/Button";
+
+import { withAlert } from "react-alert";
+import { withRouter, Link } from "react-router-dom";
+import { compose } from "redux";
+import { Config } from "../../../../base";
 import { EdgeLeft, EdgeRight } from "../../../Common/Edge/Edge";
+
+import { ProfileModal } from "../../Modal/Template";
+import Button from "../../../Common/Button";
 import Icon from "../../../Common/Icon";
-import Config from "../../../../config/Config";
 
 import "./NavMenuDefault.scss";
 
 const NavMenuDefault = (props) => {
+  const [isProfileModalOpen, toggleProfileModal] = useState(false);
+  const [isLogOutFired, toggleLogOut] = useState(false);
   return (
     <menu className="NavMenuDefault">
       <Button
@@ -44,7 +51,12 @@ const NavMenuDefault = (props) => {
             <p>Leaderboards</p>
           </div>
         </Link>
-        <Link className="item profile" to={`${Config.ROUTE_PAGE_PROFILE_CLEAN}${props.user.id}`}>
+        <div
+          onClick={() => {
+            toggleProfileModal(true);
+          }}
+          className="item profile"
+        >
           <div className="content">
             <EdgeLeft width={10} height={20} />
             <div className="container">
@@ -53,11 +65,27 @@ const NavMenuDefault = (props) => {
             </div>
             <EdgeRight width={10} height={20} />
           </div>
-        </Link>
+        </div>
 
         <EdgeLeft />
         <EdgeRight />
       </div>
+
+      <ProfileModal
+        username={props.user.username}
+        isOpen={isProfileModalOpen}
+        isLogOutFired={isLogOutFired}
+        onLogOut={() => {
+          if (isLogOutFired) return;
+          toggleLogOut(true);
+          props.alert.show("Sorry to see you go :(.", { type: "warn", timeout: 5000, isClosable: false });
+          setTimeout(() => {
+            props.alert.removeAll();
+            props.onLogOut();
+          }, 3000);
+        }}
+        onClose={toggleProfileModal}
+      />
     </menu>
   );
 };
@@ -68,6 +96,14 @@ NavMenuDefault.propTypes = {
     username: PropTypes.string,
     id: PropTypes.string,
   }),
+  alert: PropTypes.shape({
+    show: PropTypes.func,
+    removeAll: PropTypes.func,
+  }).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func,
+  }).isRequired,
+  onLogOut: PropTypes.func.isRequired,
 };
 NavMenuDefault.defaultProps = {
   path: Config.ROUTE_PAGE_DASHBOARD,
@@ -77,4 +113,4 @@ NavMenuDefault.defaultProps = {
   },
 };
 
-export default NavMenuDefault;
+export default compose(withRouter, withAlert())(NavMenuDefault);

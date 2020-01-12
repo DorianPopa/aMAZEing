@@ -1,11 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./Block.scss";
-import Config from "../../../config";
+import { Config } from "../../../base";
 
-const Block = ({ type, isHoverEnabled, onClick }) => {
+const Block = ({ type, isHoverEnabled, onClick, rank }) => {
   return (
-    <svg className="Block block" viewBox="0 0 50 50" data-type={type} data-hover={isHoverEnabled} onClick={onClick}>
+    <svg
+      className="Block block"
+      viewBox="0 0 50 50"
+      data-rank-line={rank.line}
+      data-rank-column={rank.column}
+      data-type={type}
+      data-hover={isHoverEnabled}
+      onClick={onClick}
+    >
       <g>
         <path className="main" d="M 0 0 50 0 50 50 0 50" />
         <path className="triangle-left" d="M 0 0 25 25 0 50" />
@@ -29,12 +37,20 @@ Block.propTypes = {
   ]),
   isHoverEnabled: PropTypes.bool,
   onClick: PropTypes.func,
+  rank: PropTypes.shape({
+    line: PropTypes.number,
+    column: PropTypes.number,
+  }),
 };
 
 Block.defaultProps = {
   type: "simple",
   isHoverEnabled: true,
   onClick: () => {},
+  rank: {
+    line: 0,
+    column: 0,
+  },
 };
 
 export default Block;

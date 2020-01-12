@@ -1,4 +1,4 @@
-@import "../../../config/Config.scss";
+@import "../../../base/config/Config.scss";
 
 .Piece {
   opacity: 1 !important;
@@ -9,8 +9,8 @@
 
   & > .box {
     position: relative;
-    width: $sizePiece * 3;
-    height: $sizePiece * 3;
+    width: 30px * 3;
+    height: 30px * 3;
     background-color: #ffffff;
     border: 1px solid $colorBorder;
     display: grid;

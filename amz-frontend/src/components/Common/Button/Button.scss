@@ -1,4 +1,4 @@
-@import "../../../config/Config.scss";
+@import "../../../base/config/Config.scss";
 
 .Button {
   height: $sizeButtonHeight;
@@ -56,6 +56,15 @@
         z-index: 1;
       }
 
+      & > .loader {
+        position: absolute;
+        right: 15px;
+        z-index: 2;
+        & > div[role="progressbar"] {
+          color: #ffffff;
+        }
+      }
+
       &:before {
         content: "";
         position: absolute;
@@ -103,6 +112,9 @@
           & > span {
             color: $color;
           }
+        }
+        & > .loader > div[role="progressbar"] {
+          color: $color;
         }
       }
 
@@ -180,6 +192,15 @@
         z-index: 1;
       }
 
+      & > .loader {
+        position: absolute;
+        right: 15px;
+        z-index: 2;
+        & > div[role="progressbar"] {
+          color: #ffffff;
+        }
+      }
+
       & > .icon {
         margin-left: -6px;
         margin-right: 6px;
@@ -212,6 +233,9 @@
           & > span {
             color: $color;
           }
+        }
+        & > .loader > div[role="progressbar"] {
+          color: $color;
         }
       }
 
@@ -256,6 +280,9 @@
             color: $color;
             transition: color 0.2s;
           }
+        }
+        & > .loader > div[role="progressbar"] {
+          color: $color;
         }
       }
 
@@ -304,9 +331,22 @@
     &[data-theme="solution"] {
       @include buton-default-theme($colorTable_Orange1, #ffffff);
     }
+    &[data-theme="cherry"] {
+      @include buton-default-theme(#ad1457, #ffffff);
+    }
 
     &[data-theme="outline-dark"] {
       @include buton-default-outline-theme($colorDark, $colorDark);
+    }
+    &[data-theme="outline"] {
+      @include buton-default-outline-theme(
+        #fff,
+        #fff,
+        $background: transparent,
+        $borderHover: #fff,
+        $colorHover: #fff,
+        $backgroundHover: rgba(255, 255, 255, 0.3)
+      );
     }
   }
 }

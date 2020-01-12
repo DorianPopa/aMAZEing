@@ -1,39 +1,86 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import typy from "typy";
+import { withAlert } from "react-alert";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import Button from "../../Common/Button";
-import "./Manager.scss";
-import Config from "../../../config";
+import { Config } from "../../../base";
 import Block from "../../Common/Block/Block";
 import PanelItem from "../../Specific/Manager/PanelItem";
+import { SaveMazeModal, CancelMazeCreateModal } from "../../Structure/Modal/Template";
 
-class ManagerCreate extends Component {
+import "./Manager.scss";
+
+class ManagerCreate extends PureComponent {
   constructor(props) {
     super(props);
 
-    const piece = parseInt(Config.theme.sizePiece, 12);
+    const piece = parseInt(Config.theme.sizePiece, 10);
 
     this.state = {
       piece,
-      width: parseInt(890 / piece, 10),
-      height: parseInt(510 / piece, 10),
+      width: 0,
+      height: 0,
       chosen: Config.BLOCK_TYPE.SIMPLE,
-    };
+      matrix: {},
+      available: {},
 
+      mazeName: "",
+      mazeNameWarn: false,
+      isSaveModalOpen: false,
+      isSavingFired: false,
+      isCancelMazeCreateModalOpen: false,
+    };
+  }
+
+  componentDidMount() {
     this.configure();
   }
 
-  configure() {
-    const matrix = {};
-
-    for (let i = 0; i < this.state.height; i++)
-      for (let j = 0; j < this.state.width; j++) {
-        if (matrix[i] === undefined) matrix[i] = {};
-        matrix[i][j] = Config.BLOCK_TYPE.EMPTY;
-      }
-
-    this.state.matrix = matrix;
-
-    this.state.available = this.computeAvailableBlocks(false);
+  renderPlayground() {
+    return [...Array(this.state.height).keys()].map((line) =>
+      [...Array(this.state.width).keys()].map((column) => (
+        <Block
+          isHoverEnabled={[Config.BLOCK_TYPE.EMPTY, Config.BLOCK_TYPE.SOLUTION].includes(
+            this.state.matrix[line][column],
+          )}
+          key={`l${line}c${column}`}
+          type={this.state.matrix[line][column]}
+          onClick={() => {
+            this.onBlockPick(line, column);
+          }}
+        />
+      )),
+    );
   }
+
+  configure = () => {
+    this.setState(
+      (prev) => {
+        const matrix = {};
+        const width = parseInt(890 / prev.piece, 10);
+        const height = parseInt(510 / prev.piece, 10);
+
+        for (let i = 0; i < height; i++)
+          for (let j = 0; j < width; j++) {
+            if (matrix[i] === undefined) matrix[i] = {};
+            matrix[i][j] = Config.BLOCK_TYPE.EMPTY;
+          }
+
+        return {
+          height,
+          width,
+          matrix,
+        };
+      },
+      () => {
+        this.setState({
+          available: this.computeAvailableBlocks(false),
+        });
+      },
+    );
+  };
 
   computeAvailableBlocks(save = true) {
     let maxStartBlocks = 1;
@@ -83,6 +130,13 @@ class ManagerCreate extends Component {
     }, this.computeAvailableBlocks);
   }
 
+  onSave = () => {
+    if (typy(this.state, "mazeName").isEmptyString) {
+      this.props.alert.show("Please add a valid Maze name.", { type: "error" });
+      this.setState({ mazeNameWarn: true });
+    }
+  };
+
   render() {
     return (
       <div className="Manager create">
@@ -102,26 +156,16 @@ class ManagerCreate extends Component {
                     gridTemplateRows: `repeat(${this.state.height},1fr)`,
                   }}
                 >
-                  {[...Array(this.state.height).keys()].map((line) =>
-                    [...Array(this.state.width).keys()].map((column) => (
-                      <Block
-                        isHoverEnabled={[Config.BLOCK_TYPE.EMPTY, Config.BLOCK_TYPE.SOLUTION].includes(
-                          this.state.matrix[line][column],
-                        )}
-                        key={`l${line}c${column}`}
-                        type={this.state.matrix[line][column]}
-                        onClick={() => {
-                          this.onBlockPick(line, column);
-                        }}
-                      />
-                    )),
-                  )}
+                  {Object.keys(typy(this.state, "matrix").safeObject).length > 0 ? this.renderPlayground() : null}
                 </div>
               </div>
             </div>
             <div className="actions">
               <div className="title">
                 <h3>Info</h3>
+              </div>
+              <div className="buttons">
+                <Button type="edged" theme="solution" title="Show solution" />
               </div>
             </div>
           </div>
@@ -157,6 +201,9 @@ class ManagerCreate extends Component {
                   family: "round",
                 }}
                 title="Cancel"
+                onClick={() => {
+                  this.setState({ isCancelMazeCreateModalOpen: true });
+                }}
               />
               <Button
                 type="edged"
@@ -167,13 +214,69 @@ class ManagerCreate extends Component {
                   family: "round",
                 }}
                 title="Save maze"
+                onClick={() => {
+                  this.setState({ isSaveModalOpen: true });
+                }}
               />
             </div>
           </div>
         </div>
+        <SaveMazeModal
+          onClose={() => {
+            this.setState({ isSaveModalOpen: false, mazeName: "" });
+          }}
+          isOpen={this.state.isSaveModalOpen}
+          onSave={this.onSave}
+          mazeName={this.state.mazeName}
+          toggleMazeName={(value) => {
+            this.setState({ mazeName: value, mazeNameWarn: false });
+          }}
+          mazeNameWarn={this.state.mazeNameWarn}
+          isSavingFired={this.state.isSavingFired}
+        />
+
+        <CancelMazeCreateModal
+          isOpen={this.state.isCancelMazeCreateModalOpen}
+          onClose={() => {
+            this.setState({ isCancelMazeCreateModalOpen: false });
+          }}
+          onCancel={() => {
+            this.props.history.replace(Config.ROUTE_PAGE_DASHBOARD);
+          }}
+        />
       </div>
     );
   }
 }
 
-export default ManagerCreate;
+ManagerCreate.propTypes = {
+  alert: PropTypes.shape({
+    show: PropTypes.func,
+    removeAll: PropTypes.func,
+  }).isRequired,
+  store: PropTypes.shape({
+    user: PropTypes.shape({}),
+  }).isRequired,
+  dispatch: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func,
+  }).isRequired,
+};
+
+export default compose(
+  withAlert(),
+  connect(
+    (store) => {
+      return {
+        store: {
+          user: store.auth.user,
+        },
+      };
+    },
+    () => {
+      return {
+        dispatch: {},
+      };
+    },
+  ),
+)(ManagerCreate);

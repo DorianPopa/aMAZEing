@@ -1,4 +1,4 @@
-@import "../../../config/Config.scss";
+@import "../../../base/config/Config.scss";
 
 $sizeManagerPanelWidth: 340px;
 $sizeManagerActionsHeight: 120px;
@@ -122,6 +122,16 @@ $sizeManagerActionsHeight: 120px;
             font-weight: 500;
             font-size: 18pt;
             color: $colorSecondary;
+          }
+        }
+
+        & > .buttons {
+          flex: 1;
+
+          & > .Button {
+            & > .content > .title {
+              min-width: 100px;
+            }
           }
         }
       }

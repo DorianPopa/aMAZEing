@@ -1,19 +1,22 @@
 import React, { Component } from "react";
+import typy from "typy";
 import Button from "../../Common/Button";
-import "./Manager.scss";
-import Config from "../../../config";
+import { Config } from "../../../base";
 import Block from "../../Common/Block/Block";
+import "./Manager.scss";
 
 class ManagerSolve extends Component {
   constructor(props) {
     super(props);
 
-    const piece = parseInt(Config.theme.sizePiece, 12);
+    const piece = parseInt(Config.theme.sizePiece, 10);
 
     this.state = {
       piece,
-      width: parseInt(890 / piece, 10),
-      height: parseInt(510 / piece, 10),
+      width: 0,
+      height: 0,
+      matrix: {},
+      solution: {},
       source: [
         [1, 1, Config.BLOCK_TYPE.SIMPLE],
         [1, 2, Config.BLOCK_TYPE.SIMPLE],
@@ -22,28 +25,41 @@ class ManagerSolve extends Component {
         [9, 1, Config.BLOCK_TYPE.FINISH],
       ],
     };
+  }
 
+  componentDidMount() {
     this.configure();
   }
 
-  configure() {
-    const matrix = {};
+  configure = () => {
+    this.setState(
+      (prev) => {
+        const matrix = {};
+        const width = parseInt(890 / prev.piece, 10);
+        const height = parseInt(510 / prev.piece, 10);
 
-    for (let i = 0; i < this.state.height; i++)
-      for (let j = 0; j < this.state.width; j++) {
-        if (matrix[i] === undefined) matrix[i] = {};
-        matrix[i][j] = Config.BLOCK_TYPE.EMPTY;
-      }
-
-    this.state.matrix = matrix;
-
-    this.state.source.forEach((block) => {
-      const [line, column, type] = block;
-      matrix[line][column] = type;
-    });
-
-    this.state.solution = this.computeSolutionBlocks(false);
-  }
+        for (let i = 0; i < height; i++)
+          for (let j = 0; j < width; j++) {
+            if (matrix[i] === undefined) matrix[i] = {};
+            matrix[i][j] = Config.BLOCK_TYPE.EMPTY;
+          }
+        prev.source.forEach((block) => {
+          const [line, column, type] = block;
+          matrix[line][column] = type;
+        });
+        return {
+          height,
+          width,
+          matrix,
+        };
+      },
+      () => {
+        this.setState({
+          solution: this.computeSolutionBlocks(false),
+        });
+      },
+    );
+  };
 
   computeSolutionBlocks(save = true) {
     let used = 0;
@@ -99,17 +115,19 @@ class ManagerSolve extends Component {
                     gridTemplateRows: `repeat(${this.state.height},1fr)`,
                   }}
                 >
-                  {[...Array(this.state.height).keys()].map((line) =>
-                    [...Array(this.state.width).keys()].map((column) => (
-                      <Block
-                        key={`l${line}c${column}`}
-                        type={this.state.matrix[line][column]}
-                        onClick={() => {
-                          this.onBlockPick(line, column);
-                        }}
-                      />
-                    )),
-                  )}
+                  {Object.keys(typy(this.state, "matrix").safeObject).length > 0
+                    ? [...Array(this.state.height).keys()].map((line) =>
+                        [...Array(this.state.width).keys()].map((column) => (
+                          <Block
+                            key={`l${line}c${column}`}
+                            type={this.state.matrix[line][column]}
+                            onClick={() => {
+                              this.onBlockPick(line, column);
+                            }}
+                          />
+                        )),
+                      )
+                    : null}
                 </div>
               </div>
             </div>

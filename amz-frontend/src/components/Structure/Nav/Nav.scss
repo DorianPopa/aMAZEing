@@ -1,4 +1,4 @@
-@import "../../../config/Config.scss";
+@import "../../../base/config/Config.scss";
 
 .Nav {
   @include Container;
@@ -22,9 +22,6 @@
         object-fit: contain;
         margin-top: 6px;
       }
-    }
-
-    & > .menu {
     }
   }
 }

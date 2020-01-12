@@ -1,1 +1,1 @@
-export { default } from "./MazeCard";
+export { default } from "./MazeSelfCard";

@@ -1,8 +1,8 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Nav from "../../Structure/Nav";
 import { Dashboard, Manager, Leaderboards } from "../../Pages";
-import Config from "../../../config/Config";
+import { Config } from "../../../base";
 
 const NavigatorUser = () => {
   const PAGES = [
@@ -11,28 +11,28 @@ const NavigatorUser = () => {
       route: Config.ROUTE_PAGE_DASHBOARD,
       title: "Dashboard",
       depth: 1,
-      component: <Dashboard />,
+      component: (props) => <Dashboard {...props} />,
     },
     {
       exact: true,
       route: Config.ROUTE_PAGE_LEADERBOARDS,
       title: "Leaderboards",
       depth: 1,
-      component: <Leaderboards />,
+      component: (props) => <Leaderboards {...props} />,
     },
     {
       exact: true,
       route: Config.ROUTE_PAGE_MAZE_MANAGER_SOLVE,
       title: "Solve Maze",
       depth: 1,
-      component: <Manager type="solve" />,
+      component: (props) => <Manager {...props} type="solve" />,
     },
     {
       exact: true,
       route: Config.ROUTE_PAGE_MAZE_MANAGER_CREATE,
       title: "Create Maze",
       depth: 1,
-      component: <Manager type="create" />,
+      component: (props) => <Manager {...props} type="create" />,
     },
   ];
 
@@ -40,8 +40,14 @@ const NavigatorUser = () => {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Switch>
         {PAGES.map((element) => (
-          <Route key={element.route} path={element.route} render={() => element.component} exact={element.exact} />
+          <Route
+            key={element.route}
+            path={element.route}
+            render={(props) => element.component(props)}
+            exact={element.exact}
+          />
         ))}
+        <Redirect to={Config.ROUTE_PAGE_DASHBOARD} />
       </Switch>
 
       <Nav />

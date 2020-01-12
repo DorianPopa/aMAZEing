@@ -29,6 +29,7 @@ Button.propTypes = {
     "gray",
     "delete",
     "solution",
+    "cherry",
   ]),
   ...ButtonEdged.propTypes,
   ...ButtonClassic.propTypes,

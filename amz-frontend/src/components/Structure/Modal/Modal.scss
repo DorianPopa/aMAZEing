@@ -1,0 +1,117 @@
+@import "../../../base/config/Config.scss";
+
+.Modal {
+  background-color: $colorSecondary;
+  padding: 40px;
+  min-width: 600px;
+  max-width: calc(95% - 2 * 40px);
+
+  @media all and (max-width: #{$col-lg}) {
+    max-width: calc(98% - 2 * 20px);
+    padding: 20px;
+  }
+
+  & > .top {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 5px solid rgba(#ffffff, 0.1);
+    margin-bottom: 40px;
+    & > h2 {
+      padding-top: 5px;
+      flex: 1;
+      color: #ffffff;
+    }
+    & > .button {
+      margin-left: 15px;
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+      background-color: rgba(#ffffff, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-size: 14pt;
+      font-weight: 600;
+
+      transition: background-color 200ms;
+      cursor: pointer;
+
+      & > .Icon > i {
+        color: #ffffff;
+        font-size: 14pt;
+      }
+
+      &:hover,
+      &:active {
+        background-color: $colorTable_Red1;
+        transition: background-color 200ms;
+      }
+    }
+  }
+
+  & > .ModalContent {
+    width: 100%;
+    min-height: 120px;
+    color: #ffffff;
+  }
+}
+
+.Modal.CancelModal {
+  background-color: $colorTable_Red1;
+  .ModalContent {
+  }
+}
+
+.Modal.SaveMazeModal {
+  background-color: $colorPrimary;
+  .ModalContent {
+    min-height: 80px;
+    & > p {
+      margin-bottom: 40px;
+    }
+
+    & > .fields {
+      width: 100%;
+      margin-bottom: 40px;
+
+      & > .Base > .container > .Label > .label > label {
+        color: #ffffff;
+      }
+    }
+
+    & > .buttons {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+
+      & > * {
+        grid-column: span 1;
+      }
+    }
+  }
+}
+
+.Modal.ProfileModal,
+.CancelModal {
+  .ModalContent {
+    min-height: 80px;
+    & > p {
+      margin-bottom: 40px;
+    }
+
+    & > .buttons {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+
+      & > * {
+        grid-column: span 1;
+      }
+    }
+  }
+}

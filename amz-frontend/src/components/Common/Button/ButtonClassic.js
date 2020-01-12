@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import "./Button.scss";
 import Icon from "../Icon";
@@ -12,6 +13,7 @@ const ButtonClassic = (props) => {
       <div className="title">
         <p>{props.title}</p>
       </div>
+      <div className="loader">{props.isLoading ? <CircularProgress size={20} /> : null}</div>
     </div>
   );
 
