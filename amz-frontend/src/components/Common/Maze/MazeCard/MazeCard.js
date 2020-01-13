@@ -7,12 +7,12 @@ import Edge from "../../Edge/Edge";
 import { Config } from "../../../../base";
 
 const cover = (seed) => {
-  const pattern = Trianglify({ width: 240, height: 140, cell_size: 100, seed });
+  const pattern = Trianglify({ width: 400, height: 250, cell_size: 100, seed });
   return pattern.png();
 };
 
 const MazeCard = (props) => {
-  const { title, username, index, id } = props;
+  const { title, username, index, id, solved } = props;
 
   return (
     <div className="MazeCard" data-id={id}>
@@ -39,13 +39,13 @@ const MazeCard = (props) => {
           <div className="content">
             <Button
               type="edged"
-              theme="secondary"
+              theme={solved ? "light" : "secondary"}
               icon={{
                 icon: true,
                 source: "play_circle_filled",
                 family: "round",
               }}
-              title="Play this"
+              title={solved ? "Solved" : "Play this"}
               to={Config.ROUTE_BUILDER_PAGE_MAZE_MANAGER_SOLVE(id)}
             />
           </div>

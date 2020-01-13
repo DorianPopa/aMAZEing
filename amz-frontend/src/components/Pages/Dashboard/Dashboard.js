@@ -60,8 +60,8 @@ class Dashboard extends PureComponent {
             </div>
             <div className="cards">
               <StatCard
-                title="Your Score"
-                value={`${this.props.store.profile.score} pts`}
+                title="Your Accuracy"
+                value={`${this.props.store.profile.score} %`}
                 onClick={() => {
                   console.log("Go to Leaderboards");
                 }}

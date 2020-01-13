@@ -8,6 +8,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import Button from "../../Common/Button";
 import { Config, Network } from "../../../base";
+import ScoreDisplay from "../../Specific/Manager/ScoreDisplay";
 import Block from "../../Common/Block/Block";
 import "./Manager.scss";
 import { SubmitSolutionModal, RequestSolutionModal } from "../../Structure/Modal/Template";
@@ -157,17 +158,6 @@ class ManagerSolve extends PureComponent {
 
     console.log(JSON.stringify(payload.pointlist));
 
-    for (let i = 0; i < this.state.height; i++)
-      for (let j = 0; j < this.state.width; j++) {
-        payload.pointlist.push({
-          i,
-          j,
-          value: this.state.matrix[i][j],
-        });
-      }
-
-    console.log(payload);
-
     const response = await Network.doSolutionSubmit(
       this.props.store.user,
       payload,
@@ -181,27 +171,25 @@ class ManagerSolve extends PureComponent {
 
     this.setState({ isSubmitFired: false });
 
-    // switch (status) {
-    //   case Config.HTTP_STATUS.CREATED:
-    //     this.props.alert.show("Cool! You've just created a new maze!", {
-    //       type: "simple",
-    //       isLoading: true,
-    //       timeout: 2000,
-    //     });
-
-    //     this.setState({ restrict: true });
-
-    //     setTimeout(() => {
-    //       this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
-    //     }, 1500);
-
-    //     break;
-    //   case Config.HTTP_STATUS.BAD_REQUEST:
-    //     this.props.alert.show(typy(result.message).safeString, { type: "error", timeout: 5000 });
-    //     break;
-    //   default:
-    //     break;
-    // }
+    switch (status) {
+      case Config.HTTP_STATUS.OK:
+        this.setState({
+          isSubmitSolutionModalOpen: false,
+          score: result.accuracy,
+          isAccuracyDisplayOpen: true,
+        });
+        break;
+      case Config.HTTP_STATUS.NOT_FOUND:
+      case Config.HTTP_STATUS.BAD_REQUEST:
+        this.props.alert.show(typy(result.message).safeString, { type: "error", timeout: 5000 });
+        break;
+      case Config.HTTP_STATUS.UNAUHTORIZED: {
+        Network.EMERGENCY();
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   onSolutionRequest = async (type = Config.SOLUTION_ALGORIGHM.BFS) => {
@@ -290,111 +278,123 @@ class ManagerSolve extends PureComponent {
 
   render() {
     return (
-      <div className="Manager solve" data-restrict={this.state.restrict}>
-        <div className="PageLoader" data-visible={this.state.isFetchFired}>
-          <CircularProgress size={30} />
-        </div>
-        <div className="content">
-          <div className="playground">
-            <div className="title">
-              <h1>
-                Maze
-                {this.state.data.title && this.state.data.owner ? (
-                  <>
-                    {" "}
-                    <span>{this.state.data.title}</span> by <span>@{this.state.data.owner}</span>
-                  </>
-                ) : null}
-              </h1>
+      <>
+        <ScoreDisplay
+          isOpen={this.state.isAccuracyDisplayOpen}
+          score={this.state.score}
+          onDismiss={() => {
+            this.props.history.replace(Config.ROUTE_PAGE_DASHBOARD);
+          }}
+          onViewAlogorithm={() => {
+            this.setState({ isAccuracyDisplayOpen: false, isAlgorithmicDisplayOpen: true });
+          }}
+        />
+        <div className="Manager solve" data-restrict={this.state.restrict}>
+          <div className="PageLoader" data-visible={this.state.isFetchFired}>
+            <CircularProgress size={30} />
+          </div>
+          <div className="content">
+            <div className="playground">
+              <div className="title">
+                <h1>
+                  Maze
+                  {this.state.data.title && this.state.data.owner ? (
+                    <>
+                      {" "}
+                      <span>{this.state.data.title}</span> by <span>@{this.state.data.owner}</span>
+                    </>
+                  ) : null}
+                </h1>
+              </div>
+              <div className="board">
+                <div className="container">
+                  <div
+                    className="background"
+                    style={{
+                      width: this.state.piece * this.state.width,
+                      height: this.state.piece * this.state.height,
+                      gridTemplateColumns: `repeat(${this.state.width},1fr)`,
+                      gridTemplateRows: `repeat(${this.state.height},1fr)`,
+                    }}
+                  >
+                    {Object.keys(typy(this.state, "matrix").safeObject).length > 0 ? this.renderPlayground() : null}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="board">
-              <div className="container">
-                <div
-                  className="background"
-                  style={{
-                    width: this.state.piece * this.state.width,
-                    height: this.state.piece * this.state.height,
-                    gridTemplateColumns: `repeat(${this.state.width},1fr)`,
-                    gridTemplateRows: `repeat(${this.state.height},1fr)`,
-                  }}
-                >
-                  {Object.keys(typy(this.state, "matrix").safeObject).length > 0 ? this.renderPlayground() : null}
+            <div className="panel">
+              <div className="content">
+                <div className="title">
+                  <h3>Stats</h3>
+                </div>
+                <p className="info">Blocks used: {this.state.solution.used}</p>
+
+                <div className="title">
+                  <h3>Map</h3>
+                </div>
+
+                <div className="size">
+                  <div className="box">
+                    <p className="title">Height</p>
+                    <p className="value">
+                      <span>{this.state.height}</span> blocks
+                    </p>
+                  </div>
+                  <div className="box">
+                    <p className="title">Width</p>
+                    <p className="value">
+                      <span>{this.state.width}</span> blocks
+                    </p>
+                  </div>
+                </div>
+                <div className="bottom">
+                  <p className="info">
+                    Once you visualize the algorithmic solution of this maze, your accuracy will be automatically set to
+                    0 for this game.
+                  </p>
+                  <div className="buttons">
+                    <Button
+                      type="edged"
+                      theme="light"
+                      title="View solution"
+                      onClick={() => {
+                        this.setState({ isRequestSolutionModalOpen: true });
+                      }}
+                    />
+                    <Button
+                      type="edged"
+                      theme="solution"
+                      icon={{
+                        icon: true,
+                        source: "flash_on",
+                        family: "round",
+                      }}
+                      title="Submit your solution"
+                      onClick={() => {
+                        this.setState({ isSubmitSolutionModalOpen: true });
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="panel">
-            <div className="content">
-              <div className="title">
-                <h3>Stats</h3>
-              </div>
-              <p className="info">Blocks used: {this.state.solution.used}</p>
-
-              <div className="title">
-                <h3>Map</h3>
-              </div>
-
-              <div className="size">
-                <div className="box">
-                  <p className="title">Height</p>
-                  <p className="value">
-                    <span>{this.state.height}</span> blocks
-                  </p>
-                </div>
-                <div className="box">
-                  <p className="title">Width</p>
-                  <p className="value">
-                    <span>{this.state.width}</span> blocks
-                  </p>
-                </div>
-              </div>
-              <div className="bottom">
-                <p className="info">
-                  Once you visualize the algorithmic solution of this maze, your score will be automatically set to 0
-                  for this game.
-                </p>
-                <div className="buttons">
-                  <Button
-                    type="edged"
-                    theme="light"
-                    title="View solution"
-                    onClick={() => {
-                      this.setState({ isRequestSolutionModalOpen: true });
-                    }}
-                  />
-                  <Button
-                    type="edged"
-                    theme="solution"
-                    icon={{
-                      icon: true,
-                      source: "flash_on",
-                      family: "round",
-                    }}
-                    title="Submit your solution"
-                    onClick={() => {
-                      this.setState({ isSubmitSolutionModalOpen: true });
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <SubmitSolutionModal
+            isOpen={this.state.isSubmitSolutionModalOpen}
+            onClose={() => {
+              this.setState({ isSubmitSolutionModalOpen: false });
+            }}
+            onSubmit={this.onSubmit}
+          />
+          <RequestSolutionModal
+            isOpen={this.state.isRequestSolutionModalOpen}
+            onClose={() => {
+              this.setState({ isRequestSolutionModalOpen: false });
+            }}
+            onSubmit={this.onSolutionRequest}
+          />
         </div>
-        <SubmitSolutionModal
-          isOpen={this.state.isSubmitSolutionModalOpen}
-          onClose={() => {
-            this.setState({ isSubmitSolutionModalOpen: false });
-          }}
-          onSubmit={this.onSubmit}
-        />
-        <RequestSolutionModal
-          isOpen={this.state.isRequestSolutionModalOpen}
-          onClose={() => {
-            this.setState({ isRequestSolutionModalOpen: false });
-          }}
-          onSubmit={this.onSolutionRequest}
-        />
-      </div>
+      </>
     );
   }
 }

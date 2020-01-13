@@ -8,7 +8,7 @@ import Edge from "../../Edge/Edge";
 import Icon from "../../Icon";
 
 const cover = (seed) => {
-  const pattern = Trianglify({ width: 240, height: 140, cell_size: 100, seed });
+  const pattern = Trianglify({ width: 400, height: 250, cell_size: 100, seed });
   return pattern.png();
 };
 
