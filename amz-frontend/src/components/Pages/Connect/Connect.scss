@@ -7,10 +7,12 @@
   & > .content {
     z-index: 2;
     padding-top: $sizeCanvasPaddingDashboard;
+    padding-bottom: $sizeCanvasPaddingDashboard;
     display: flex;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 2 * #{$sizeCanvasPaddingDashboard});
+    overflow-y: auto;
 
     & > .card {
       width: 100%;

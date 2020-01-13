@@ -34,6 +34,63 @@ function* sagaFetchUserProfile({ payload }) {
   }
 }
 
+function* sagaFetchMazes({ payload }) {
+  try {
+    console.log(payload);
+
+    if (typy(payload, "reset").isTruthy) {
+      yield put({ type: Config.REDUX_ACTION.PROFILE_SET_MAZES_PLAYGROUND, payload: { list: [] } });
+      yield put({ type: Config.REDUX_ACTION.PROFILE_SET_MAZES_SELF, payload: { list: [] } });
+    }
+
+    yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES, payload: { flag: true } });
+    const response = yield call([Network, Network.fetchMazes], { ...payload.user });
+    yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES, payload: { flag: false } });
+
+    const { status } = response;
+    const result = yield response.json();
+
+    console.log(status, result);
+
+    switch (status) {
+      case Config.HTTP_STATUS.OK: {
+        const list = result;
+        const playground = [];
+        const self = [];
+
+        list.forEach((element) => {
+          const mirror = {
+            ...element,
+            title: element.name,
+            username: element.owner,
+            players: element.playersCount,
+          };
+          if (typy(element, "ownerId").safeString.toLowerCase() === payload.user.id.toLowerCase()) self.push(mirror);
+          else playground.push(mirror);
+        });
+
+        yield put({ type: Config.REDUX_ACTION.PROFILE_SET_MAZES_PLAYGROUND, payload: { list: playground } });
+        yield put({ type: Config.REDUX_ACTION.PROFILE_SET_MAZES_SELF, payload: { list: self } });
+
+        if (typy(payload, "onSuccess").isFunction) yield payload.onSuccess();
+        break;
+      }
+      case Config.HTTP_STATUS.BAD_REQUEST: {
+        if (typy(payload, "onError").isFunction) yield payload.onError();
+        break;
+      }
+      case Config.HTTP_STATUS.UNAUHTORIZED: {
+        // Network.EMERGENCY();
+        break;
+      }
+      default:
+        break;
+    }
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
 function* sagaFetchMazesSelf({ payload }) {
   try {
     if (typy(payload, "reset").isTruthy)
@@ -104,6 +161,7 @@ function* sagaFetchMazesPlayground({ payload }) {
 
 export const DataSaga = [
   takeLatest(Config.SAGA_ACTION.USER_FETCH_PROFILE, sagaFetchUserProfile),
+  takeLatest(Config.SAGA_ACTION.USER_FETCH_MAZES, sagaFetchMazes),
   takeLatest(Config.SAGA_ACTION.USER_FETCH_MAZES_SELF, sagaFetchMazesSelf),
   takeLatest(Config.SAGA_ACTION.USER_FETCH_MAZES_PLAYGROUND, sagaFetchMazesPlayground),
 ];

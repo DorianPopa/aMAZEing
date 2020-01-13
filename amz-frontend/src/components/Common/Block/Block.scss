@@ -53,13 +53,13 @@
     }
   }
   &[data-type="1"] {
-    @include type($colorPrimary);
-  }
-  &[data-type="2"] {
     @include type($colorTable_Green1);
   }
-  &[data-type="3"] {
+  &[data-type="2"] {
     @include type($colorTable_Red1);
+  }
+  &[data-type="3"] {
+    @include type($colorPrimary);
   }
   &[data-type="4"] {
     @include type($colorTable_Orange1);

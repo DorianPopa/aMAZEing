@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { withAlert } from "react-alert";
 import Button from "../../../Common/Button";
-import Modal from "../../Modal";
 import { Config } from "../../../../base";
 import "./NavMenuManager.scss";
 import { CancelMazeCreateModal, ProfileModal } from "../../Modal/Template";

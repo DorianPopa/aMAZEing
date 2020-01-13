@@ -25,6 +25,8 @@ class Config {
 
   static ROUTE_PAGE_MAZE_MANAGER_SOLVE = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/solve`;
 
+  static ROUTE_BUILDER_PAGE_MAZE_MANAGER_SOLVE = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/solve`;
+
   // ----------- REDUX ACTIONS -------------- //
 
   static REDUX_ACTION_TEST = "REDUX_ACTION_TEST";
@@ -36,10 +38,12 @@ class Config {
     USER_CLEAN: "USER_CLEAN",
 
     PROFILE_SET: "USER_SET_PROFILE",
+    PROFILE_SET_MAZES: "USER_SET_MAZES",
     PROFILE_SET_MAZES_SELF: "USER_SET_MAZES_SELF",
     PROFILE_SET_MAZES_PLAYGROUND: "USER_SET_MAZES_PLAYGROUND",
 
     FLAG_SET_LOADING_PROFILE: "FLAG_SET_LOADING_PROFILE",
+    FLAG_SET_LOADING_MAZES: "FLAG_SET_LOADING_MAZES",
     FLAG_SET_LOADING_MAZES_SELF: "FLAG_SET_LOADING_MAZES_SELF",
     FLAG_SET_LOADING_MAZES_PLAYGROUND: "FLAG_SET_LOADING_MAZES_PLAYGROUND",
   };
@@ -48,6 +52,7 @@ class Config {
 
   static SAGA_ACTION = {
     USER_FETCH_PROFILE: "USER_FETCH_PROFILE",
+    USER_FETCH_MAZES: "USER_FETCH_MAZES",
     USER_FETCH_MAZES_SELF: "USER_FETCH_MAZES_SELF",
     USER_FETCH_MAZES_PLAYGROUND: "USER_FETCH_MAZES_PLAYGROUND",
   };
@@ -68,13 +73,27 @@ class Config {
   static API_ROOT = "https://amazeing.azurewebsites.net";
 
   static API = {
-    REGISTER: `${Config.API_ROOT}/users`,
-    LOGIN: `${Config.API_ROOT}/login`,
+    REGISTER: () => `${Config.API_ROOT}/users`,
+    LOGIN: () => `${Config.API_ROOT}/login`,
 
-    USER_PROFILE: `${Config.API_ROOT}/users/`,
+    USER_PROFILE: (id) => `${Config.API_ROOT}/users/${id}`,
 
-    MAZES_SELF: `${Config.API_ROOT}/?/`, // TODO MAZES_SELF ROUTE
-    MAZES_PLAYGROUND: `${Config.API_ROOT}/?/`, // TODO MAZES_PLAYGROUND ROUTE
+    MAZES: () => `${Config.API_ROOT}/mazes/`,
+    MAZES_SELF: () => `${Config.API_ROOT}/?/`, // TODO MAZES_SELF ROUTE
+    MAZES_PLAYGROUND: () => `${Config.API_ROOT}/?/`, // TODO MAZES_PLAYGROUND ROUTE
+
+    MAZE_CREATE: (uId) => `${Config.API_ROOT}/users/${uId}/build/save`,
+
+    MAZE_PROFILE: (id) => `${Config.API_ROOT}/mazes/${id}`,
+    MAZE_SOLVE_BFS: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/bfs`,
+    MAZE_SOLVE_BIDIRECTIONAL_BFS: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/bidirectional-bfs`,
+    MAZE_SOLVE_ASTAR: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/a-star`,
+  };
+
+  static SOLUTION_ALGORIGHM = {
+    BFS: "BFS",
+    BIDIRECTIONAL_BFS: "BIDIRECTIONAL_BFS",
+    ASTAR: "ASTAR",
   };
 
   static CONNECT_TYPE = {
@@ -89,10 +108,11 @@ class Config {
   static BLOCK_TYPE = {
     FORBIDDEN: -1,
     EMPTY: 0,
-    SIMPLE: 1,
-    START: 2,
-    FINISH: 3,
+    START: 1,
+    FINISH: 2,
+    SIMPLE: 3,
     SOLUTION: 4,
+    OFFICIAL: 5,
   };
 }
 

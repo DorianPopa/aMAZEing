@@ -1,11 +1,15 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import typy from "typy";
+import { withAlert } from "react-alert";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import Button from "../../Common/Button";
-import { Config } from "../../../base";
+import { Config, Network } from "../../../base";
 import Block from "../../Common/Block/Block";
 import "./Manager.scss";
 
-class ManagerSolve extends Component {
+class ManagerSolve extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -17,18 +21,78 @@ class ManagerSolve extends Component {
       height: 0,
       matrix: {},
       solution: {},
-      source: [
-        [1, 1, Config.BLOCK_TYPE.SIMPLE],
-        [1, 2, Config.BLOCK_TYPE.SIMPLE],
-        [1, 3, Config.BLOCK_TYPE.SIMPLE],
-        [10, 1, Config.BLOCK_TYPE.START],
-        [9, 1, Config.BLOCK_TYPE.FINISH],
-      ],
+      source: {},
+      data: {
+        title: "",
+        owner: "",
+      },
+
+      restrict: false,
     };
   }
 
   componentDidMount() {
     this.configure();
+    this.fetchMaze();
+  }
+
+  fetchMaze = async () => {
+    console.log(this.props);
+    if (typy(this, "props.match.params.id").isNullOrUndefined) this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
+    const response = await Network.fetchMaze(this.props.store.user, typy(this, "props.match.params.id").safeString);
+
+    const { status } = response;
+    const result = await response.json();
+
+    console.log(status, result);
+
+    switch (status) {
+      case Config.HTTP_STATUS.OK: {
+        const { name, owner } = result;
+        this.setState((prev) => {
+          const m = { ...prev.matrix };
+
+          result.state.forEach((point) => {
+            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
+          });
+
+          return {
+            data: {
+              matrix: m,
+              title: name,
+              owner,
+            },
+          };
+        });
+        break;
+      }
+      case Config.HTTP_STATUS.BAD_REQUEST: {
+        break;
+      }
+      case Config.HTTP_STATUS.UNAUHTORIZED: {
+        Network.EMERGENCY();
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
+  renderPlayground() {
+    return [...Array(this.state.height).keys()].map((line) =>
+      [...Array(this.state.width).keys()].map((column) => (
+        <Block
+          isHoverEnabled={[Config.BLOCK_TYPE.EMPTY, Config.BLOCK_TYPE.SOLUTION].includes(
+            this.state.matrix[line][column],
+          )}
+          key={`l${line}c${column}`}
+          type={this.state.matrix[line][column]}
+          onClick={() => {
+            this.onBlockPick(line, column);
+          }}
+        />
+      )),
+    );
   }
 
   configure = () => {
@@ -43,10 +107,7 @@ class ManagerSolve extends Component {
             if (matrix[i] === undefined) matrix[i] = {};
             matrix[i][j] = Config.BLOCK_TYPE.EMPTY;
           }
-        prev.source.forEach((block) => {
-          const [line, column, type] = block;
-          matrix[line][column] = type;
-        });
+
         return {
           height,
           width,
@@ -98,11 +159,19 @@ class ManagerSolve extends Component {
 
   render() {
     return (
-      <div className="Manager solve">
+      <div className="Manager solve" data-restrict={this.state.restrict}>
         <div className="content">
           <div className="playground">
             <div className="title">
-              <h1>Map</h1>
+              <h1>
+                Maze
+                {this.state.data.title && this.state.data.owner ? (
+                  <>
+                    {" "}
+                    <span>{this.state.data.title}</span> by <span>@{this.state.data.owner}</span>
+                  </>
+                ) : null}
+              </h1>
             </div>
             <div className="board">
               <div className="container">
@@ -115,19 +184,7 @@ class ManagerSolve extends Component {
                     gridTemplateRows: `repeat(${this.state.height},1fr)`,
                   }}
                 >
-                  {Object.keys(typy(this.state, "matrix").safeObject).length > 0
-                    ? [...Array(this.state.height).keys()].map((line) =>
-                        [...Array(this.state.width).keys()].map((column) => (
-                          <Block
-                            key={`l${line}c${column}`}
-                            type={this.state.matrix[line][column]}
-                            onClick={() => {
-                              this.onBlockPick(line, column);
-                            }}
-                          />
-                        )),
-                      )
-                    : null}
+                  {Object.keys(typy(this.state, "matrix").safeObject).length > 0 ? this.renderPlayground() : null}
                 </div>
               </div>
             </div>
@@ -184,4 +241,37 @@ class ManagerSolve extends Component {
   }
 }
 
-export default ManagerSolve;
+ManagerSolve.propTypes = {
+  alert: PropTypes.shape({
+    show: PropTypes.func,
+    removeAll: PropTypes.func,
+  }).isRequired,
+  store: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  dispatch: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func,
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+export default compose(
+  withAlert(),
+  connect(
+    (store) => {
+      return {
+        store: {
+          user: store.auth.user,
+        },
+      };
+    },
+    () => {
+      return {
+        dispatch: {},
+      };
+    },
+  ),
+)(ManagerSolve);

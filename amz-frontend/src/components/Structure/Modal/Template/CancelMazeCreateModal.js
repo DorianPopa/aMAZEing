@@ -8,7 +8,7 @@ const CancelMazeCreateModal = (props) => {
   return (
     <Modal className="CancelModal" title="Cancel progress?" isOpen={isOpen} onClose={onClose}>
       <p id="transition-modal-description">
-        If you do this, the maze below will be removed from the platform. <br />
+        If you do this, the work on this maze will be removed. <br />
         Are you sure you want to cancel the progress and return to the Dahsboard?
       </p>
       <div className="buttons">

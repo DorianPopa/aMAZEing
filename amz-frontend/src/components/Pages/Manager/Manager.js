@@ -6,10 +6,10 @@ import ManagerSolve from "./ManagerSolve";
 const Manager = (props) => {
   switch (props.type) {
     case "solve":
-      return <ManagerSolve />;
+      return <ManagerSolve {...props} />;
     case "create":
     default:
-      return <ManagerCreate />;
+      return <ManagerCreate {...props} />;
   }
 };
 

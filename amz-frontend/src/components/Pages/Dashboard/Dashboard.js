@@ -28,8 +28,9 @@ class Dashboard extends PureComponent {
   componentDidMount() {
     console.log(this.props.store);
     this.props.dispatch.doSagaFetchProfile(this.props.store.user.id);
-    this.props.dispatch.doSagaFetchMazesPlayground(this.props.store.user.id);
-    this.props.dispatch.doSagaFetchMazesSelf(this.props.store.user.id);
+    // this.props.dispatch.doSagaFetchMazesPlayground(this.props.store.user.id);
+    // this.props.dispatch.doSagaFetchMazesSelf(this.props.store.user.id);
+    this.props.dispatch.doSagaFetchMazes(this.props.store.user);
   }
 
   render() {
@@ -160,6 +161,7 @@ Dashboard.propTypes = {
 
   dispatch: PropTypes.shape({
     doSagaFetchProfile: PropTypes.func,
+    doSagaFetchMazes: PropTypes.func,
     doSagaFetchMazesSelf: PropTypes.func,
     doSagaFetchMazesPlayground: PropTypes.func,
   }).isRequired,
@@ -186,6 +188,18 @@ export default compose(
                 id,
                 onSuccess,
                 onError,
+                reset: true,
+              },
+            });
+          },
+          doSagaFetchMazes: (user, onSuccess = () => {}, onError = () => {}) => {
+            return dispatch({
+              type: Config.SAGA_ACTION.USER_FETCH_MAZES,
+              payload: {
+                user,
+                onSuccess,
+                onError,
+                reset: true,
               },
             });
           },
@@ -196,6 +210,7 @@ export default compose(
                 id,
                 onSuccess,
                 onError,
+                reset: true,
               },
             });
           },
@@ -205,6 +220,7 @@ export default compose(
               payload: {
                 onSuccess,
                 onError,
+                reset: true,
               },
             });
           },

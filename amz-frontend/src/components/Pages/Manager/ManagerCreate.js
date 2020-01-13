@@ -5,7 +5,7 @@ import { withAlert } from "react-alert";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import Button from "../../Common/Button";
-import { Config } from "../../../base";
+import { Config, Network } from "../../../base";
 import Block from "../../Common/Block/Block";
 import PanelItem from "../../Specific/Manager/PanelItem";
 import { SaveMazeModal, CancelMazeCreateModal } from "../../Structure/Modal/Template";
@@ -31,6 +31,8 @@ class ManagerCreate extends PureComponent {
       isSaveModalOpen: false,
       isSavingFired: false,
       isCancelMazeCreateModalOpen: false,
+
+      restrict: false,
     };
   }
 
@@ -130,16 +132,81 @@ class ManagerCreate extends PureComponent {
     }, this.computeAvailableBlocks);
   }
 
-  onSave = () => {
+  onSave = async () => {
     if (typy(this.state, "mazeName").isEmptyString) {
       this.props.alert.show("Please add a valid Maze name.", { type: "error" });
       this.setState({ mazeNameWarn: true });
+      return;
+    }
+
+    if (this.state.available[Config.BLOCK_TYPE.START] > 0) {
+      this.props.alert.show("Please add a Start block.", { type: "error" });
+      return;
+    }
+
+    if (this.state.available[Config.BLOCK_TYPE.END] > 0) {
+      this.props.alert.show("Please add a Finish block.", { type: "error" });
+      return;
+    }
+
+    const payload = {};
+
+    payload.name = typy(this.state, "mazeName").safeString;
+    payload.width = this.state.width;
+    payload.height = this.state.height;
+
+    payload.pointlist = [];
+
+    for (let i = 0; i < this.state.height; i++)
+      for (let j = 0; j < this.state.width; j++) {
+        payload.pointlist.push({
+          i,
+          j,
+          value: this.state.matrix[i][j],
+        });
+      }
+
+    console.log(payload);
+
+    console.log(JSON.stringify(payload.pointlist));
+
+    const response = await Network.doMazeCreate(payload, this.props.store.user);
+
+    console.log(response);
+
+    const { status } = response;
+    const result = await response.json();
+
+    console.log(status, result);
+
+    this.setState({ isSavingFired: false });
+
+    switch (status) {
+      case Config.HTTP_STATUS.CREATED:
+        this.props.alert.show("Cool! You've just created a new maze!", {
+          type: "simple",
+          isLoading: true,
+          timeout: 2000,
+        });
+
+        this.setState({ restrict: true });
+
+        setTimeout(() => {
+          this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
+        }, 1500);
+
+        break;
+      case Config.HTTP_STATUS.BAD_REQUEST:
+        this.props.alert.show(typy(result.message).safeString, { type: "error", timeout: 5000 });
+        break;
+      default:
+        break;
     }
   };
 
   render() {
     return (
-      <div className="Manager create">
+      <div className="Manager create" data-restrict={this.state.restrict}>
         <div className="content">
           <div className="playground">
             <div className="title">
@@ -255,11 +322,14 @@ ManagerCreate.propTypes = {
     removeAll: PropTypes.func,
   }).isRequired,
   store: PropTypes.shape({
-    user: PropTypes.shape({}),
+    user: PropTypes.shape({
+      id: PropTypes.string,
+    }),
   }).isRequired,
   dispatch: PropTypes.shape({}).isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func,
+    push: PropTypes.func,
   }).isRequired,
 };
 

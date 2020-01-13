@@ -32,8 +32,8 @@ const MazeSelfCard = (props) => {
         </div>
         <div className="footer">
           <div className="content">
-            <Button type="classic" theme="outline-dark" title="View solution" mini />
-            <Button type="classic" theme="outline-dark" title="Edit" mini />
+            <Button type="classic" theme="outline-dark" title="View" mini />
+            {/* <Button type="classic" theme="outline-dark" title="Edit" mini /> */}
             <Button type="classic" theme="outline-dark" title="Remove" mini />
           </div>
         </div>

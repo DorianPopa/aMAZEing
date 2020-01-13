@@ -56,7 +56,7 @@ SaveMazeModal.propTypes = {
   isOpen: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   mazeName: PropTypes.string.isRequired,
-  toggleMazeName: PropTypes.string.isRequired,
+  toggleMazeName: PropTypes.func.isRequired,
   mazeNameWarn: PropTypes.bool,
   isSavingFired: PropTypes.bool,
 };

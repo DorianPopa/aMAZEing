@@ -10,6 +10,7 @@ const initialProfile = {
   mazesPlayground: [],
 
   flagProfile: false,
+  flagMazes: false,
   flagMazesSelf: false,
   flagMazesPlayground: false,
 };
@@ -28,6 +29,8 @@ const profile = (state = initialProfile, action) => {
 
     case Config.REDUX_ACTION.FLAG_SET_LOADING_PROFILE:
       return { ...state, flagProfile: action.payload.flag };
+    case Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES:
+      return { ...state, flagMazes: action.payload.flag };
     case Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES_SELF:
       return { ...state, flagMazesSelf: action.payload.flag };
     case Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES_PLAYGROUND:

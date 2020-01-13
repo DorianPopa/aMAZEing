@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import "./MazeCard.scss";
 import Button from "../../Button";
 import Edge from "../../Edge/Edge";
+import { Config } from "../../../../base";
 
 const MazeCard = (props) => {
   const { title, username, index, id } = props;
@@ -37,6 +38,7 @@ const MazeCard = (props) => {
                 family: "round",
               }}
               title="Play this"
+              to={Config.ROUTE_BUILDER_PAGE_MAZE_MANAGER_SOLVE(id)}
             />
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Store } from "../index";
 
 class Network {
   static fetchUserProfile({ id }) {
-    const API = new URL(Config.API.USER_PROFILE + id);
+    // const API = new URL(Config.API.USER_PROFILE(id));
 
     return {
       status: 200,
@@ -26,8 +26,66 @@ class Network {
     // });
   }
 
+  static fetchMaze(user, mazeId) {
+    const API = new URL(Config.API.MAZE_PROFILE(mazeId));
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
+  }
+
+  static fetchMazeSolution(user, maze, type) {
+    let API = null;
+    switch (type) {
+      case Config.SOLUTION_ALGORIGHM.BFS:
+        API = new URL(Config.API.MAZE_SOLVE_BFS(user.id));
+        break;
+      case Config.SOLUTION_ALGORIGHM.BIDIRECTIONAL_BFS:
+        API = new URL(Config.API.MAZE_SOLVE_BIDIRECTIONAL_BFS(user.id));
+        break;
+      case Config.SOLUTION_ALGORIGHM.ASTAR:
+        API = new URL(Config.API.MAZE_SOLVE_ASTAR(user.id));
+        break;
+      default:
+        break;
+    }
+
+    if (!API) {
+      console.warn("Unknown soluton type.");
+      return null;
+    }
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "POST",
+      contentType: "application/json",
+    });
+  }
+
+  static fetchMazes(user) {
+    const API = new URL(Config.API.MAZES());
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+        // Authorization: `Bearer ${user.token}`,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
+  }
+
   static fetchMazesSelf({ id }) {
-    const API = new URL(Config.API.MAZES_SELF);
+    // const API = new URL(Config.API.MAZES_SELF(id));
 
     return {
       status: 200,
@@ -64,7 +122,7 @@ class Network {
   }
 
   static fetchMazesPlayground() {
-    const API = new URL(Config.API.MAZES_PLAYGROUND);
+    // const API = new URL(Config.API.MAZES_PLAYGROUND());
 
     return {
       status: 200,
@@ -95,8 +153,25 @@ class Network {
     // });
   }
 
+  static doMazeCreate(data, user) {
+    const API = new URL(Config.API.MAZE_CREATE(user.id));
+
+    console.log(API);
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+        Authorization: `Bearer ${user.token}`,
+      }),
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(data),
+    });
+  }
+
   static doUserLogin(data) {
-    const API = new URL(Config.API.LOGIN);
+    const API = new URL(Config.API.LOGIN());
 
     return fetch(API, {
       headers: new Headers({
@@ -109,7 +184,7 @@ class Network {
   }
 
   static doUserRegister(data) {
-    const API = new URL(Config.API.REGISTER);
+    const API = new URL(Config.API.REGISTER());
 
     return fetch(API, {
       headers: new Headers({

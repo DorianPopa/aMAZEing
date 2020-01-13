@@ -171,7 +171,7 @@ class Connect extends Component {
       case Config.HTTP_STATUS.OK: {
         this.props.alert.show("Connected to aMAZEing. Have fun!", {
           type: "success",
-          timeout: 5000,
+          timeout: 1000,
         });
         this.setState({ restrict: true });
 
