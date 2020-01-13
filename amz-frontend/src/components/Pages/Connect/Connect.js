@@ -40,6 +40,10 @@ class Connect extends Component {
     };
   }
 
+  componentDidMount() {
+    document.title = this.props.title;
+  }
+
   renderRegister = () => {
     return (
       <form>
@@ -273,6 +277,7 @@ class Connect extends Component {
 }
 
 Connect.propTypes = {
+  title: PropTypes.string.isRequired,
   type: PropTypes.oneOf([Config.CONNECT_TYPE.LOGIN, Config.CONNECT_TYPE.REGISTER]),
   alert: PropTypes.shape({
     show: PropTypes.func,

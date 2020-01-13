@@ -42,6 +42,7 @@ class ManagerSolve extends PureComponent {
   }
 
   componentDidMount() {
+    document.title = this.props.title;
     this.configure();
     this.fetchMaze();
   }
@@ -299,6 +300,7 @@ class ManagerSolve extends PureComponent {
 }
 
 ManagerSolve.propTypes = {
+  title: PropTypes.string.isRequired,
   alert: PropTypes.shape({
     show: PropTypes.func,
     removeAll: PropTypes.func,

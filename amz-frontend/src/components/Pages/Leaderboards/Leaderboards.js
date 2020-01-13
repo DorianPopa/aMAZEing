@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withAlert } from "react-alert";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import Icon from "../../Common/Icon";
-
 import "./Leaderboards.scss";
 
 class Leaderboards extends Component {
@@ -46,6 +49,10 @@ class Leaderboards extends Component {
       score: 120,
     },
   ];
+
+  componentDidMount() {
+    document.title = this.props.title;
+  }
 
   sortPlayers = (players, mode) => {
     return players.sort(mode);
@@ -114,4 +121,40 @@ class Leaderboards extends Component {
   }
 }
 
-export default Leaderboards;
+Leaderboards.propTypes = {
+  title: PropTypes.string.isRequired,
+  alert: PropTypes.shape({
+    show: PropTypes.func,
+    removeAll: PropTypes.func,
+  }).isRequired,
+  store: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  dispatch: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func,
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+Leaderboards.defaultProps = {};
+
+export default compose(
+  withAlert(),
+  connect(
+    (store) => {
+      return {
+        store: {
+          user: store.auth.user,
+        },
+      };
+    },
+    () => {
+      return {
+        dispatch: {},
+      };
+    },
+  ),
+)(Leaderboards);

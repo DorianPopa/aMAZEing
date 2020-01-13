@@ -26,6 +26,7 @@ class Dashboard extends PureComponent {
   }
 
   componentDidMount() {
+    document.title = this.props.title;
     this.props.dispatch.doSagaFetchProfile(this.props.store.user);
     this.props.dispatch.doSagaFetchMazes(this.props.store.user);
   }
@@ -152,6 +153,7 @@ class Dashboard extends PureComponent {
 }
 
 Dashboard.propTypes = {
+  title: PropTypes.string.isRequired,
   store: PropTypes.shape({
     user: PropTypes.shape({
       id: PropTypes.string,

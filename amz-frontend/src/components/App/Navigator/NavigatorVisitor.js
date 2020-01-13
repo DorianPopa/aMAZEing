@@ -28,7 +28,7 @@ const NavigatorUser = () => {
           <Route
             key={element.route}
             path={element.route}
-            render={(props) => element.component(props)}
+            render={(props) => element.component({ ...props, title: `${element.title} | aMAZEing` })}
             exact={element.exact}
           />
         ))}

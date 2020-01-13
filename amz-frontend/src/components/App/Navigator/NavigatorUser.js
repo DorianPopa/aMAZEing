@@ -34,6 +34,13 @@ const NavigatorUser = () => {
       depth: 1,
       component: (props) => <Manager {...props} type="create" />,
     },
+    {
+      exact: true,
+      route: Config.ROUTE_PAGE_MAZE_MANAGER_VIEW,
+      title: "View Maze",
+      depth: 1,
+      component: (props) => <Manager {...props} type="view" />,
+    },
   ];
 
   return (
@@ -43,7 +50,7 @@ const NavigatorUser = () => {
           <Route
             key={element.route}
             path={element.route}
-            render={(props) => element.component(props)}
+            render={(props) => element.component({ ...props, title: `${element.title} | aMAZEing` })}
             exact={element.exact}
           />
         ))}

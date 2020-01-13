@@ -37,6 +37,7 @@ class ManagerCreate extends PureComponent {
   }
 
   componentDidMount() {
+    document.title = this.props.title;
     this.configure();
   }
 
@@ -317,6 +318,7 @@ class ManagerCreate extends PureComponent {
 }
 
 ManagerCreate.propTypes = {
+  title: PropTypes.string.isRequired,
   alert: PropTypes.shape({
     show: PropTypes.func,
     removeAll: PropTypes.func,

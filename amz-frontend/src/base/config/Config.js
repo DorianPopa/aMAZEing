@@ -25,7 +25,11 @@ class Config {
 
   static ROUTE_PAGE_MAZE_MANAGER_SOLVE = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/solve`;
 
+  static ROUTE_PAGE_MAZE_MANAGER_VIEW = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/view`;
+
   static ROUTE_BUILDER_PAGE_MAZE_MANAGER_SOLVE = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/solve`;
+
+  static ROUTE_BUILDER_PAGE_MAZE_MANAGER_VIEW = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/view`;
 
   // ----------- REDUX ACTIONS -------------- //
 
@@ -79,8 +83,8 @@ class Config {
     USER_PROFILE: (id) => `${Config.API_ROOT}/users/${id}`,
 
     MAZES: () => `${Config.API_ROOT}/mazes/`,
-    MAZES_SELF: () => `${Config.API_ROOT}/?/`, // TODO MAZES_SELF ROUTE
-    MAZES_PLAYGROUND: () => `${Config.API_ROOT}/?/`, // TODO MAZES_PLAYGROUND ROUTE
+    MAZES_SELF: () => `${Config.API_ROOT}/?/`, // DEPRECATED
+    MAZES_PLAYGROUND: () => `${Config.API_ROOT}/?/`, // DEPRECATED
 
     MAZE_CREATE: (uId) => `${Config.API_ROOT}/users/${uId}/build/save`,
 
