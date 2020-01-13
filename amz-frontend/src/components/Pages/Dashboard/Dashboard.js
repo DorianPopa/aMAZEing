@@ -50,6 +50,7 @@ class Dashboard extends PureComponent {
         <div className="PageLoader" data-visible={this.props.store.profile.flagProfile}>
           <CircularProgress size={30} />
         </div>
+
         <header>
           <div className="content stats">
             <div className="title">

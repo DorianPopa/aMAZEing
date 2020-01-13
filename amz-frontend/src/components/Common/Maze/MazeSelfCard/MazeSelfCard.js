@@ -1,10 +1,16 @@
 import React from "react";
+import Trianglify from "trianglify";
 import PropTypes from "prop-types";
 
 import "./MazeSelfCard.scss";
 import Button from "../../Button";
 import Edge from "../../Edge/Edge";
 import Icon from "../../Icon";
+
+const cover = (seed) => {
+  const pattern = Trianglify({ width: 240, height: 140, cell_size: 100, seed });
+  return pattern.png();
+};
 
 const MazeSelfCard = (props) => {
   const { title, players, index, id, onView, onRemove } = props;
@@ -28,7 +34,9 @@ const MazeSelfCard = (props) => {
           </div>
         </div>
         <div className="main">
-          <div className="content" />
+          <div className="content">
+            <img alt="" src={cover(id)} />
+          </div>
         </div>
         <div className="footer">
           <div className="content">
