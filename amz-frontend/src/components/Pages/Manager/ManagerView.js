@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import typy from "typy";
@@ -9,7 +10,7 @@ import Button from "../../Common/Button";
 import { Config, Network } from "../../../base";
 import Block from "../../Common/Block/Block";
 import "./Manager.scss";
-import { SubmitSolutionModal, RequestSolutionModal } from "../../Structure/Modal/Template";
+import { RequestSolutionModal } from "../../Structure/Modal/Template";
 
 class ManagerView extends PureComponent {
   constructor(props) {
@@ -26,45 +27,62 @@ class ManagerView extends PureComponent {
       source: {},
       data: {
         title: "",
-        owner: "",
+        playersCount: 0,
       },
 
       isFetchFired: false,
+      isRequestAlgorithmicFired: null,
+      isPlainSolutionFired: false,
 
       isRequestSolutionModalOpen: false,
-      isSubmitSolutionModalOpen: false,
       isAccuracyModalOpen: false,
-      isSubmitFired: false,
       isSolutionRequestFired: false,
 
       restrict: false,
     };
   }
 
+  get isMounted() {
+    return this._isMounted;
+  }
+
+  set isMounted(value) {
+    this._isMounted = value;
+  }
+
   componentDidMount() {
+    this.isMounted = true;
     document.title = this.props.title;
     this.configure();
     this.fetchMaze();
   }
 
-  fetchMaze = async () => {
-    this.setState({ isFetchFired: true });
-    if (typy(this, "props.match.params.id").isNullOrUndefined) this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
-    const response = await Network.fetchMaze(this.props.store.user, typy(this, "props.match.params.id").safeString);
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
+  fetchPlainSolution = async () => {
+    this.setState({ isPlainSolutionFired: true });
+    const response = await Network.fetchMazePlainSolution(
+      this.props.store.user,
+      typy(this, "props.match.params.id").safeString,
+    );
+
+    console.log(response);
 
     const { status } = response;
     const result = await response.json();
 
-    console.log(status, result);
+    if (!this.isMounted) return;
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        const { name, owner } = result;
+        const { name, playersCount } = result;
         this.setState((prev) => {
           const m = { ...prev.matrix };
 
-          result.state.forEach((point) => {
-            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
+          result.solution.forEach((point) => {
+            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = Config.BLOCK_TYPE.SOLUTION;
           });
 
           return {
@@ -72,7 +90,7 @@ class ManagerView extends PureComponent {
             data: {
               matrix: m,
               title: name,
-              owner,
+              playersCount,
             },
           };
         });
@@ -100,8 +118,68 @@ class ManagerView extends PureComponent {
     }
   };
 
-  onSubmit = async () => {
-    this.setState({ isSubmitFired: true });
+  fetchMaze = async () => {
+    this.setState({ isFetchFired: true });
+    if (typy(this, "props.match.params.id").isNullOrUndefined) this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
+    const response = await Network.fetchMaze(this.props.store.user, typy(this, "props.match.params.id").safeString);
+
+    const { status } = response;
+    const result = await response.json();
+
+    console.log(status, result);
+
+    if (!this.isMounted) return;
+
+    switch (status) {
+      case Config.HTTP_STATUS.OK: {
+        const { name, playersCount } = result;
+
+        this.setState((prev) => {
+          const m = {};
+
+          [...Array(prev.height).keys()].forEach((line) => {
+            [...Array(prev.width).keys()].forEach((column) => {
+              if (m[line] === undefined) m[line] = {};
+              m[line][column] = prev.matrix[line][column];
+            });
+          });
+
+          result.state.forEach((point) => {
+            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
+          });
+
+          return {
+            isFetchFired: false,
+            matrix: m,
+            data: {
+              title: name,
+              playersCount,
+            },
+          };
+        });
+
+        break;
+      }
+      case Config.HTTP_STATUS.NOT_FOUND:
+      case Config.HTTP_STATUS.BAD_REQUEST: {
+        this.setState({ restrict: true });
+        this.props.alert.show("The maze you're looking for is not available.", {
+          type: "warn",
+          timeout: 3000,
+          isClosable: false,
+        });
+        setTimeout(() => {
+          this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
+        }, 3000);
+        break;
+      }
+      case Config.HTTP_STATUS.UNAUHTORIZED: {
+        Network.EMERGENCY();
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   onSolutionRequest = async (type = Config.SOLUTION_ALGORIGHM.BFS) => {
@@ -113,14 +191,10 @@ class ManagerView extends PureComponent {
     return [...Array(this.state.height).keys()].map((line) =>
       [...Array(this.state.width).keys()].map((column) => (
         <Block
-          isHoverEnabled={[Config.BLOCK_TYPE.EMPTY, Config.BLOCK_TYPE.SOLUTION].includes(
-            this.state.matrix[line][column],
-          )}
+          isHoverEnabled={false}
           key={`l${line}c${column}`}
           type={this.state.matrix[line][column]}
-          onClick={() => {
-            this.onBlockPick(line, column);
-          }}
+          onClick={() => {}}
         />
       )),
     );
@@ -191,7 +265,7 @@ class ManagerView extends PureComponent {
   render() {
     return (
       <div className="Manager view" data-restrict={this.state.restrict}>
-        <div className="PageLoader" data-visible={this.state.isFetchFired}>
+        <div className="PageLoader" data-visible={this.state.isFetchFired || this.state.isPlainSolutionFired}>
           <CircularProgress size={30} />
         </div>
         <div className="content">
@@ -199,10 +273,10 @@ class ManagerView extends PureComponent {
             <div className="title">
               <h1>
                 Maze
-                {this.state.data.title && this.state.data.owner ? (
+                {this.state.data.title ? (
                   <>
                     {" "}
-                    <span>{this.state.data.title}</span> by <span>@{this.state.data.owner}</span>
+                    <span>{this.state.data.title}</span> by <span>You</span>
                   </>
                 ) : null}
               </h1>
@@ -228,7 +302,7 @@ class ManagerView extends PureComponent {
               <div className="title">
                 <h3>Stats</h3>
               </div>
-              <p className="info">Blocks used: {this.state.solution.used}</p>
+              <p className="info">Players: {this.state.data.playersCount}</p>
 
               <div className="title">
                 <h3>Map</h3>
@@ -249,19 +323,7 @@ class ManagerView extends PureComponent {
                 </div>
               </div>
               <div className="bottom">
-                <p className="info">
-                  Once you visualize the algorithmic solution of this maze, your score will be automatically set to 0
-                  for this game.
-                </p>
                 <div className="buttons">
-                  <Button
-                    type="edged"
-                    theme="light"
-                    title="View solution"
-                    onClick={() => {
-                      this.setState({ isRequestSolutionModalOpen: true });
-                    }}
-                  />
                   <Button
                     type="edged"
                     theme="solution"
@@ -270,9 +332,9 @@ class ManagerView extends PureComponent {
                       source: "flash_on",
                       family: "round",
                     }}
-                    title="Submit your solution"
+                    title="View algorithmic solution"
                     onClick={() => {
-                      this.setState({ isSubmitSolutionModalOpen: true });
+                      this.setState({ isRequestSolutionModalOpen: true });
                     }}
                   />
                 </div>
@@ -280,14 +342,10 @@ class ManagerView extends PureComponent {
             </div>
           </div>
         </div>
-        <SubmitSolutionModal
-          isOpen={this.state.isSubmitSolutionModalOpen}
-          onClose={() => {
-            this.setState({ isSubmitSolutionModalOpen: false });
-          }}
-          onSubmit={this.onSubmit}
-        />
+
         <RequestSolutionModal
+          isSelf
+          isRequestFired={this.state.isRequestAlgorithmicFired}
           isOpen={this.state.isRequestSolutionModalOpen}
           onClose={() => {
             this.setState({ isRequestSolutionModalOpen: false });

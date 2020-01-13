@@ -7,7 +7,7 @@ import Edge from "../../Edge/Edge";
 import Icon from "../../Icon";
 
 const MazeSelfCard = (props) => {
-  const { title, players, index, id } = props;
+  const { title, players, index, id, onView, onRemove } = props;
 
   return (
     <div className="MazeSelfCard" data-id={id}>
@@ -32,9 +32,8 @@ const MazeSelfCard = (props) => {
         </div>
         <div className="footer">
           <div className="content">
-            <Button type="classic" theme="outline-dark" title="View" mini />
-            {/* <Button type="classic" theme="outline-dark" title="Edit" mini /> */}
-            <Button type="classic" theme="outline-dark" title="Remove" mini />
+            <Button type="classic" theme="outline-dark" title="View" mini onClick={() => onView(id)} />
+            <Button type="classic" theme="outline-dark" title="Remove" mini onClick={() => onRemove(id)} />
           </div>
         </div>
       </div>
@@ -47,6 +46,9 @@ MazeSelfCard.propTypes = {
   title: PropTypes.string.isRequired,
   index: PropTypes.number,
   players: PropTypes.number,
+
+  onView: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 MazeSelfCard.defaultProps = {

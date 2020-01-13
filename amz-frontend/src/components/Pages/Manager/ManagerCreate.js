@@ -171,7 +171,7 @@ class ManagerCreate extends PureComponent {
 
     console.log(JSON.stringify(payload.pointlist));
 
-    const response = await Network.doMazeCreate(payload, this.props.store.user);
+    const response = await Network.doMazeCreate(this.props.store.user, payload);
 
     console.log(response);
 
@@ -185,8 +185,8 @@ class ManagerCreate extends PureComponent {
     switch (status) {
       case Config.HTTP_STATUS.CREATED:
         this.props.alert.show("Cool! You've just created a new maze!", {
-          type: "simple",
-          isLoading: true,
+          type: "success",
+          isLoading: false,
           timeout: 2000,
         });
 

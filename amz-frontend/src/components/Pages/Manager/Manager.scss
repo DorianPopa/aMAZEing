@@ -153,8 +153,7 @@ $sizeManagerActionsHeight: 120px;
   }
 }
 
-.Manager.solve,
-.Manager.view {
+.Manager.solve {
   & > .content {
     border-bottom: 1px solid #eeeeee;
     & > .panel {
@@ -201,6 +200,111 @@ $sizeManagerActionsHeight: 120px;
             flex-direction: column;
             padding: 10px;
             background: #ffffff;
+            & > .title {
+              font-size: 10pt;
+              color: $colorSecondary;
+              font-weight: 500;
+              margin-bottom: 12px;
+            }
+            & > .value {
+              color: $colorSecondary;
+              font-weight: 500;
+              font-size: 14pt;
+              span {
+                color: $colorPrimary;
+              }
+            }
+          }
+        }
+
+        & > .bottom {
+          margin-top: auto;
+
+          & > .info {
+            width: 100%;
+            font-size: 11pt;
+            color: #ffffff;
+            font-weight: 500;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ffffff;
+          }
+          & > .buttons {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            & > * {
+              width: 100%;
+              margin-top: 15px;
+              & > .content {
+                flex: 1;
+                justify-content: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.Manager.view {
+  & > .content {
+    border-bottom: 1px solid #eeeeee;
+    & > .playground {
+      & > .title {
+        & > h1 {
+          & > span {
+            color: $colorTable_Orange1;
+          }
+        }
+      }
+    }
+    & > .panel {
+      background-color: transparent;
+      border-left: none;
+      height: 100%;
+      & > .content {
+        height: calc(100% - 100px - 2 * 15px);
+        padding: 15px;
+        margin-top: 69px;
+        width: calc(100% - 2 * 15px);
+        background-color: #f5f5f5;
+        border: 1px solid #eeeeee;
+        display: flex;
+        flex-direction: column;
+
+        & > .title {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          margin-bottom: 20px;
+          & > h3 {
+            font-weight: 500;
+            font-size: 16pt;
+            color: $colorDark;
+          }
+        }
+
+        & > .info {
+          font-size: 11pt;
+          color: $colorDark;
+          font-weight: 500;
+          margin-bottom: 20px;
+        }
+
+        & > .size {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 10px;
+          & > .box {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: #ffffff;
+            border: 1px solid #eeeeee;
             & > .title {
               font-size: 10pt;
               color: $colorSecondary;

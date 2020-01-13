@@ -29,6 +29,19 @@ class Network {
     });
   }
 
+  static fetchMazePlainSolution(user, mazeId) {
+    const API = new URL(Config.API.MAZE_PLAIN_SOLUTION(mazeId));
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
+  }
+
   static fetchMazeSolution(user, maze, type) {
     let API = null;
     switch (type) {
@@ -74,10 +87,23 @@ class Network {
     });
   }
 
-  static doMazeCreate(data, user) {
-    const API = new URL(Config.API.MAZE_CREATE(user.id));
+  static doSolutionSubmit(user, data, mazeId) {
+    const API = new URL(Config.API.MAZE_SUBMIT_SOLUTION(mazeId));
 
-    console.log(API);
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+        Authorization: `Bearer ${user.token}`,
+      }),
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(data),
+    });
+  }
+
+  static doMazeCreate(user, data) {
+    const API = new URL(Config.API.MAZE_CREATE(user.id));
 
     return fetch(API, {
       headers: new Headers({

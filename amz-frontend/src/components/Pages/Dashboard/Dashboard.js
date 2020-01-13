@@ -31,6 +31,14 @@ class Dashboard extends PureComponent {
     this.props.dispatch.doSagaFetchMazes(this.props.store.user);
   }
 
+  onMazeSelfRemove = (id) => {
+    console.log("remove", id);
+  };
+
+  onMazeSelfView = (id) => {
+    this.props.history.push(Config.ROUTE_BUILDER_PAGE_MAZE_MANAGER_VIEW(typy(id).safeString));
+  };
+
   render() {
     const mLoading = typy(this.props, "store.profile.flagMazes").safeBoolean;
 
@@ -87,7 +95,7 @@ class Dashboard extends PureComponent {
               <h2>Your mazes</h2>
             </div>
             <div className="actions">
-              <Button
+              {/* <Button
                 type="edged"
                 theme="gray"
                 icon={{
@@ -97,7 +105,7 @@ class Dashboard extends PureComponent {
                 }}
                 style={{}}
                 title="See stats"
-              />
+              /> */}
               <Button
                 type="edged"
                 icon={{
@@ -116,7 +124,17 @@ class Dashboard extends PureComponent {
                 <CircularProgress size={20} />
               </div>
             ) : mSelf.length > 0 ? (
-              mSelf.map((e, i) => <MazeSelfCard key={e.id} id={e.id} index={i} players={e.players} title={e.title} />)
+              mSelf.map((e, i) => (
+                <MazeSelfCard
+                  onView={this.onMazeSelfView}
+                  onRemove={this.onMazeSelfRemove}
+                  key={e.id}
+                  id={e.id}
+                  index={i}
+                  players={e.players}
+                  title={e.title}
+                />
+              ))
             ) : (
               <div className="empty">
                 <p>You have no mazes yet. Create your first one!</p>
@@ -170,7 +188,9 @@ Dashboard.propTypes = {
       mazesPlayground: PropTypes.arrayOf(PropTypes.shape({})),
     }),
   }).isRequired,
-
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
   dispatch: PropTypes.shape({
     doSagaFetchProfile: PropTypes.func,
     doSagaFetchMazes: PropTypes.func,

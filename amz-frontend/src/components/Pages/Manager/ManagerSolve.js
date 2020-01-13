@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import typy from "typy";
@@ -28,6 +29,7 @@ class ManagerSolve extends PureComponent {
         title: "",
         owner: "",
       },
+      solved: false,
 
       isFetchFired: false,
 
@@ -41,11 +43,36 @@ class ManagerSolve extends PureComponent {
     };
   }
 
+  get isMounted() {
+    return this._isMounted;
+  }
+
+  set isMounted(value) {
+    this._isMounted = value;
+  }
+
   componentDidMount() {
+    this.isMounted = true;
     document.title = this.props.title;
     this.configure();
     this.fetchMaze();
   }
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
+  copyStateMaze = (prev = this.state) => {
+    const m = {};
+    [...Array(prev.height).keys()].forEach((line) => {
+      [...Array(prev.width).keys()].forEach((column) => {
+        if (m[line] === undefined) m[line] = {};
+        m[line][column] = prev.matrix[line][column];
+      });
+    });
+
+    return m;
+  };
 
   fetchMaze = async () => {
     this.setState({ isFetchFired: true });
@@ -59,18 +86,26 @@ class ManagerSolve extends PureComponent {
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        const { name, owner } = result;
+        const { name, owner, ownerId, solved } = result;
+
+        if (typy(ownerId).safeString === typy(this, "props.store.user.id")) {
+          this.props.history.push(
+            Config.ROUTE_BUILDER_PAGE_MAZE_MANAGER_VIEW(typy(this, "props.match.params.id").safeString),
+          );
+        }
+
         this.setState((prev) => {
-          const m = { ...prev.matrix };
+          const m = this.copyStateMaze(prev);
 
           result.state.forEach((point) => {
             m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
           });
 
           return {
+            solved,
             isFetchFired: false,
+            matrix: m,
             data: {
-              matrix: m,
               title: name,
               owner,
             },
@@ -102,6 +137,71 @@ class ManagerSolve extends PureComponent {
 
   onSubmit = async () => {
     this.setState({ isSubmitFired: true });
+
+    const payload = {};
+
+    payload.name = "Not needed";
+    payload.width = this.state.width;
+    payload.height = this.state.height;
+
+    payload.pointlist = [];
+
+    for (let i = 0; i < this.state.height; i++)
+      for (let j = 0; j < this.state.width; j++) {
+        payload.pointlist.push({
+          i,
+          j,
+          value: this.state.matrix[i][j],
+        });
+      }
+
+    console.log(JSON.stringify(payload.pointlist));
+
+    for (let i = 0; i < this.state.height; i++)
+      for (let j = 0; j < this.state.width; j++) {
+        payload.pointlist.push({
+          i,
+          j,
+          value: this.state.matrix[i][j],
+        });
+      }
+
+    console.log(payload);
+
+    const response = await Network.doSolutionSubmit(
+      this.props.store.user,
+      payload,
+      typy(this, "props.match.params.id").safeString,
+    );
+
+    const { status } = response;
+    const result = await response.json();
+
+    console.log(status, result);
+
+    this.setState({ isSubmitFired: false });
+
+    // switch (status) {
+    //   case Config.HTTP_STATUS.CREATED:
+    //     this.props.alert.show("Cool! You've just created a new maze!", {
+    //       type: "simple",
+    //       isLoading: true,
+    //       timeout: 2000,
+    //     });
+
+    //     this.setState({ restrict: true });
+
+    //     setTimeout(() => {
+    //       this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
+    //     }, 1500);
+
+    //     break;
+    //   case Config.HTTP_STATUS.BAD_REQUEST:
+    //     this.props.alert.show(typy(result.message).safeString, { type: "error", timeout: 5000 });
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
 
   onSolutionRequest = async (type = Config.SOLUTION_ALGORIGHM.BFS) => {

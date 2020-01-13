@@ -92,6 +92,10 @@ class Config {
     MAZE_SOLVE_BFS: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/bfs`,
     MAZE_SOLVE_BIDIRECTIONAL_BFS: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/bidirectional-bfs`,
     MAZE_SOLVE_ASTAR: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/a-star`,
+
+    MAZE_PLAIN_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/solution`,
+
+    MAZE_SUBMIT_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/submit`,
   };
 
   static SOLUTION_ALGORIGHM = {

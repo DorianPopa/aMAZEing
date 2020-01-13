@@ -6,51 +6,50 @@ import { withAlert } from "react-alert";
 import Button from "../../../Common/Button";
 import { Config } from "../../../../base";
 import "./NavMenuManager.scss";
-import { CancelMazeCreateModal, ProfileModal } from "../../Modal/Template";
+import { CancelMazeCreateModal, RemoveMazeModal, ProfileModal } from "../../Modal/Template";
 
 const NavMenuManager = (props) => {
   const [isProfileModalOpen, toggleProfileModal] = useState(false);
   const [isLogOutFired, toggleLogOut] = useState(false);
   const [isCancelModalOpen, toggleCancelModal] = useState(false);
+  const [isRemoveModalOpen, toggleRemoveModal] = useState(false);
+
+  const { isSelf } = props;
 
   return (
     <menu className="NavMenuManager">
-      {/* <Button
-        type="edged"
-        theme="delete"
-        icon={{
-          icon: true,
-          source: "delete_sweep",
-          family: "outlined",
-        }}
-        isEdgeAnimated={false}
-      /> */}
+      {isSelf && (
+        <Button
+          type="edged"
+          theme="delete"
+          icon={{
+            icon: true,
+            source: "delete_sweep",
+            family: "outlined",
+          }}
+          isEdgeAnimated={false}
+          onClick={() => {
+            toggleRemoveModal(true);
+          }}
+        />
+      )}
 
-      <Button
-        type="edged"
-        theme="light"
-        icon={{
-          icon: true,
-          source: "close",
-          family: "round",
-        }}
-        title="Cancel progress"
-        onClick={() => {
-          toggleCancelModal(true);
-        }}
-        isEdgeAnimated={false}
-      />
-
-      {/* <Button
-        type="edged"
-        icon={{
-          icon: true,
-          source: "check",
-          family: "round",
-        }}
-        title="Save maze"
-        isEdgeAnimated={false}
-      /> */}
+      {!isSelf && (
+        <Button
+          type="edged"
+          theme="light"
+          icon={{
+            icon: true,
+            source: "close",
+            family: "round",
+          }}
+          title="Cancel progress"
+          onClick={() => {
+            toggleCancelModal(true);
+          }}
+          isEdgeAnimated={false}
+        />
+      )}
 
       <Button
         type="edged"
@@ -74,6 +73,14 @@ const NavMenuManager = (props) => {
           props.history.replace(Config.ROUTE_PAGE_DASHBOARD);
         }}
       />
+      <RemoveMazeModal
+        isOpen={isRemoveModalOpen}
+        onClose={toggleRemoveModal}
+        onRemove={() => {
+          props.history.replace(Config.ROUTE_PAGE_DASHBOARD);
+          // TODO implementRemove
+        }}
+      />
       <ProfileModal
         username={props.user.username}
         isOpen={isProfileModalOpen}
@@ -94,6 +101,7 @@ const NavMenuManager = (props) => {
 };
 
 NavMenuManager.propTypes = {
+  isSelf: PropTypes.bool,
   user: PropTypes.shape({
     username: PropTypes.string,
     id: PropTypes.string,
@@ -108,6 +116,7 @@ NavMenuManager.propTypes = {
   onLogOut: PropTypes.func.isRequired,
 };
 NavMenuManager.defaultProps = {
+  isSelf: false,
   user: {
     username: "Visitor",
     id: "",

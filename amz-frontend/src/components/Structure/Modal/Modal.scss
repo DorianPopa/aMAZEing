@@ -59,7 +59,8 @@
   }
 }
 
-.Modal.CancelModal {
+.Modal.CancelModal,
+.Modal.RemoveModal {
   background-color: $colorTable_Red1;
   .ModalContent {
   }
@@ -97,6 +98,7 @@
 
 .Modal.ProfileModal,
 .Modal.CancelModal,
+.Modal.RemoveModal,
 .Modal.SubmitSolutionModal,
 .Modal.RequestSolutionModal {
   .ModalContent {

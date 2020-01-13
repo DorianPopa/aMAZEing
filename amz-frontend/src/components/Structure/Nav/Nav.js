@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import typy from "typy";
 import { PURGE } from "redux-persist";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, matchPath, Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { ReactComponent as Logo } from "../../../assets/images/logo_white.svg";
@@ -40,7 +40,12 @@ const Nav = (props) => {
           />
         ) : (
           <NavMenuManager
-            self
+            isSelf={
+              matchPath(pathname, {
+                path: Config.ROUTE_PAGE_MAZE_MANAGER_VIEW,
+                exact: true,
+              }) !== null
+            }
             user={{
               username: typy(props, "store.user.username").safeString,
               id: typy(props, "store.user.id").safeString,
