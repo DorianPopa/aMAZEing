@@ -5,7 +5,7 @@ namespace aMAZEing.security
 {
     public interface IAuthService
     {
-        Jwt GenerateJwt(Guid userId);
+        Jwt GenerateJwt(Guid userId, string username);
 
         IDictionary<string, object> ValidateJwt(string token);
     }

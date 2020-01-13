@@ -98,16 +98,22 @@ namespace aMAZEing.services
                     .Width(m.Width)
                     .Height(m.Height)
                     .State(m.State.DecompressString())
-                    .Solution(m.Solution.DecompressString())
                     .CreationTime(m.CreationTime)
                     .Build();
 
                 ownMazes.Add(mDTO);
             }
 
+            List<UserMaze> solvedMazes = _userMazeRepository.FindLockedMazesByUserId(user.UserId);
+            int totalAccuracy = 0;
+            foreach (UserMaze um in solvedMazes)
+                totalAccuracy += um.Accuracy.GetValueOrDefault();
+            int accuracy = totalAccuracy / solvedMazes.Count;
+
             return UserDTO.Builder()
                 .Id(user.UserId)
                 .Username(user.Username)
+                .Accuracy(accuracy)
                 .OwnMazes(ownMazes)
                 .Build();
         }

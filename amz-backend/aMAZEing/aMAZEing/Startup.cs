@@ -62,10 +62,10 @@ namespace aMAZEing
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseCors("Cors");
 
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

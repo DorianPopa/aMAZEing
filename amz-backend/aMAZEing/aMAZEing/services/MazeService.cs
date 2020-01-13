@@ -78,7 +78,6 @@ namespace aMAZEing.services
                 .Width(storedMaze.Width)
                 .Height(storedMaze.Height)
                 .State(storedMaze.State.DecompressString())
-                .Solution(storedMaze.Solution.DecompressString())
                 .CreationTime(storedMaze.CreationTime)
                 .Build();
         }
@@ -112,15 +111,44 @@ namespace aMAZEing.services
                 state += point.Value;
             }
 
-            Maze maze = Maze.Create(mazeFE.Name, mazeFE.Width, mazeFE.Height, state.CompressString(),
-                solution.CompressString());
+            Maze maze = Maze.Create(mazeFE.Name, mazeFE.Width, mazeFE.Height, state.CompressString(), solution.CompressString());
             return maze;
         }
 
-        public List<MazeDTO> GetAllMazes()
+        public Score Submit(Guid mazeId, string userId, MazeFE userSolution)
         {
+            Guid userGuid = new Guid(userId);
+            User user = _userRepository.FindById(userGuid);
+
+            if (_userMazeRepository.FindById(mazeId, userGuid) != null)
+                throw new ApiException(403, "Already submitted solution for this maze");
+
+            if (!ValidateUserSolution(userSolution))
+                throw new ApiException(400, "Invalid solution");
+
+            Maze maze = _mazeRepository.FindById(mazeId);
+            int userSolutionSize = userSolution.PointList.Count(p => p.Value == 4);
+            int deviation = Convert.ToInt32((userSolutionSize - maze.Solution.Length) * 100 / maze.Solution.Length);
+            int accuracy = Math.Max(0, 100 - deviation);
+
+            string userSolutionString = "";
+            foreach (Point point in userSolution.PointList)
+            {
+                userSolutionString += point.Value;
+            }
+
+            UserMaze um = UserMaze.Create(user, maze, "LOCKED", true, accuracy, userSolutionString);
+            _userMazeRepository.Create(um);
+
+            return new Score(accuracy);
+        }
+
+        public List<MazeDTO> GetAllMazes(string userId)
+        {
+            Guid userGuid = new Guid(userId);
+
             return _mazeRepository.GetAll()
-                .Select(BuildMazeDTOFromMaze)
+                .Select(maze => BuildMazeDTOFromMaze(maze, userGuid))
                 .ToList();
         }
 
@@ -132,6 +160,30 @@ namespace aMAZEing.services
                 return null;
 
             return BuildMazeDTOFromMaze(retMaze);
+        }
+
+        public MazeSolution GetMazeSolution(Guid mazeId, string userId)
+        {
+            Maze maze = _mazeRepository.FindById(mazeId);
+
+            Guid userGuid = new Guid(userId);
+            User user = _userRepository.FindById(userGuid);
+
+            UserMaze userMaze = _userMazeRepository.FindById(mazeId, userGuid);
+            if (userMaze != null) 
+            {
+                _userMazeRepository.Update(maze.MazeId, user.UserId, "LOCKED", true);
+            }
+            else
+            {
+                userMaze = UserMaze.Create(user, maze, "LOCKED", true, 0, String.Empty);
+                _userMazeRepository.Create(userMaze);
+            }
+
+            if (maze == null)
+                return null;
+
+            return new MazeSolution(maze.Solution.DecompressString(), maze.Width);
         }
 
         private MazeDTO BuildMazeDTOFromMaze(Maze maze)
@@ -149,9 +201,99 @@ namespace aMAZEing.services
                 .Width(maze.Width)
                 .Height(maze.Height)
                 .State(maze.State.DecompressString())
-                .Solution(maze.Solution.DecompressString())
                 .CreationTime(maze.CreationTime)
                 .Build();
+        }
+
+        private MazeDTO BuildMazeDTOFromMaze(Maze maze, Guid userId)
+        {
+            int playersCount = _userMazeRepository.PlayersCountByMazeId(maze.MazeId);
+            UserMaze userMaze = _userMazeRepository.FindOwnByMazeId(maze.MazeId);
+            User user = _userRepository.FindById(userMaze.UserId);
+
+            UserMaze userMazeSolved = _userMazeRepository.FindById(maze.MazeId, userId);
+            bool solved = false;
+            if (userMazeSolved != null)
+                solved = userMazeSolved.Solved;
+
+            return MazeDTO.Builder()
+                .Id(maze.MazeId)
+                .Name(maze.Name)
+                .OwnerId(user.UserId)
+                .Owner(user.Username)
+                .PlayersCount(playersCount)
+                .Width(maze.Width)
+                .Height(maze.Height)
+                .State(maze.State.DecompressString())
+                .CreationTime(maze.CreationTime)
+                .Solved(solved)
+                .Build();
+        }
+
+        private bool ValidateUserSolution(MazeFE maze)
+        {
+            int[,] matrix = new int[maze.Height, maze.Width];
+            Point startPoint = Point.Default;
+            Point endPoint = Point.Default;
+
+            foreach (Point p in maze.PointList)
+            {
+                matrix[p.I, p.J] = 0;
+
+                if (p.Value == 1)
+                {
+                    startPoint.I = p.I;
+                    startPoint.J = p.J;
+                    startPoint.Value = 1;
+                    matrix[p.I, p.J] = 1;
+                }
+                else if (p.Value == 2)
+                {
+                    endPoint.I = p.I;
+                    endPoint.J = p.J;
+                }
+                else if (p.Value == 3)
+                {
+                    matrix[p.I, p.J] = -1;
+                }
+                else if (p.Value == 4)
+                {
+                    matrix[p.I, p.J] = 4;
+                }
+            }
+
+            int[] di = { -1, 0, 1, 0 };
+            int[] dj = { 0, 1, 0, -1 };
+
+            for (int i = 0; i < maze.Height; i++)
+            {
+                for (int j = 0; j < maze.Width; j++)
+                {
+                    if (matrix[i, j] == 4)
+                    {
+                        int solNeighbourCount = 0;
+                        int startNeighbourCount = 0;
+                        int endNeighbourCount = 0;
+
+                        for (int k = 0; k <= 3; k++)
+                        {
+                            int nextPointValue = matrix[i + di[k], j + dj[k]];
+
+                            if (nextPointValue == 4)        solNeighbourCount++;
+                            else if (nextPointValue == 1)   startNeighbourCount++;
+                            else if (nextPointValue == 2)   endNeighbourCount++;
+                        }
+
+                        if (solNeighbourCount == 2 && startNeighbourCount == 0 && endNeighbourCount == 0)   continue;
+                        if (solNeighbourCount == 1 && ((startNeighbourCount ^ endNeighbourCount) == 1))     continue;
+                        if (solNeighbourCount == 0 && ((startNeighbourCount + endNeighbourCount) == 2))     continue;
+
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

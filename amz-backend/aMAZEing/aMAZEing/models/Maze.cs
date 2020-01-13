@@ -27,6 +27,7 @@ namespace aMAZEing.models
             };
         }
 
+
         [Required]
         public Guid MazeId { get; set; }
 

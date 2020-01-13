@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using aMAZEing.DTOs;
@@ -45,6 +46,12 @@ namespace aMAZEing.services
                 }
             }
 
+            if((startPoint.I == endPoint.I && Math.Abs(startPoint.J - endPoint.J) == 1) || 
+               (startPoint.J == endPoint.J && Math.Abs(startPoint.I - endPoint.I) == 1))
+            {
+                throw new ApiException(400, "Invalid maze. Start point right next to end point");
+            }
+
             int[,] res = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
             if (matrix[endPoint.I, endPoint.J] == 0)
@@ -56,10 +63,11 @@ namespace aMAZEing.services
             int[] dj = { 0, 1, 0, -1 };
 
             // parse solution
-            Point currPoint = endPoint;
+            Point currPoint = new Point(endPoint.I, endPoint.J, res[endPoint.I, endPoint.J]);
             while (true)
             {
-                Point nextPoint, bestNextPoint = Point.Default;
+                Point nextPoint = Point.Default;
+                Point bestNextPoint = Point.Default;
                 for (int i = 0; i <= 3; ++i)
                 {
                     int next_i = currPoint.I + di[i];
@@ -127,6 +135,12 @@ namespace aMAZEing.services
                 {
                     matrix[p.I, p.J] = -1;
                 }
+            }
+
+            if ((startPoint.I == endPoint.I && Math.Abs(startPoint.J - endPoint.J) == 1) ||
+                (startPoint.J == endPoint.J && Math.Abs(startPoint.I - endPoint.I) == 1))
+            {
+                throw new ApiException(400, "Invalid maze. Start point right next to end point");
             }
 
             int[,] res = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);

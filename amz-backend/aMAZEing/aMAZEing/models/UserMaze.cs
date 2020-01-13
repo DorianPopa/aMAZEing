@@ -17,7 +17,21 @@ namespace aMAZEing.models
                 MazeId = maze.MazeId,
                 State = "OWN",
                 Solved = false,
-                Accuracy = null
+                Accuracy = null,
+                UserSolution = String.Empty
+            };
+        }
+
+        public static UserMaze Create(User user, Maze maze, string state, bool solved, int accuracy, string userSolution)
+        {
+            return new UserMaze
+            {
+                UserId = user.UserId,
+                MazeId = maze.MazeId,
+                State = state,
+                Solved = solved,
+                Accuracy = accuracy,
+                UserSolution = userSolution
             };
         }
 
@@ -35,5 +49,7 @@ namespace aMAZEing.models
         public bool Solved { get; set; }
 
         public int? Accuracy { get; set; }
+
+        public string UserSolution { get; set; }
     }
 }

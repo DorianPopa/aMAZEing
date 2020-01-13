@@ -49,6 +49,12 @@ namespace aMAZEing.services
                 }
             }
 
+            if ((startPoint.I == endPoint.I && System.Math.Abs(startPoint.J - endPoint.J) == 1) ||
+                (startPoint.J == endPoint.J && System.Math.Abs(startPoint.I - endPoint.I) == 1))
+            {
+                throw new ApiException(400, "Invalid maze. Start point right next to end point");
+            }
+
             try
             {
                 return Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);

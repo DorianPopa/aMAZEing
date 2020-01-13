@@ -26,17 +26,38 @@ namespace aMAZEing.repositories
             _context.UserMazes.Add(userMaze);
             var result = _context.SaveChanges();
 
-            if(result > 0) { }
             // ensure UserMaze saved to db
-            UserMaze retUserMaze = FindById(userMaze.MazeId, userMaze.UserId);
-            if (new Guid(retUserMaze.UserId.ToString()) == userMaze.UserId && new Guid(retUserMaze.MazeId.ToString()) == userMaze.MazeId)
+            if (result > 0) 
             {
                 _logger.LogInformation("UserMaze with UserId {0} and MazeId {1} saved into database\n\n", userMaze.UserId, userMaze.MazeId);
-                return retUserMaze;
+                return userMaze;
             }
+            else
+            {
+                _logger.LogError("Server error! UserMaze with UserId {0} and MazeId {1} not saved into database\n\n", userMaze.UserId, userMaze.MazeId);
+                return null;
+            }
+        }
 
-            _logger.LogError("Server error! UserMaze with UserId {0} and MazeId {1} not saved into database\n\n", userMaze.UserId, userMaze.MazeId);
-            return null;
+        public virtual UserMaze Update(Guid mazeId, Guid userId, string state, bool solved, int accuracy)
+        {
+            UserMaze userMaze = FindById(mazeId, userId);
+            userMaze.State = state;
+            userMaze.Solved = solved;
+            userMaze.Accuracy = accuracy;
+            _context.SaveChanges();
+
+            return userMaze;
+        }
+
+        public virtual UserMaze Update(Guid mazeId, Guid userId, string state, bool solved)
+        {
+            UserMaze userMaze = FindById(mazeId, userId);
+            userMaze.State = state;
+            userMaze.Solved = solved;
+            _context.SaveChanges();
+
+            return userMaze;
         }
 
         public virtual UserMaze FindById(Guid mazeId, Guid userId)
@@ -52,6 +73,11 @@ namespace aMAZEing.repositories
         public virtual List<UserMaze> FindOwnMazesByUserId(Guid id)
         {
             return _context.UserMazes.Where(um => um.UserId == id && um.State.Equals("OWN")).ToList();
+        }
+
+        public virtual List<UserMaze> FindLockedMazesByUserId(Guid id)
+        {
+            return _context.UserMazes.Where(um => um.UserId == id && um.State.Equals("LOCKED")).ToList();
         }
 
         public virtual int PlayersCountByMazeId(Guid mazeId)

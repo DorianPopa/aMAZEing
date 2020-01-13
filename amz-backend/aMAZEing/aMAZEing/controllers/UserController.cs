@@ -58,7 +58,7 @@ namespace aMAZEing.controllers
             try
             {
                 User retUser = _userService.ValidateCredentials(user);
-                Jwt jwt = _authService.GenerateJwt(retUser.UserId);
+                Jwt jwt = _authService.GenerateJwt(retUser.UserId, user.Username);
                 return Ok(jwt);
             }
             catch (ApiException e)
@@ -66,8 +66,6 @@ namespace aMAZEing.controllers
                 return BadRequest(new BadRequestError(e.Message));
             }
         }
-
-
 
         [HttpGet]
         public ActionResult<List<UserDTO>> GetAllUsers()
@@ -174,7 +172,7 @@ namespace aMAZEing.controllers
         }
 
         [HttpGet]
-        [Route("leaderboard")]
+        [Route("/leaderboard")]
         public ActionResult<List<UserDTO>> GetLeaderboard()
         {
             _logger.LogInformation("GET request for the leaderboard\n\n");

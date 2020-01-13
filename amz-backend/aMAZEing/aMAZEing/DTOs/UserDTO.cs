@@ -9,13 +9,22 @@ namespace aMAZEing.DTOs
 
         public string Username { get; private set; }
 
-        public List<MazeDTO> OwnMazes { get; private set; }
+        public int Accuracy { get; private set; }
 
-        public UserDTO(Guid id, string username, List<MazeDTO> ownMazes)
+        //public List<MazeDTO> OwnMazes { get; private set; }
+
+        public int OwnMazesCount { get; private set; }
+
+        public int OwnMazesPlayersCount { get; private set; }
+
+        public UserDTO(Guid id, string username, int accuracy, List<MazeDTO> ownMazes, int ownMazesCount, int ownMazesPlayersCount)
         {
             Id = id;
             Username = username;
-            OwnMazes = ownMazes;
+            Accuracy = accuracy;
+            //OwnMazes = ownMazes;
+            OwnMazesCount = ownMazesCount;
+            OwnMazesPlayersCount = ownMazesPlayersCount;
         }
 
         public static UserBuilder Builder()
@@ -29,11 +38,18 @@ namespace aMAZEing.DTOs
 
             private string BuilderUsername { get; set; }
 
+            public int BuilderAccuracy { get; set; }
+
             public List<MazeDTO> BuilderOwnMazes { get; private set; }
+
+            public int BuilderOwnMazesCount { get; private set; }
+
+            public int BuilderOwnMazesPlayersCount { get; private set; }
 
             public UserBuilder()
             {
                 BuilderOwnMazes = new List<MazeDTO>();
+                BuilderOwnMazesPlayersCount = 0;
             }
 
             public UserBuilder Id(Guid id)
@@ -48,15 +64,25 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
+            public UserBuilder Accuracy(int accuracy)
+            {
+                BuilderAccuracy = accuracy;
+                return this;
+            }
+
             public UserBuilder OwnMazes(List<MazeDTO> ownMazes)
             {
                 BuilderOwnMazes = ownMazes;
+                BuilderOwnMazesCount = ownMazes.Count;
+                foreach (MazeDTO maze in ownMazes)
+                    BuilderOwnMazesPlayersCount += maze.PlayersCount;
+
                 return this;
             }
 
             public UserDTO Build()
             {
-                return new UserDTO(BuilderId, BuilderUsername, BuilderOwnMazes);
+                return new UserDTO(BuilderId, BuilderUsername, BuilderAccuracy, BuilderOwnMazes, BuilderOwnMazesCount, BuilderOwnMazesPlayersCount);
             }
         }
     }

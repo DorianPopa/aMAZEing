@@ -45,6 +45,12 @@ namespace aMAZEing.services
                 }
             }
 
+            if ((startPoint.I == endPoint.I && System.Math.Abs(startPoint.J - endPoint.J) == 1) ||
+                (startPoint.J == endPoint.J && System.Math.Abs(startPoint.I - endPoint.I) == 1))
+            {
+                throw new ApiException(400, "Invalid maze. Start point right next to end point");
+            }
+
             MazeVisualizerDTO solution = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
             
             if(!solution.Solution.Any())
@@ -97,6 +103,13 @@ namespace aMAZEing.services
                     matrix[p.I, p.J] = -1;
                 }
             }
+
+            if ((startPoint.I == endPoint.I && System.Math.Abs(startPoint.J - endPoint.J) == 1) ||
+                (startPoint.J == endPoint.J && System.Math.Abs(startPoint.I - endPoint.I) == 1))
+            {
+                throw new ApiException(400, "Invalid maze. Start point right next to end point");
+            }
+
             MazeVisualizerDTO solution = Solve(matrix, startPoint, endPoint, mazeFE.Width, mazeFE.Height);
 
             if (!solution.Solution.Any())

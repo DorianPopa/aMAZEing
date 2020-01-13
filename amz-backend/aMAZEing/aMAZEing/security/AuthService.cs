@@ -20,16 +20,16 @@ namespace aMAZEing.security
 
 
 
-        public Jwt GenerateJwt(Guid userId)
+        public Jwt GenerateJwt(Guid userId, string username)
         {
             var token = new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
                 .WithSecret(Secret)
-                .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(2).ToUnixTimeSeconds())
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(12).ToUnixTimeSeconds())
                 .AddClaim("userId", userId)
                 .Build();
 
-            return new Jwt(token, userId);
+            return new Jwt(token, userId, username);
         }
 
         public IDictionary<string, object> ValidateJwt(string token)
