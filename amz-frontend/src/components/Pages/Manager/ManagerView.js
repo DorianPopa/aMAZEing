@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import typy from "typy";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { withAlert } from "react-alert";
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -9,9 +8,8 @@ import Button from "../../Common/Button";
 import { Config, Network } from "../../../base";
 import Block from "../../Common/Block/Block";
 import "./Manager.scss";
-import { SubmitSolutionModal, RequestSolutionModal } from "../../Structure/Modal/Template";
 
-class ManagerSolve extends PureComponent {
+class ManagerView extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -29,14 +27,6 @@ class ManagerSolve extends PureComponent {
         owner: "",
       },
 
-      isFetchFired: false,
-
-      isRequestSolutionModalOpen: false,
-      isSubmitSolutionModalOpen: false,
-      isAccuracyModalOpen: false,
-      isSubmitFired: false,
-      isSolutionRequestFired: false,
-
       restrict: false,
     };
   }
@@ -47,7 +37,7 @@ class ManagerSolve extends PureComponent {
   }
 
   fetchMaze = async () => {
-    this.setState({ isFetchFired: true });
+    console.log(this.props);
     if (typy(this, "props.match.params.id").isNullOrUndefined) this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
     const response = await Network.fetchMaze(this.props.store.user, typy(this, "props.match.params.id").safeString);
 
@@ -67,7 +57,6 @@ class ManagerSolve extends PureComponent {
           });
 
           return {
-            isFetchFired: false,
             data: {
               matrix: m,
               title: name,
@@ -77,17 +66,7 @@ class ManagerSolve extends PureComponent {
         });
         break;
       }
-      case Config.HTTP_STATUS.NOT_FOUND:
       case Config.HTTP_STATUS.BAD_REQUEST: {
-        this.setState({ restrict: true });
-        this.props.alert.show("The maze you're looking for is not available.", {
-          type: "warn",
-          timeout: 3000,
-          isClosable: false,
-        });
-        setTimeout(() => {
-          this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
-        }, 3000);
         break;
       }
       case Config.HTTP_STATUS.UNAUHTORIZED: {
@@ -97,15 +76,6 @@ class ManagerSolve extends PureComponent {
       default:
         break;
     }
-  };
-
-  onSubmit = async () => {
-    this.setState({ isSubmitFired: true });
-  };
-
-  onSolutionRequest = async (type = Config.SOLUTION_ALGORIGHM.BFS) => {
-    this.setState({ isSolutionRequestFired: true });
-    console.log(type);
   };
 
   renderPlayground() {
@@ -190,9 +160,6 @@ class ManagerSolve extends PureComponent {
   render() {
     return (
       <div className="Manager solve" data-restrict={this.state.restrict}>
-        <div className="PageLoader" data-visible={this.state.isFetchFired}>
-          <CircularProgress size={30} />
-        </div>
         <div className="content">
           <div className="playground">
             <div className="title">
@@ -253,14 +220,7 @@ class ManagerSolve extends PureComponent {
                   for this game.
                 </p>
                 <div className="buttons">
-                  <Button
-                    type="edged"
-                    theme="light"
-                    title="View solution"
-                    onClick={() => {
-                      this.setState({ isRequestSolutionModalOpen: true });
-                    }}
-                  />
+                  <Button type="edged" theme="light" title="View solution" />
                   <Button
                     type="edged"
                     theme="solution"
@@ -269,36 +229,19 @@ class ManagerSolve extends PureComponent {
                       source: "flash_on",
                       family: "round",
                     }}
-                    title="Submit your solution"
-                    onClick={() => {
-                      this.setState({ isSubmitSolutionModalOpen: true });
-                    }}
+                    title="Save maze"
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <SubmitSolutionModal
-          isOpen={this.state.isSubmitSolutionModalOpen}
-          onClose={() => {
-            this.setState({ isSubmitSolutionModalOpen: false });
-          }}
-          onSubmit={this.onSubmit}
-        />
-        <RequestSolutionModal
-          isOpen={this.state.isRequestSolutionModalOpen}
-          onClose={() => {
-            this.setState({ isRequestSolutionModalOpen: false });
-          }}
-          onSubmit={this.onSolutionRequest}
-        />
       </div>
     );
   }
 }
 
-ManagerSolve.propTypes = {
+ManagerView.propTypes = {
   alert: PropTypes.shape({
     show: PropTypes.func,
     removeAll: PropTypes.func,
@@ -331,4 +274,4 @@ export default compose(
       };
     },
   ),
-)(ManagerSolve);
+)(ManagerView);

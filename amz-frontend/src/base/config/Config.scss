@@ -170,6 +170,30 @@ $top-mobile: "all and (max-width : #{$col-sm})";
       @include fade-in(500ms);
     }
   }
+
+  & > .PageLoader {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -100;
+    display: flex;
+    background-color: rgba(255, 255, 255, 1);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 500ms;
+
+    &[data-visible="true"] {
+      z-index: 100;
+      pointer-events: all;
+      opacity: 1;
+      transition: opacity 500ms;
+    }
+  }
 }
 
 /**

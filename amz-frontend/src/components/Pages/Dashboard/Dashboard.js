@@ -26,22 +26,21 @@ class Dashboard extends PureComponent {
   }
 
   componentDidMount() {
-    console.log(this.props.store);
-    this.props.dispatch.doSagaFetchProfile(this.props.store.user.id);
-    // this.props.dispatch.doSagaFetchMazesPlayground(this.props.store.user.id);
-    // this.props.dispatch.doSagaFetchMazesSelf(this.props.store.user.id);
+    this.props.dispatch.doSagaFetchProfile(this.props.store.user);
     this.props.dispatch.doSagaFetchMazes(this.props.store.user);
   }
 
   render() {
-    const mSelfLoading = typy(this.props, "store.profile.flagMazesSelf").safeBoolean;
-    const mPlaygroundLoading = typy(this.props, "store.profile.flagMazesSelf").safeBoolean;
+    const mLoading = typy(this.props, "store.profile.flagMazes").safeBoolean;
 
     const mSelf = typy(this.props, "store.profile.mazesSelf").safeArray;
     const mPlayground = typy(this.props, "store.profile.mazesPlayground").safeArray;
 
     return (
       <div className="Dashboard" data-restrict={this.state.restrict}>
+        <div className="PageLoader" data-visible={this.props.store.profile.flagProfile}>
+          <CircularProgress size={30} />
+        </div>
         <header>
           <div className="content stats">
             <div className="title">
@@ -52,7 +51,7 @@ class Dashboard extends PureComponent {
             <div className="cards">
               <StatCard
                 title="Your Score"
-                value={`${typy(this.props, "store.profile.score").safeString} pts`}
+                value={`${this.props.store.profile.score} pts`}
                 onClick={() => {
                   console.log("Go to Leaderboards");
                 }}
@@ -63,9 +62,14 @@ class Dashboard extends PureComponent {
                 </div>
               </StatCard>
 
-              <StatCard title="Your mazes" value={`${typy(this.props, "store.profile.mazeCount").safeNumber} mazes`}>
+              <StatCard
+                title="Your mazes"
+                value={`${this.props.store.profile.mazeCount} maze${
+                  this.props.store.profile.mazeCount === 1 ? "" : "s"
+                }`}
+              >
                 <div className="statCardPlayers">
-                  <p className="title">played by {typy(this.props, "store.profile.mazePlayers").safeNumber} users</p>
+                  <p className="title">played by {this.props.store.profile.mazePlayers} users</p>
                 </div>
               </StatCard>
             </div>
@@ -106,7 +110,7 @@ class Dashboard extends PureComponent {
             </div>
           </div>
           <div className="grid">
-            {mSelfLoading ? (
+            {mLoading ? (
               <div className="loading">
                 <CircularProgress size={20} />
               </div>
@@ -127,7 +131,7 @@ class Dashboard extends PureComponent {
             </div>
           </div>
           <div className="grid">
-            {mPlaygroundLoading ? (
+            {mLoading ? (
               <div className="loading">
                 <CircularProgress size={20} />
               </div>
@@ -154,6 +158,12 @@ Dashboard.propTypes = {
       username: PropTypes.string,
     }),
     profile: PropTypes.shape({
+      score: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      mazeCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      mazePlayers: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+      flagMazes: PropTypes.bool,
+      flagProfile: PropTypes.bool,
       mazesSelf: PropTypes.arrayOf(PropTypes.shape({})),
       mazesPlayground: PropTypes.arrayOf(PropTypes.shape({})),
     }),
@@ -162,8 +172,6 @@ Dashboard.propTypes = {
   dispatch: PropTypes.shape({
     doSagaFetchProfile: PropTypes.func,
     doSagaFetchMazes: PropTypes.func,
-    doSagaFetchMazesSelf: PropTypes.func,
-    doSagaFetchMazesPlayground: PropTypes.func,
   }).isRequired,
 };
 
@@ -181,11 +189,11 @@ export default compose(
     (dispatch) => {
       return {
         dispatch: {
-          doSagaFetchProfile: (id, onSuccess = () => {}, onError = () => {}) => {
+          doSagaFetchProfile: (user, onSuccess = () => {}, onError = () => {}) => {
             return dispatch({
               type: Config.SAGA_ACTION.USER_FETCH_PROFILE,
               payload: {
-                id,
+                user,
                 onSuccess,
                 onError,
                 reset: true,
@@ -197,27 +205,6 @@ export default compose(
               type: Config.SAGA_ACTION.USER_FETCH_MAZES,
               payload: {
                 user,
-                onSuccess,
-                onError,
-                reset: true,
-              },
-            });
-          },
-          doSagaFetchMazesSelf: (id, onSuccess = () => {}, onError = () => {}) => {
-            return dispatch({
-              type: Config.SAGA_ACTION.USER_FETCH_MAZES_SELF,
-              payload: {
-                id,
-                onSuccess,
-                onError,
-                reset: true,
-              },
-            });
-          },
-          doSagaFetchMazesPlayground: (onSuccess = () => {}, onError = () => {}) => {
-            return dispatch({
-              type: Config.SAGA_ACTION.USER_FETCH_MAZES_PLAYGROUND,
-              payload: {
                 onSuccess,
                 onError,
                 reset: true,

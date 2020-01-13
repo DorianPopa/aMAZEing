@@ -178,6 +178,7 @@ class Connect extends Component {
         setTimeout(() => {
           this.props.dispatch.doUserSetId(result.id);
           this.props.dispatch.doUserSetToken(result.token);
+          this.props.dispatch.doUserSetUsername(result.username);
           this.props.history.replace(Config.ROUTE_PAGE_DASHBOARD);
         }, 1000);
 
@@ -283,6 +284,7 @@ Connect.propTypes = {
   dispatch: PropTypes.shape({
     doUserSetToken: PropTypes.func,
     doUserSetId: PropTypes.func,
+    doUserSetUsername: PropTypes.func,
   }).isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func,
@@ -306,6 +308,9 @@ export default compose(
     (dispatch) => {
       return {
         dispatch: {
+          doUserSetUsername: (username) => {
+            return dispatch({ type: Config.REDUX_ACTION.USER_SET_USERNAME, payload: { username } });
+          },
           doUserSetToken: (token) => {
             return dispatch({ type: Config.REDUX_ACTION.USER_SET_TOKEN, payload: { token } });
           },

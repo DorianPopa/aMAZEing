@@ -3,27 +3,17 @@ import Config from "../config";
 import { Store } from "../index";
 
 class Network {
-  static fetchUserProfile({ id }) {
-    // const API = new URL(Config.API.USER_PROFILE(id));
+  static fetchUserProfile(user) {
+    const API = new URL(Config.API.USER_PROFILE(user.id));
 
-    return {
-      status: 200,
-      json: () => {
-        return {
-          score: "201",
-          mazeCount: 4,
-          mazePlayers: 10,
-        };
-      },
-    };
-
-    // return fetch(API, {
-    //   headers: new Headers({
-    //     "content-type": "application/json",
-    //   }),
-    //   method: "GET",
-    //   contentType: "application/json",
-    // });
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
   }
 
   static fetchMaze(user, mazeId) {
@@ -84,9 +74,63 @@ class Network {
     });
   }
 
+  static doMazeCreate(data, user) {
+    const API = new URL(Config.API.MAZE_CREATE(user.id));
+
+    console.log(API);
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+        Authorization: `Bearer ${user.token}`,
+      }),
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(data),
+    });
+  }
+
+  static doUserLogin(data) {
+    const API = new URL(Config.API.LOGIN());
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+      }),
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(data),
+    });
+  }
+
+  static doUserRegister(data) {
+    const API = new URL(Config.API.REGISTER());
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+      }),
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(data),
+    });
+  }
+
+  static EMERGENCY = async () => {
+    Store.dispatch({ type: PURGE, result: () => null });
+    window.location.href = Config.ROUTE_PAGE_CONNECT;
+  };
+
+  /**
+   *
+   * <<<< DEPRECATED >>>>
+   *
+   */
+
   static fetchMazesSelf({ id }) {
     // const API = new URL(Config.API.MAZES_SELF(id));
-
+    console.log(id);
     return {
       status: 200,
       json: () => {
@@ -152,54 +196,6 @@ class Network {
     //   contentType: "application/json",
     // });
   }
-
-  static doMazeCreate(data, user) {
-    const API = new URL(Config.API.MAZE_CREATE(user.id));
-
-    console.log(API);
-
-    return fetch(API, {
-      headers: new Headers({
-        "content-type": "application/json",
-        Bearer: user.token,
-        Authorization: `Bearer ${user.token}`,
-      }),
-      method: "POST",
-      contentType: "application/json",
-      body: JSON.stringify(data),
-    });
-  }
-
-  static doUserLogin(data) {
-    const API = new URL(Config.API.LOGIN());
-
-    return fetch(API, {
-      headers: new Headers({
-        "content-type": "application/json",
-      }),
-      method: "POST",
-      contentType: "application/json",
-      body: JSON.stringify(data),
-    });
-  }
-
-  static doUserRegister(data) {
-    const API = new URL(Config.API.REGISTER());
-
-    return fetch(API, {
-      headers: new Headers({
-        "content-type": "application/json",
-      }),
-      method: "POST",
-      contentType: "application/json",
-      body: JSON.stringify(data),
-    });
-  }
-
-  static EMERGENCY = async () => {
-    Store.dispatch({ type: PURGE, result: () => null });
-    window.location.href = Config.ROUTE_PAGE_CONNECT;
-  };
 }
 
 export default Network;

@@ -5,16 +5,23 @@ import Network from "../network";
 
 function* sagaFetchUserProfile({ payload }) {
   try {
+    console.log("fUP", payload);
+
     yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_PROFILE, payload: { flag: true } });
-    const response = yield call([Network, Network.fetchUserProfile], { id: payload.id });
-    yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_PROFILE, payload: { flag: false } });
+    const response = yield call([Network, Network.fetchUserProfile], { ...payload.user });
 
     const { status } = response;
     const result = yield response.json();
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        yield put({ type: Config.REDUX_ACTION.PROFILE_SET, payload: { ...result } });
+        const profile = {
+          score: typy(result, "accuracy").isTruthy ? typy(result, "accuracy").safeNumber : 0,
+          mazeCount: typy(result, "ownMazesCount").isTruthy ? typy(result, "ownMazesCount").safeNumber : 0,
+          mazePlayers: typy(result, "ownMazesPlayersCount").isTruthy ? typy(result, "ownMazesCount").safeNumber : 0,
+        };
+
+        yield put({ type: Config.REDUX_ACTION.PROFILE_SET, payload: { ...profile } });
         if (typy(payload, "onSuccess").isFunction) yield payload.onSuccess();
         break;
       }
@@ -32,20 +39,15 @@ function* sagaFetchUserProfile({ payload }) {
   } catch (e) {
     console.warn(e);
   }
+  yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_PROFILE, payload: { flag: false } });
 }
 
 function* sagaFetchMazes({ payload }) {
   try {
     console.log(payload);
 
-    if (typy(payload, "reset").isTruthy) {
-      yield put({ type: Config.REDUX_ACTION.PROFILE_SET_MAZES_PLAYGROUND, payload: { list: [] } });
-      yield put({ type: Config.REDUX_ACTION.PROFILE_SET_MAZES_SELF, payload: { list: [] } });
-    }
-
     yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES, payload: { flag: true } });
     const response = yield call([Network, Network.fetchMazes], { ...payload.user });
-    yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES, payload: { flag: false } });
 
     const { status } = response;
     const result = yield response.json();
@@ -89,6 +91,7 @@ function* sagaFetchMazes({ payload }) {
   } catch (e) {
     console.warn(e);
   }
+  yield put({ type: Config.REDUX_ACTION.FLAG_SET_LOADING_MAZES, payload: { flag: false } });
 }
 
 function* sagaFetchMazesSelf({ payload }) {

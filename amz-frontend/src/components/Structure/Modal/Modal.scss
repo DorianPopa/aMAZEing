@@ -96,11 +96,15 @@
 }
 
 .Modal.ProfileModal,
-.CancelModal {
+.Modal.CancelModal,
+.Modal.SubmitSolutionModal,
+.Modal.RequestSolutionModal {
   .ModalContent {
     min-height: 80px;
     & > p {
       margin-bottom: 40px;
+      max-width: 600px;
+      line-height: 1.6;
     }
 
     & > .buttons {
