@@ -187,7 +187,10 @@ namespace aMAZEing.controllers
                 return Unauthorized(new UnauthorizedError(e.Message));
             }
 
-            throw new NotImplementedException();
+            ActionResult<List<UserDTO>> leaderboard = GetAllUsers();
+            // sort from latest to oldest
+            leaderboard.Value.Sort((u1, u2) => u2.Accuracy.CompareTo(u1.Accuracy));
+            return leaderboard;
         }
 
         private IDictionary<string, object> Authorize(string accessToken)

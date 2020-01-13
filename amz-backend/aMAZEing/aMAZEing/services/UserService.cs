@@ -108,7 +108,10 @@ namespace aMAZEing.services
             int totalAccuracy = 0;
             foreach (UserMaze um in solvedMazes)
                 totalAccuracy += um.Accuracy.GetValueOrDefault();
-            int accuracy = totalAccuracy / solvedMazes.Count;
+
+            int accuracy = 0;
+            if (solvedMazes.Count != 0)
+                accuracy = totalAccuracy / solvedMazes.Count;
 
             return UserDTO.Builder()
                 .Id(user.UserId)

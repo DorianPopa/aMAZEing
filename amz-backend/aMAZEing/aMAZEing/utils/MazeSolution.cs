@@ -9,6 +9,8 @@ namespace aMAZEing.utils
 
         public MazeSolution(string solution, int width)
         {
+            Solution = new List<Point>();
+
             for (int i = 0; i < solution.Length; ++i)
             {
                 if (solution[i] == '1')

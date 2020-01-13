@@ -24,17 +24,19 @@ namespace aMAZEing.repositories
         public virtual Maze Create(Maze maze)
         {
             _context.Mazes.Add(maze);
-            _context.SaveChanges();
+            var result = _context.SaveChanges();
 
             // ensure maze saved to db
-            if (new Guid(FindById(maze.MazeId).MazeId.ToString()) == maze.MazeId)
+            if (result > 0)
             {
                 _logger.LogInformation("Maze with Id {0} saved into database\n\n", maze.MazeId);
                 return maze;
             }
-
-            _logger.LogError("Server error! Maze with Id {0} not saved into database\n\n", maze.MazeId);
-            return null;
+            else
+            {
+                _logger.LogError("Server error! Maze with Id {0} not saved into database\n\n", maze.MazeId);
+                return null;
+            }
         }
 
         public virtual Maze FindById(Guid id)

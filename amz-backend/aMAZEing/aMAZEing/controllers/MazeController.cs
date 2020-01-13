@@ -104,7 +104,7 @@ namespace aMAZEing.controllers
         [Route("{id}/submit")]
         public ActionResult<Score> SubmitSolution(Guid id, [FromBody] MazeFE userSolution)
         {
-            _logger.LogInformation("POST request to submit solution for maze with Id {0}\n\n", id);
+            _logger.LogInformation("POST request to submit a solution for maze with Id {0}\n\n", id);
 
             IDictionary<string, object> payload;
             try
