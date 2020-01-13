@@ -211,6 +211,8 @@ class Connect extends Component {
 
     const response = await Network.doUserRegister(payload);
 
+    this.setState({ isRegistering: false });
+
     const { status } = response;
     const result = await response.json();
 
