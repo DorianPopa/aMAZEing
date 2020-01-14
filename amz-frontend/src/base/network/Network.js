@@ -55,6 +55,19 @@ class Network {
     });
   }
 
+  static fetchMazeUserSolution(user, mazeId) {
+    const API = new URL(Config.API.MAZE_USER_SOLUTION(mazeId));
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
+  }
+
   static fetchMazeSolution(user, maze, type) {
     let API = null;
     switch (type) {

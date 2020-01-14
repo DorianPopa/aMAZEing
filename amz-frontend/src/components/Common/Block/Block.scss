@@ -64,4 +64,25 @@
   &[data-type="4"] {
     @include type($colorTable_Orange1);
   }
+  &[data-type="5"] {
+    @include type($colorTable_Orange1);
+    &:after {
+      position: absolute;
+      content: "Y";
+      color: $colorDark;
+      font-size: 12pt;
+      z-index: 3;
+      opacity: 1;
+      fill: transparent;
+    }
+
+    .overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      opacity: 1;
+      position: relative;
+    }
+  }
 }

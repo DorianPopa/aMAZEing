@@ -12,6 +12,7 @@ import { Config } from "../../../base";
 
 import NavMenuDefault from "./NavMenuDefault";
 import NavMenuManager from "./NavMenuManager";
+import NavMenuVisualizer from "./NavMenuVisualizer";
 
 const Nav = (props) => {
   const { pathname } = props.location;
@@ -21,6 +22,10 @@ const Nav = (props) => {
   const onLogOut = () => {
     props.dispatch.doLogOut();
     props.history.replace(Config.ROUTE_PAGE_CONNECT);
+  };
+
+  const onGoToDashboard = () => {
+    props.history.push(Config.ROUTE_PAGE_DASHBOARD);
   };
 
   return (
@@ -36,6 +41,15 @@ const Nav = (props) => {
               username: typy(props, "store.user.username").safeString,
               id: typy(props, "store.user.id").safeString,
             }}
+            onLogOut={onLogOut}
+          />
+        ) : matchPath(pathname, { path: Config.ROUTE_PAGE_MAZE_VISUALIZER, exact: true }) !== null ? (
+          <NavMenuVisualizer
+            user={{
+              username: typy(props, "store.user.username").safeString,
+              id: typy(props, "store.user.id").safeString,
+            }}
+            onGoToDashboard={onGoToDashboard}
             onLogOut={onLogOut}
           />
         ) : (
@@ -68,6 +82,7 @@ Nav.propTypes = {
   }).isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func,
+    push: PropTypes.func,
   }).isRequired,
 };
 

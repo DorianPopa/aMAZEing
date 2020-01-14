@@ -4,7 +4,6 @@ import { withAlert } from "react-alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import Icon from "../../Common/Icon";
 import "./Leaderboards.scss";
 import { Config, Network } from "../../../base";
 
@@ -60,7 +59,6 @@ class Leaderboards extends PureComponent {
   };
 
   render() {
-    let i = 0;
     return (
       <div className="Leaderboards">
         <div className="PageLoader" data-visible={this.state.isListLoading}>

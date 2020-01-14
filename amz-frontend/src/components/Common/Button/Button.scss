@@ -338,6 +338,9 @@
     &[data-theme="outline-dark"] {
       @include buton-default-outline-theme($colorDark, $colorDark);
     }
+    &[data-theme="outline-primary"] {
+      @include buton-default-outline-theme($colorPrimary, $colorPrimary);
+    }
     &[data-theme="outline"] {
       @include buton-default-outline-theme(
         #fff,

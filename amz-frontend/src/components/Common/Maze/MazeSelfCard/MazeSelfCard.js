@@ -14,7 +14,7 @@ const cover = (seed) => {
     cell_size: 150,
     variance: 1,
     seed,
-    x_colors: ["5c70d4", "1a1b2b", "292b45", "5c70d4", "ffffff", "7f00ff"],
+    x_colors: ["1a1b2b", "292b45", "7f00ff", "292b45"],
   });
   return pattern.png();
 };
@@ -47,7 +47,14 @@ const MazeSelfCard = (props) => {
         </div>
         <div className="footer">
           <div className="content">
-            <Button type="classic" theme="outline-dark" title="View" mini onClick={() => onView(id)} />
+            <Button
+              type="classic"
+              theme="outline-dark"
+              icon={{ icon: true, family: "round", source: "view_module" }}
+              title="View"
+              mini
+              onClick={() => onView(id)}
+            />
             <Button type="classic" theme="outline-dark" title="Remove" mini onClick={() => onRemove(id)} />
           </div>
         </div>

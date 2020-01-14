@@ -64,7 +64,7 @@ class ManagerSolve extends PureComponent {
     this.isMounted = false;
   }
 
-  copyStateMaze = (prev = this.state) => {
+  copyStateMaze = (prev) => {
     const m = {};
     [...Array(prev.height).keys()].forEach((line) => {
       [...Array(prev.width).keys()].forEach((column) => {
@@ -77,39 +77,46 @@ class ManagerSolve extends PureComponent {
   };
 
   fetchUserSolution = async () => {
-    this.setState({ isFetchFired: false });
-    return; // TODO userSolution
-    const response = await Network.fetchMazePlainSolution(
+    this.setState({ isFetchFired: true });
+
+    const response = await Network.fetchMazeUserSolution(
       this.props.store.user,
       typy(this, "props.match.params.id").safeString,
     );
-
-    console.log(response);
 
     const { status } = response;
     const result = await response.json();
 
     if (!this.isMounted) return;
 
+    console.log(status, result);
+
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        const { name, playersCount } = result;
-        this.setState((prev) => {
-          const m = { ...prev.matrix };
+        this.setState(
+          (prev) => {
+            const m = this.copyStateMaze(prev);
 
-          result.solution.forEach((point) => {
-            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = Config.BLOCK_TYPE.SOLUTION;
-          });
+            result.item2.solution.forEach((point) => {
+              m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = Config.BLOCK_TYPE.SELF;
+            });
 
-          return {
-            isFetchFired: false,
-            data: {
+            return {
+              score: result.item1.accuracy,
+              solution: {
+                used: result.item2.solutionSize,
+              },
               matrix: m,
-              title: name,
-              playersCount,
-            },
-          };
-        });
+            };
+          },
+          () => {
+            setTimeout(() => {
+              this.setState({
+                isFetchFired: false,
+              });
+            }, 1500);
+          },
+        );
         break;
       }
       case Config.HTTP_STATUS.NOT_FOUND:
@@ -148,32 +155,35 @@ class ManagerSolve extends PureComponent {
       case Config.HTTP_STATUS.OK: {
         const { accuracy, name, owner, ownerId, solved } = result;
 
-        if (typy(ownerId).safeString === typy(this, "props.store.user.id")) {
+        if (typy(ownerId).safeString === typy(this, "props.store.user.id").safeString) {
           this.props.history.push(
             Config.ROUTE_BUILDER_PAGE_MAZE_MANAGER_VIEW(typy(this, "props.match.params.id").safeString),
           );
         }
 
-        this.setState((prev) => {
-          const m = this.copyStateMaze(prev);
+        this.setState(
+          (prev) => {
+            const m = this.copyStateMaze(prev);
 
-          result.state.forEach((point) => {
-            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
-          });
+            result.state.forEach((point) => {
+              m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
+            });
 
-          if (solved) this.fetchUserSolution();
-
-          return {
-            solved,
-            isFetchFired: solved,
-            matrix: m,
-            score: accuracy,
-            data: {
-              title: name,
-              owner,
-            },
-          };
-        });
+            return {
+              solved,
+              isFetchFired: solved,
+              matrix: m,
+              score: accuracy,
+              data: {
+                title: name,
+                owner,
+              },
+            };
+          },
+          () => {
+            if (solved) this.fetchUserSolution();
+          },
+        );
         break;
       }
       case Config.HTTP_STATUS.NOT_FOUND:
@@ -355,6 +365,7 @@ class ManagerSolve extends PureComponent {
           <div className="PageLoader" data-visible={this.state.isFetchFired}>
             <CircularProgress size={30} />
           </div>
+
           <div className="content">
             <div className="playground">
               <div className="title">
@@ -390,7 +401,7 @@ class ManagerSolve extends PureComponent {
                   <h3>Stats</h3>
                 </div>
                 <p className="info">Blocks used: {this.state.solution.used}</p>
-                {this.state.solved ? <p className="info">Your accuracy: {this.state.score}</p> : null}
+                {this.state.solved ? <p className="info">Your accuracy: {this.state.score}%</p> : null}
 
                 <div className="title">
                   <h3>Map</h3>
@@ -445,6 +456,7 @@ class ManagerSolve extends PureComponent {
               </div>
             </div>
           </div>
+
           <SubmitSolutionModal
             isOpen={this.state.isSubmitSolutionModalOpen}
             onClose={() => {
@@ -458,7 +470,11 @@ class ManagerSolve extends PureComponent {
             onClose={() => {
               this.setState({ isRequestSolutionModalOpen: false });
             }}
-            onSubmit={this.onSolutionRequest}
+            onSubmit={(type) => {
+              this.props.history.push(
+                Config.ROUTE_BUILDER_PAGE_MAZE_VISUALIZER(typy(this, "props.match.params.id").safeString, type),
+              );
+            }}
           />
         </div>
       </>

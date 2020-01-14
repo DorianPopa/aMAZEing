@@ -21,6 +21,11 @@ const Block = ({ type, isHoverEnabled, onClick, rank }) => {
         <path className="triangle-right" d="M 50 0 25 25 50 50" />
         <path className="triangle-bottom" d="M 50 50 25 25 0 50" />
         <path className="overlay" d="M 0 0 50 0 50 50 0 50" />
+        {type === Config.BLOCK_TYPE.SELF ? (
+          <text x="15" y="31" fill="white" fontSize={30}>
+            ✪
+          </text>
+        ) : null}
       </g>
     </svg>
   );
@@ -34,6 +39,7 @@ Block.propTypes = {
     Config.BLOCK_TYPE.START,
     Config.BLOCK_TYPE.FINISH,
     Config.BLOCK_TYPE.SOLUTION,
+    Config.BLOCK_TYPE.SELF,
   ]),
   isHoverEnabled: PropTypes.bool,
   onClick: PropTypes.func,

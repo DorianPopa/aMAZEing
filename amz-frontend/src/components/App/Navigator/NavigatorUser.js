@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Nav from "../../Structure/Nav";
-import { Dashboard, Manager, Leaderboards } from "../../Pages";
+import { Dashboard, Manager, Leaderboards, Visualizer } from "../../Pages";
 import { Config } from "../../../base";
 
 const NavigatorUser = () => {
@@ -40,6 +40,13 @@ const NavigatorUser = () => {
       title: "View Maze",
       depth: 1,
       component: (props) => <Manager {...props} type="view" />,
+    },
+    {
+      exact: true,
+      route: Config.ROUTE_PAGE_MAZE_VISUALIZER,
+      title: "Visualizer",
+      depth: 1,
+      component: (props) => <Visualizer {...props} />,
     },
   ];
 

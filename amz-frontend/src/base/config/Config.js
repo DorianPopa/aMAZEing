@@ -27,13 +27,14 @@ class Config {
 
   static ROUTE_PAGE_MAZE_MANAGER_VIEW = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/view`;
 
-  static ROUTE_PAGE_MAZE_VISUALIZER = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/visualize`;
+  static ROUTE_PAGE_MAZE_VISUALIZER = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/visualize/:type`;
 
   static ROUTE_BUILDER_PAGE_MAZE_MANAGER_SOLVE = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/solve`;
 
   static ROUTE_BUILDER_PAGE_MAZE_MANAGER_VIEW = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/view`;
 
-  static ROUTE_BUILDER_PAGE_MAZE_VISUALIZER = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/visualize`;
+  static ROUTE_BUILDER_PAGE_MAZE_VISUALIZER = (id, type) =>
+    `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/visualize/${type}`;
 
   // ----------- REDUX ACTIONS -------------- //
 
@@ -98,6 +99,7 @@ class Config {
     MAZE_SOLVE_ASTAR: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/a-star`,
 
     MAZE_PLAIN_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/solution`,
+    MAZE_USER_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/user-solution`,
 
     MAZE_SUBMIT_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/submit`,
 
@@ -126,7 +128,7 @@ class Config {
     FINISH: 2,
     SIMPLE: 3,
     SOLUTION: 4,
-    OFFICIAL: 5,
+    SELF: 5,
   };
 }
 

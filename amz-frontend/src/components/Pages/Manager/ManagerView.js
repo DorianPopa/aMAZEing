@@ -182,11 +182,6 @@ class ManagerView extends PureComponent {
     }
   };
 
-  onSolutionRequest = async (type = Config.SOLUTION_ALGORIGHM.BFS) => {
-    this.setState({ isSolutionRequestFired: true });
-    console.log(type);
-  };
-
   renderPlayground() {
     return [...Array(this.state.height).keys()].map((line) =>
       [...Array(this.state.width).keys()].map((column) => (
@@ -350,7 +345,11 @@ class ManagerView extends PureComponent {
           onClose={() => {
             this.setState({ isRequestSolutionModalOpen: false });
           }}
-          onSubmit={this.onSolutionRequest}
+          onSubmit={(type) => {
+            this.props.history.push(
+              Config.ROUTE_BUILDER_PAGE_MAZE_VISUALIZER(typy(this, "props.match.params.id").safeString, type),
+            );
+          }}
         />
       </div>
     );
