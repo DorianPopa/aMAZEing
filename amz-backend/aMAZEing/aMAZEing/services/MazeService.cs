@@ -195,7 +195,7 @@ namespace aMAZEing.services
             }
             else
             {
-                userMaze = UserMaze.Create(user, maze, "LOCKED", true, 0, String.Empty);
+                userMaze = UserMaze.Create(user, maze, "LOCKED", true, 0, String.Empty.CompressString());
                 _userMazeRepository.Create(userMaze);
             }
 
