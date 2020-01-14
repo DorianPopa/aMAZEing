@@ -31,10 +31,14 @@ class Leaderboards extends PureComponent {
 
     console.log(status, result);
 
-    if (!this.isMounted) return;
+    this.setState({ isListLoading: false });
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
+        this.setState({
+          list: result,
+        });
+
         break;
       }
       case Config.HTTP_STATUS.NOT_FOUND:
@@ -73,14 +77,14 @@ class Leaderboards extends PureComponent {
               <div className="placeLabel label">
                 <p>Place</p>
               </div>
-              <div className="iconLabel label">
-                <p>Icon</p>
-              </div>
               <div className="nameLabel label">
                 <p>Name</p>
               </div>
               <div className="playedLabel label">
-                <p>Played</p>
+                <p>Mazes Creates</p>
+              </div>
+              <div className="playedLabel label">
+                <p>Mazes Played</p>
               </div>
               <div className="scoreLabel label">
                 <p>Accuracy</p>
@@ -89,19 +93,23 @@ class Leaderboards extends PureComponent {
             {this.state.list.map((player, index) => (
               <div key={player.id} className="playerScore">
                 <div className="place cell">
-                  <p>{index + 1}</p>
-                </div>
-                <div className="box cell">
-                  <Icon icon source="check" />
+                  <div className="initial">
+                    <p>{index + 1}</p>
+                  </div>
                 </div>
                 <div className="name cell">
-                  <p>{player.name}</p>
+                  <p>
+                    <b>@{player.username}</b>
+                  </p>
                 </div>
                 <div className="played cell">
-                  <p>2</p>
+                  <p>{player.ownMazesCount}</p>
+                </div>
+                <div className="played cell">
+                  <p>{player.ownMazesPlayersCount}</p>
                 </div>
                 <div className="score cell">
-                  <p>{player.score}</p>
+                  <p>{player.accuracy}%</p>
                 </div>
               </div>
             ))}

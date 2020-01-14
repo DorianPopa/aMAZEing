@@ -77,22 +77,36 @@
           justify-content: center;
         }
         & > .place {
-        }
-        & > .box {
-          & > .Icon {
-            & > i {
-              color: $colorPrimary;
+          & > .initial {
+            height: 40px;
+            width: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            border: 1px solid #eeeeee;
+
+            & > p {
+              font-size: 10pt;
+              font-weight: 600;
+              font-family: $fontSecondary;
+              color: $colorSecondary;
             }
           }
         }
 
         & > .name {
+          color: $colorPrimary;
         }
 
         & > .played {
         }
 
         & > .score {
+          font-size: 12pt;
+          font-weight: 600;
+          color: $colorSecondary;
         }
       }
     }

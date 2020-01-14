@@ -101,7 +101,7 @@ class Config {
 
     MAZE_SUBMIT_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/submit`,
 
-    LEADERBOARDS: () => `${Config.API_ROOT}/leaderboards/`,
+    LEADERBOARD: () => `${Config.API_ROOT}/leaderboard/`,
   };
 
   static SOLUTION_ALGORIGHM = {

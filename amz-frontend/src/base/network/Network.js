@@ -4,7 +4,7 @@ import { Store } from "../index";
 
 class Network {
   static fetchLeaderboards(user) {
-    const API = new URL(Config.API.LEADERBOARDS());
+    const API = new URL(Config.API.LEADERBOARD());
 
     return fetch(API, {
       headers: new Headers({
