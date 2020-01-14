@@ -17,14 +17,17 @@ namespace aMAZEing.DTOs
 
         public int OwnMazesPlayersCount { get; private set; }
 
-        public UserDTO(Guid id, string username, int accuracy, List<MazeDTO> ownMazes, int ownMazesCount, int ownMazesPlayersCount)
+        public int SolvedMazesCount { get; private set; }
+
+        public UserDTO(Guid id, string username, int accuracy, List<MazeDTO> ownMazes, int ownMazesCount, int ownMazesPlayersCount, int solvedMazesCount)
         {
             Id = id;
             Username = username;
             Accuracy = accuracy;
             //OwnMazes = ownMazes;
             OwnMazesCount = ownMazesCount;
-            OwnMazesPlayersCount = ownMazesPlayersCount;
+            OwnMazesPlayersCount = ownMazesPlayersCount; 
+            SolvedMazesCount = solvedMazesCount;
         }
 
         public static UserBuilder Builder()
@@ -45,6 +48,8 @@ namespace aMAZEing.DTOs
             public int BuilderOwnMazesCount { get; private set; }
 
             public int BuilderOwnMazesPlayersCount { get; private set; }
+
+            public int BuilderSolvedMazesCount { get; private set; }
 
             public UserBuilder()
             {
@@ -80,9 +85,15 @@ namespace aMAZEing.DTOs
                 return this;
             }
 
+            public UserBuilder SolvedMazesCount(int solvedMazesCount)
+            {
+                BuilderSolvedMazesCount = solvedMazesCount;
+                return this;
+            }
+
             public UserDTO Build()
             {
-                return new UserDTO(BuilderId, BuilderUsername, BuilderAccuracy, BuilderOwnMazes, BuilderOwnMazesCount, BuilderOwnMazesPlayersCount);
+                return new UserDTO(BuilderId, BuilderUsername, BuilderAccuracy, BuilderOwnMazes, BuilderOwnMazesCount, BuilderOwnMazesPlayersCount, BuilderSolvedMazesCount);
             }
         }
     }

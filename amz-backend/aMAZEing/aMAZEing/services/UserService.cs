@@ -118,6 +118,7 @@ namespace aMAZEing.services
                 .Username(user.Username)
                 .Accuracy(accuracy)
                 .OwnMazes(ownMazes)
+                .SolvedMazesCount(solvedMazes.Count)
                 .Build();
         }
 

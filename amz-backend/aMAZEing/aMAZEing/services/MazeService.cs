@@ -122,7 +122,7 @@ namespace aMAZEing.services
             if (um == null)
                 throw new ApiException(404, "User solution not found");
 
-            string userSolution = um.UserSolution;
+            string userSolution = um.UserSolution.DecompressString();
             Maze maze = _mazeRepository.FindById(mazeId);
             MazeSolution sol = new MazeSolution(userSolution, maze.Width, '4');
             Score userAccuracy = new Score(um.Accuracy.GetValueOrDefault());

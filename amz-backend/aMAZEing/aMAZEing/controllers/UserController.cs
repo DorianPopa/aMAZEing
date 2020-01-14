@@ -141,7 +141,7 @@ namespace aMAZEing.controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("{userId}/build/visualize/{algorithm}")]
         public ActionResult<MazeVisualizerDTO> VisualizeMazeSolution(Guid userId, string algorithm, [FromBody] MazeFE maze)
         {
