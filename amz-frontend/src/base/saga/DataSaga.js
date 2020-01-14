@@ -77,6 +77,7 @@ function* sagaFetchMazes({ payload }) {
         if (typy(payload, "onSuccess").isFunction) yield payload.onSuccess();
         break;
       }
+      case Config.HTTP_STATUS.NOT_FOUND:
       case Config.HTTP_STATUS.BAD_REQUEST: {
         if (typy(payload, "onError").isFunction) yield payload.onError();
         break;
@@ -112,6 +113,7 @@ function* sagaFetchMazesSelf({ payload }) {
         if (typy(payload, "onSuccess").isFunction) yield payload.onSuccess();
         break;
       }
+      case Config.HTTP_STATUS.NOT_FOUND:
       case Config.HTTP_STATUS.BAD_REQUEST: {
         if (typy(payload, "onError").isFunction) yield payload.onError();
         break;

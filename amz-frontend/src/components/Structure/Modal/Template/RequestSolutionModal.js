@@ -10,7 +10,7 @@ const RequestSolutionModal = (props) => {
     <Modal className="RequestSolutionModal" title="Request Official Solution" isOpen={isOpen} onClose={onClose}>
       <p id="transition-modal-description">
         {isSelf
-          ? "Want to see the official solution for your maze? Pick an algorithm from below."
+          ? "Want to see the official solution for this maze? Pick an algorithm from below."
           : "Want see the official solution? If you haven't already submited your own, requesting the solution will automatically set your score to 0 for this maze. If you wish to continue, pick an algorithm from below."}
       </p>
       <div className="buttons">

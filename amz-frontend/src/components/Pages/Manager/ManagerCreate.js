@@ -197,6 +197,7 @@ class ManagerCreate extends PureComponent {
         }, 1500);
 
         break;
+      case Config.HTTP_STATUS.NOT_FOUND:
       case Config.HTTP_STATUS.BAD_REQUEST:
         this.props.alert.show(typy(result.message).safeString, { type: "error", timeout: 5000 });
         break;

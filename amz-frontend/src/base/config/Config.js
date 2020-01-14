@@ -27,9 +27,13 @@ class Config {
 
   static ROUTE_PAGE_MAZE_MANAGER_VIEW = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/view`;
 
+  static ROUTE_PAGE_MAZE_VISUALIZER = `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/:id/visualize`;
+
   static ROUTE_BUILDER_PAGE_MAZE_MANAGER_SOLVE = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/solve`;
 
   static ROUTE_BUILDER_PAGE_MAZE_MANAGER_VIEW = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/view`;
+
+  static ROUTE_BUILDER_PAGE_MAZE_VISUALIZER = (id) => `${Config.ROUTE_PAGE_MAZE_VIEWER_CLEAN}manager/${id}/visualize`;
 
   // ----------- REDUX ACTIONS -------------- //
 
@@ -96,6 +100,8 @@ class Config {
     MAZE_PLAIN_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/solution`,
 
     MAZE_SUBMIT_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/submit`,
+
+    LEADERBOARDS: () => `${Config.API_ROOT}/leaderboards/`,
   };
 
   static SOLUTION_ALGORIGHM = {

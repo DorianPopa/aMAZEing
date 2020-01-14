@@ -31,6 +31,7 @@ class ManagerSolve extends PureComponent {
         owner: "",
       },
       solved: false,
+      score: 0,
 
       isFetchFired: false,
 
@@ -75,6 +76,64 @@ class ManagerSolve extends PureComponent {
     return m;
   };
 
+  fetchUserSolution = async () => {
+    this.setState({ isFetchFired: false });
+    return; // TODO userSolution
+    const response = await Network.fetchMazePlainSolution(
+      this.props.store.user,
+      typy(this, "props.match.params.id").safeString,
+    );
+
+    console.log(response);
+
+    const { status } = response;
+    const result = await response.json();
+
+    if (!this.isMounted) return;
+
+    switch (status) {
+      case Config.HTTP_STATUS.OK: {
+        const { name, playersCount } = result;
+        this.setState((prev) => {
+          const m = { ...prev.matrix };
+
+          result.solution.forEach((point) => {
+            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = Config.BLOCK_TYPE.SOLUTION;
+          });
+
+          return {
+            isFetchFired: false,
+            data: {
+              matrix: m,
+              title: name,
+              playersCount,
+            },
+          };
+        });
+        break;
+      }
+      case Config.HTTP_STATUS.NOT_FOUND:
+      case Config.HTTP_STATUS.BAD_REQUEST: {
+        this.setState({ restrict: true });
+        this.props.alert.show("The maze you're looking for is not available.", {
+          type: "warn",
+          timeout: 3000,
+          isClosable: false,
+        });
+        setTimeout(() => {
+          this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
+        }, 3000);
+        break;
+      }
+      case Config.HTTP_STATUS.UNAUHTORIZED: {
+        Network.EMERGENCY();
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   fetchMaze = async () => {
     this.setState({ isFetchFired: true });
     if (typy(this, "props.match.params.id").isNullOrUndefined) this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
@@ -87,7 +146,7 @@ class ManagerSolve extends PureComponent {
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        const { name, owner, ownerId, solved } = result;
+        const { accuracy, name, owner, ownerId, solved } = result;
 
         if (typy(ownerId).safeString === typy(this, "props.store.user.id")) {
           this.props.history.push(
@@ -102,10 +161,13 @@ class ManagerSolve extends PureComponent {
             m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = typy(point, "value").safeNumber;
           });
 
+          if (solved) this.fetchUserSolution();
+
           return {
             solved,
-            isFetchFired: false,
+            isFetchFired: solved,
             matrix: m,
+            score: accuracy,
             data: {
               title: name,
               owner,
@@ -328,6 +390,7 @@ class ManagerSolve extends PureComponent {
                   <h3>Stats</h3>
                 </div>
                 <p className="info">Blocks used: {this.state.solution.used}</p>
+                {this.state.solved ? <p className="info">Your accuracy: {this.state.score}</p> : null}
 
                 <div className="title">
                   <h3>Map</h3>
@@ -349,8 +412,9 @@ class ManagerSolve extends PureComponent {
                 </div>
                 <div className="bottom">
                   <p className="info">
-                    Once you visualize the algorithmic solution of this maze, your accuracy will be automatically set to
-                    0 for this game.
+                    {this.state.solved
+                      ? `You have already submitted a solution for this maze. Your accuracy was ${this.state.score}`
+                      : "Once you visualize the algorithmic solution of this maze, your accuracy will be automatically set to 0 for this game."}
                   </p>
                   <div className="buttons">
                     <Button
@@ -361,19 +425,21 @@ class ManagerSolve extends PureComponent {
                         this.setState({ isRequestSolutionModalOpen: true });
                       }}
                     />
-                    <Button
-                      type="edged"
-                      theme="solution"
-                      icon={{
-                        icon: true,
-                        source: "flash_on",
-                        family: "round",
-                      }}
-                      title="Submit your solution"
-                      onClick={() => {
-                        this.setState({ isSubmitSolutionModalOpen: true });
-                      }}
-                    />
+                    {!this.state.solved ? (
+                      <Button
+                        type="edged"
+                        theme="solution"
+                        icon={{
+                          icon: true,
+                          source: "flash_on",
+                          family: "round",
+                        }}
+                        title="Submit your solution"
+                        onClick={() => {
+                          this.setState({ isSubmitSolutionModalOpen: true });
+                        }}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -387,6 +453,7 @@ class ManagerSolve extends PureComponent {
             onSubmit={this.onSubmit}
           />
           <RequestSolutionModal
+            isSelf={this.state.solved}
             isOpen={this.state.isRequestSolutionModalOpen}
             onClose={() => {
               this.setState({ isRequestSolutionModalOpen: false });

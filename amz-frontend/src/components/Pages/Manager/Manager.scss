@@ -11,6 +11,8 @@ $sizeManagerActionsHeight: 120px;
     align-items: flex-start;
     justify-content: flex-start;
     padding-bottom: 0;
+    width: 100%;
+    max-width: $sizeCanvasMaxWidth;
     padding-top: $sizeNavHeight;
 
     & > * {

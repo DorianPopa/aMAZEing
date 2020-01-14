@@ -157,7 +157,7 @@ class Dashboard extends PureComponent {
               </div>
             ) : mPlayground.length > 0 ? (
               mPlayground.map((e, i) => (
-                <MazeCard key={e.id} id={e.id} index={i} username={e.username} title={e.title} />
+                <MazeCard key={e.id} id={e.id} index={i} solved={e.solved} username={e.username} title={e.title} />
               ))
             ) : (
               <div className="empty">

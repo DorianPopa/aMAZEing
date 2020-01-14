@@ -3,6 +3,19 @@ import Config from "../config";
 import { Store } from "../index";
 
 class Network {
+  static fetchLeaderboards(user) {
+    const API = new URL(Config.API.LEADERBOARDS());
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
+  }
+
   static fetchUserProfile(user) {
     const API = new URL(Config.API.USER_PROFILE(user.id));
 

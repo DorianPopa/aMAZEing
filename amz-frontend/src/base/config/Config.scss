@@ -128,8 +128,8 @@ $top-mobile: "all and (max-width : #{$col-sm})";
 
   & > .content {
     z-index: 1;
-    width: 100%;
-    max-width: $sizeCanvasMaxWidth;
+    width: calc(100% - 2 * #{$sizeCanvasPaddingDashboard});
+    max-width: calc(#{$sizeCanvasMaxWidth} - 2 * #{$sizeCanvasPaddingDashboard});
     margin: 0 auto;
     display: flex;
   }

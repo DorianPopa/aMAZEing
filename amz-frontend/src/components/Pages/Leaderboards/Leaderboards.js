@@ -1,76 +1,67 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { withAlert } from "react-alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import Icon from "../../Common/Icon";
 import "./Leaderboards.scss";
+import { Config, Network } from "../../../base";
 
-class Leaderboards extends Component {
-  players = [
-    {
-      name: "player1",
-      score: 120,
-    },
-    {
-      name: "player2",
-      score: 140,
-    },
-    {
-      name: "player3",
-      score: 100,
-    },
-    {
-      name: "player4",
-      score: 20,
-    },
-    {
-      name: "player5",
-      score: 130,
-    },
-    {
-      name: "player6",
-      score: 150,
-    },
-    {
-      name: "player7",
-      score: 210,
-    },
-    {
-      name: "player8",
-      score: 180,
-    },
-    {
-      name: "player9",
-      score: 50,
-    },
-    {
-      name: "player10",
-      score: 120,
-    },
-  ];
+class Leaderboards extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isListLoading: false,
+      list: [],
+    };
+  }
 
   componentDidMount() {
     document.title = this.props.title;
+    this.fetchList();
   }
 
-  sortPlayers = (players, mode) => {
-    return players.sort(mode);
-  };
+  fetchList = async () => {
+    this.setState({ isListLoading: true });
+    const response = await Network.fetchLeaderboards(this.props.store.user);
 
-  sortByName = (a, b) => {
-    return a.name > b.name ? 1 : -1;
-  };
+    const { status } = response;
+    const result = await response.json();
 
-  sortByScore = (a, b) => {
-    if (a.score === b.score) return this.sortByName(a, b);
-    return a.score < b.score ? 1 : -1;
+    console.log(status, result);
+
+    if (!this.isMounted) return;
+
+    switch (status) {
+      case Config.HTTP_STATUS.OK: {
+        break;
+      }
+      case Config.HTTP_STATUS.NOT_FOUND:
+      case Config.HTTP_STATUS.BAD_REQUEST: {
+        this.props.alert.show("We're having some issues. Please refresh the page.", {
+          type: "warn",
+          timeout: 3000,
+          isClosable: false,
+        });
+        break;
+      }
+      case Config.HTTP_STATUS.UNAUHTORIZED: {
+        Network.EMERGENCY();
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   render() {
     let i = 0;
     return (
       <div className="Leaderboards">
+        <div className="PageLoader" data-visible={this.state.isListLoading}>
+          <CircularProgress size={30} />
+        </div>
         <section className="content">
           <div className="top">
             <div className="title">
@@ -92,13 +83,13 @@ class Leaderboards extends Component {
                 <p>Played</p>
               </div>
               <div className="scoreLabel label">
-                <p>Score</p>
+                <p>Accuracy</p>
               </div>
             </div>
-            {this.sortPlayers(this.players, this.sortByScore).map((player) => (
-              <div key={++i} className="playerScore">
+            {this.state.list.map((player, index) => (
+              <div key={player.id} className="playerScore">
                 <div className="place cell">
-                  <p>{i}</p>
+                  <p>{index + 1}</p>
                 </div>
                 <div className="box cell">
                   <Icon icon source="check" />

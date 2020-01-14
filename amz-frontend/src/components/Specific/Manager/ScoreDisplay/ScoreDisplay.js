@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import typy from "typy";
 import { withAlert } from "react-alert";
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -79,6 +78,7 @@ class ScoreDisplay extends PureComponent {
 
 ScoreDisplay.propTypes = {
   isOpen: PropTypes.bool,
+  onViewAlogorithm: PropTypes.func.isRequired,
   score: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onDismiss: PropTypes.func.isRequired,
   alert: PropTypes.shape({

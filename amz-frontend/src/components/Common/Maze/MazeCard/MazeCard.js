@@ -7,7 +7,14 @@ import Edge from "../../Edge/Edge";
 import { Config } from "../../../../base";
 
 const cover = (seed) => {
-  const pattern = Trianglify({ width: 400, height: 250, cell_size: 100, seed });
+  const pattern = Trianglify({
+    width: 400,
+    height: 250,
+    cell_size: 150,
+    variance: 1,
+    seed,
+    x_colors: ["5c70d4", "1a1b2b", "292b45", "5c70d4", "ffffff", "7f00ff"],
+  });
   return pattern.png();
 };
 
@@ -39,7 +46,7 @@ const MazeCard = (props) => {
           <div className="content">
             <Button
               type="edged"
-              theme={solved ? "light" : "secondary"}
+              theme={solved ? "gray" : "secondary"}
               icon={{
                 icon: true,
                 source: "play_circle_filled",
