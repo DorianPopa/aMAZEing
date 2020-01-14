@@ -94,9 +94,9 @@ class Config {
     MAZE_CREATE: (uId) => `${Config.API_ROOT}/users/${uId}/build/save`,
 
     MAZE_PROFILE: (id) => `${Config.API_ROOT}/mazes/${id}`,
-    MAZE_SOLVE_BFS: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/bfs`,
-    MAZE_SOLVE_BIDIRECTIONAL_BFS: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/bidirectional-bfs`,
-    MAZE_SOLVE_ASTAR: (uId) => `${Config.API_ROOT}/users/${uId}//build/visualize/a-star`,
+    MAZE_SOLVE_BFS: (uId) => `${Config.API_ROOT}/users/${uId}/build/visualize/bfs`,
+    MAZE_SOLVE_BIDIRECTIONAL_BFS: (uId) => `${Config.API_ROOT}/users/${uId}/build/visualize/bidirectional-bfs`,
+    MAZE_SOLVE_ASTAR: (uId) => `${Config.API_ROOT}/users/${uId}/build/visualize/a-star`,
 
     MAZE_PLAIN_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/solution`,
     MAZE_USER_SOLUTION: (mId) => `${Config.API_ROOT}/mazes/${mId}/user-solution`,

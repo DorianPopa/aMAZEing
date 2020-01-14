@@ -31,6 +31,7 @@ class Visualizer extends PureComponent {
         title: "t",
         owner: "o",
       },
+      result: {},
     };
   }
 
@@ -54,11 +55,22 @@ class Visualizer extends PureComponent {
   }
 
   fetchMazeSolution = async () => {
+    console.log("result", this.state.result);
+
     const response = await Network.fetchMazeSolution(
       this.props.store.user,
-      typy(this, "props.match.params.id").safeString,
+      {
+        width: this.state.result.width,
+        height: this.state.result.height,
+        pointlist: this.state.result.pointlist,
+      },
       typy(this, "props.match.params.type").safeString,
     );
+
+    const { status } = response;
+    // const result = await response.json();
+
+    console.log(status, response);
 
     this.setState({ isFetchFired: false });
   };
@@ -77,7 +89,7 @@ class Visualizer extends PureComponent {
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        const { name, playersCount } = result;
+        const { name, playersCount, owner } = result;
 
         this.setState(
           (prev) => {
@@ -96,8 +108,10 @@ class Visualizer extends PureComponent {
 
             return {
               matrix: m,
+              result,
               data: {
                 title: name,
+                owner,
                 playersCount,
               },
             };
@@ -134,16 +148,7 @@ class Visualizer extends PureComponent {
   renderPlayground() {
     return [...Array(this.state.height).keys()].map((line) =>
       [...Array(this.state.width).keys()].map((column) => (
-        <Block
-          isHoverEnabled={[Config.BLOCK_TYPE.EMPTY, Config.BLOCK_TYPE.SOLUTION].includes(
-            this.state.matrix[line][column],
-          )}
-          key={`l${line}c${column}`}
-          type={this.state.matrix[line][column]}
-          onClick={() => {
-            this.onBlockPick(line, column);
-          }}
-        />
+        <Block isHoverEnabled={false} key={`l${line}c${column}`} type={this.state.matrix[line][column]} />
       )),
     );
   }
@@ -181,6 +186,8 @@ class Visualizer extends PureComponent {
   };
 
   render() {
+    const type = typy(this, "props.match.params.type").safeString;
+
     return (
       <div className="Visualizer" data-restrict={this.state.restrict}>
         <div className="PageLoader" data-visible={this.state.isFetchFired}>
@@ -195,7 +202,14 @@ class Visualizer extends PureComponent {
                 {this.state.data.title && this.state.data.owner ? (
                   <>
                     {" "}
-                    <span>{this.state.data.title}</span> by <span>@{this.state.data.owner}</span>
+                    <span>{this.state.data.title}</span> by <span>@{this.state.data.owner}</span> with{" "}
+                    <span>
+                      {type === Config.SOLUTION_ALGORIGHM.BFS
+                        ? "BFS"
+                        : type === Config.SOLUTION_ALGORIGHM.BIDIRECTIONAL_BFS
+                        ? "Bidirectional BFS"
+                        : "A*"}
+                    </span>
                   </>
                 ) : null}
               </h1>
@@ -205,6 +219,8 @@ class Visualizer extends PureComponent {
                 <div
                   className="background"
                   style={{
+                    width: this.state.piece * this.state.width,
+                    height: this.state.piece * this.state.height,
                     gridTemplateColumns: `repeat(${this.state.width},1fr)`,
                     gridTemplateRows: `repeat(${this.state.height},1fr)`,
                   }}

@@ -94,6 +94,7 @@ class Network {
         "content-type": "application/json",
         Bearer: user.token,
       }),
+      body: JSON.stringify(maze),
       method: "POST",
       contentType: "application/json",
     });
@@ -106,7 +107,6 @@ class Network {
       headers: new Headers({
         "content-type": "application/json",
         Bearer: user.token,
-        // Authorization: `Bearer ${user.token}`,
       }),
       method: "GET",
       contentType: "application/json",
@@ -120,7 +120,6 @@ class Network {
       headers: new Headers({
         "content-type": "application/json",
         Bearer: user.token,
-        Authorization: `Bearer ${user.token}`,
       }),
       method: "POST",
       contentType: "application/json",
@@ -135,7 +134,6 @@ class Network {
       headers: new Headers({
         "content-type": "application/json",
         Bearer: user.token,
-        Authorization: `Bearer ${user.token}`,
       }),
       method: "POST",
       contentType: "application/json",

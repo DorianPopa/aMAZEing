@@ -78,7 +78,9 @@ class ScoreDisplay extends PureComponent {
                 source: "flash_on",
               }}
               title="View algorithmic solution"
-              onClick={onViewAlogorithm}
+              onClick={() => {
+                this.setState({ isRequestSolutionModalOpen: true });
+              }}
             />
           </div>
         </div>
