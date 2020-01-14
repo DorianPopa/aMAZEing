@@ -1,151 +1,145 @@
 @import "../../../base/config/Config.scss";
 
-.Dashboard {
+$sizeManagerPanelWidth: 340px;
+$sizeManagerActionsHeight: 120px;
+
+.Visualizer {
   @include Page;
-
-  & > header {
-    width: 100%;
-    position: relative;
+  & > .content {
+    height: 100%;
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    @include Container;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0;
+    width: 100%;
+    max-width: $sizeCanvasMaxWidth;
+    padding-top: $sizeNavHeight;
 
-    & > .content {
+    & > * {
+      height: calc(100vh - #{$sizeNavHeight}) !important;
+    }
+
+    & > .playground {
+      flex: 1;
+      display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: calc(#{$sizeNavHeight} + 45px) $sizeCanvasPaddingDashboard $sizeCanvasPaddingDashboard
-        $sizeCanvasPaddingDashboard;
-
-      & > .illustration {
-        margin-top: 100px;
-        position: absolute;
-        right: -$sizeCanvasPaddingDashboard;
-        height: 180px;
-        object-fit: contain;
-      }
+      justify-content: flex-start;
+      overflow: hidden;
+      padding-right: 20px;
 
       & > .title {
-        margin-bottom: 45px;
+        padding: 20px 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
         & > h1 {
-          font-size: 26pt;
-          color: $colorDark;
-          font-weight: 600;
+          font-weight: 500;
+          font-size: 18pt;
+          color: $colorSecondary;
           & > span {
             color: $colorPrimary;
           }
         }
       }
+      & > .board {
+        height: 580px;
+        width: 100%;
+        min-height: 0;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-      &.stats {
-        & > .cards {
+        & > .container {
+          overflow: hidden;
+          max-width: 100%;
+          height: 100%;
           width: 100%;
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr;
-          grid-gap: 20px;
-          padding-bottom: 40px;
-          border-bottom: 1px solid #eee;
+          position: relative;
+          display: flex;
+          justify-content: center;
 
-          .statCardButton {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 6px 10px;
-            border-radius: 2px;
-            background: rgba(#fff, 0.05);
-            transition: background 200ms;
-            cursor: pointer;
-            user-select: none;
-            &:hover,
-            &:active {
-              background: rgba(#fff, 0.1);
-              transition: background 200ms;
+          & > .background {
+            height: calc(100% - 2px);
+            width: calc(100% - 2px);
+
+            display: grid;
+            position: absolute;
+            background: #eeeeee;
+
+            border: 1px solid #eeeeee;
+
+            z-index: 1;
+            left: 0;
+            top: 0;
+            & > * {
+              grid-column: span 1;
+              grid-row: span 1;
+              background: $colorBackgroundCanvas;
             }
 
-            & > .title {
-              font-size: 10pt;
-              font-weight: 500;
-              color: #ffffff;
-              margin: 0 8px 0 0;
-              user-select: none;
-            }
-            & > .icon {
-              & > i {
-                width: 18px;
-                color: #ffffff;
-                font-size: 14pt;
-                transition: color 200ms;
-              }
-              margin-right: 6px;
+            &:after {
+              content: "";
+              position: absolute;
+              left: 0;
+              top: 0;
+              height: 100%;
+              width: 100%;
+              box-shadow: inset 0 0 15px rgba($colorSecondary, 0.2);
+              pointer-events: none;
+              z-index: 2;
             }
           }
-
-          .statCardPlayers {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 6px 0;
-            & > .title {
-              font-size: 11pt;
-              font-weight: 600;
-              font-family: $fontSecondary;
-              color: $colorPrimary;
-              margin: 0;
-            }
+          & > .canvas {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            position: relative;
+            z-index: 2;
           }
-        }
-      }
-    }
-
-    & > .underlay {
-      position: absolute;
-    }
-  }
-
-  & > .content {
-    padding-top: 0;
-    & > .top {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      margin-bottom: 30px;
-      & > .title {
-        flex: 1;
-        & > h2 {
-          font-size: 18pt;
-          color: $colorDark;
-          font-weight: 600;
         }
       }
       & > .actions {
-        margin-left: 0;
+        position: relative;
+        width: 100%;
+        height: $sizeManagerActionsHeight;
+
         display: flex;
         align-items: center;
         justify-content: flex-start;
-      }
-    }
 
-    &.self,
-    &.playground {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 40px;
+        &:after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100vw;
+          height: 1px;
+          background-color: $colorBorder;
+        }
 
-      & > .grid {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-gap: 15px;
-
-        & > .loading,
-        & > .empty {
-          grid-column: span 2;
-          padding: 0;
-          p {
-            margin: 0;
+        & > .title {
+          padding: 20px 0;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          & > h3 {
+            font-weight: 500;
+            font-size: 18pt;
+            color: $colorSecondary;
           }
-          div[role="progressbar"] {
-            color: $colorDark;
+        }
+
+        & > .buttons {
+          flex: 1;
+
+          & > .Button {
+            & > .content > .title {
+              min-width: 100px;
+            }
           }
         }
       }

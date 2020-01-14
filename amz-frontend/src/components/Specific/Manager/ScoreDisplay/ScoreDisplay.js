@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import typy from "typy";
 import { withAlert } from "react-alert";
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -8,8 +9,18 @@ import { connect } from "react-redux";
 import "./ScoreDisplay.scss";
 import Emoji from "../../../Common/Emoji/Emoji";
 import Button from "../../../Common/Button";
+import { RequestSolutionModal } from "../../../Structure/Modal/Template";
+import { Config } from "../../../../base";
 
 class ScoreDisplay extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isRequestSolutionModalOpen: false,
+    };
+  }
+
   get isMounted() {
     return this._isMounted;
   }
@@ -27,7 +38,7 @@ class ScoreDisplay extends PureComponent {
   }
 
   render() {
-    const { isOpen, score, onDismiss, onViewAlogorithm } = this.props;
+    const { id, isOpen, score, onDismiss, onViewAlogorithm } = this.props;
 
     return (
       <div className="ScoreDisplay" data-visible={isOpen}>
@@ -71,6 +82,17 @@ class ScoreDisplay extends PureComponent {
             />
           </div>
         </div>
+
+        <RequestSolutionModal
+          isSelf
+          isOpen={this.state.isRequestSolutionModalOpen}
+          onClose={() => {
+            this.setState({ isRequestSolutionModalOpen: false });
+          }}
+          onSubmit={(type) => {
+            this.props.history.push(Config.ROUTE_BUILDER_PAGE_MAZE_VISUALIZER(id, type));
+          }}
+        />
       </div>
     );
   }
@@ -81,6 +103,9 @@ ScoreDisplay.propTypes = {
   onViewAlogorithm: PropTypes.func.isRequired,
   score: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onDismiss: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
   alert: PropTypes.shape({
     show: PropTypes.func,
     removeAll: PropTypes.func,

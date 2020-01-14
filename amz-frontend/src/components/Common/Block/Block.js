@@ -22,7 +22,7 @@ const Block = ({ type, isHoverEnabled, onClick, rank }) => {
         <path className="triangle-bottom" d="M 50 50 25 25 0 50" />
         <path className="overlay" d="M 0 0 50 0 50 50 0 50" />
         {type === Config.BLOCK_TYPE.SELF ? (
-          <text x="15" y="31" fill="white" fontSize={30}>
+          <text x="2" y="2" fill="white" fontSize={30}>
             ✪
           </text>
         ) : null}

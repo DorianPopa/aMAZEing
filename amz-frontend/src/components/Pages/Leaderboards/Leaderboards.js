@@ -82,7 +82,7 @@ class Leaderboards extends PureComponent {
                 <p>Mazes Creates</p>
               </div>
               <div className="playedLabel label">
-                <p>Mazes Played</p>
+                <p>Superstar Score</p>
               </div>
               <div className="scoreLabel label">
                 <p>Accuracy</p>

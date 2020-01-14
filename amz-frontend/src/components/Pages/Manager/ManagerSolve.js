@@ -352,14 +352,13 @@ class ManagerSolve extends PureComponent {
     return (
       <>
         <ScoreDisplay
+          id={typy(this, "props.match.params.id").safeString}
           isOpen={this.state.isAccuracyDisplayOpen}
           score={this.state.score}
           onDismiss={() => {
             this.props.history.replace(Config.ROUTE_PAGE_DASHBOARD);
           }}
-          onViewAlogorithm={() => {
-            this.setState({ isAccuracyDisplayOpen: false, isAlgorithmicDisplayOpen: true });
-          }}
+          history={this.props.history}
         />
         <div className="Manager solve" data-restrict={this.state.restrict}>
           <div className="PageLoader" data-visible={this.state.isFetchFired}>
