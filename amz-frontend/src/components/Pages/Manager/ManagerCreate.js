@@ -234,9 +234,8 @@ class ManagerCreate extends PureComponent {
               <div className="title">
                 <h3>Info</h3>
               </div>
-              <div className="buttons">
-                <Button type="edged" theme="solution" title="Show solution" />
-              </div>
+
+              <div className="buttons">{/* <Button type="edged" theme="solution" title="Show solution" /> */}</div>
             </div>
           </div>
           <div className="panel">
