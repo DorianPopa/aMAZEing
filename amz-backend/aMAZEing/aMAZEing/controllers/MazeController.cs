@@ -56,18 +56,18 @@ namespace aMAZEing.controllers
         public ActionResult<List<MazeDTO>> GetMazeById(Guid id)
         {
             _logger.LogInformation("GET request for maze with Id {0}\n\n", id);
-
+            IDictionary<string, object> payload;
             try
             {
                 var accessToken = Request.Headers["Bearer"];
-                var payload = Authorize(accessToken);
+                payload = Authorize(accessToken);
             }
             catch (ApiException e)
             {
                 return Unauthorized(new UnauthorizedError(e.Message));
             }
 
-            MazeDTO retMazeDTO = _mazeService.GetMazeById(id);
+            MazeDTO retMazeDTO = _mazeService.GetMazeById(id, (string)payload["userId"]);
 
             if (retMazeDTO != null)
                 return Ok(retMazeDTO);
@@ -98,6 +98,34 @@ namespace aMAZEing.controllers
                 return Ok(solution);
 
             return NotFound(new NotFoundError("Maze with id " + id.ToString() + " not in database"));
+        }
+
+        [HttpGet]
+        [Route("{id}/user-solution")]
+        public ActionResult<Tuple<Score, MazeSolution>> GetUserSolution(Guid id)
+        {
+            _logger.LogInformation("GET request for maze user-solution with maze Id {0}\n\n", id);
+
+            IDictionary<string, object> payload;
+            try
+            {
+                var accessToken = Request.Headers["Bearer"];
+                payload = Authorize(accessToken);
+            }
+            catch (ApiException e)
+            {
+                return Unauthorized(new UnauthorizedError(e.Message));
+            }
+
+            try
+            {
+                Tuple<Score, MazeSolution> result = _mazeService.GetUserSolution(id, (string)payload["userId"]);
+                return Ok(result);
+            }
+            catch (ApiException e)
+            {
+                return NotFound(new NotFoundError(e.Message));
+            }
         }
 
         [HttpPost]

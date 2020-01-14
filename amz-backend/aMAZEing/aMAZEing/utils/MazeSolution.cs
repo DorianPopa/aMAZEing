@@ -7,13 +7,13 @@ namespace aMAZEing.utils
         public List<Point> Solution { get; set; }
         public int SolutionSize { get; set; }
 
-        public MazeSolution(string solution, int width)
+        public MazeSolution(string solution, int width, char solutionCharacter)
         {
             Solution = new List<Point>();
 
             for (int i = 0; i < solution.Length; ++i)
             {
-                if (solution[i] == '1')
+                if (solution[i] == solutionCharacter)
                 {
                     int next_i = i / width;
                     int next_j = i % width;

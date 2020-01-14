@@ -54,7 +54,7 @@ namespace aMAZEing.controllers
         public ActionResult<Jwt> Login([FromBody] User user)
         {
             _logger.LogInformation("POST request for login with Username {0}\n\n", user.Username);
-
+            
             try
             {
                 User retUser = _userService.ValidateCredentials(user);
@@ -187,8 +187,7 @@ namespace aMAZEing.controllers
                 return Unauthorized(new UnauthorizedError(e.Message));
             }
 
-            ActionResult<List<UserDTO>> leaderboard = GetAllUsers();
-            // sort from latest to oldest
+            ActionResult<List<UserDTO>> leaderboard = _userService.GetAllUsers();
             leaderboard.Value.Sort((u1, u2) => u2.Accuracy.CompareTo(u1.Accuracy));
             return leaderboard;
         }
