@@ -49,7 +49,7 @@ class Visualizer extends PureComponent {
     this.isMounted = true;
     document.title = this.props.title;
     this.configure();
-    this.fetchPlainSolution();
+    // this.fetchPlainSolution();
     this.fetchMaze();
   }
 
@@ -94,8 +94,13 @@ class Visualizer extends PureComponent {
       visited[point.value].push({ i: point.i, j: point.j });
     });
 
+    // result.solution.forEach((point) => {
+    //   solution[point.value] = { i: point.i, j: point.j };
+    // });
+
     result.solution.forEach((point) => {
-      solution[point.value] = { i: point.i, j: point.j };
+      if (solution[point.value] === undefined) solution[point.value] = [];
+      solution[point.value].push({ i: point.i, j: point.j });
     });
 
     console.log(visited);
@@ -150,22 +155,32 @@ class Visualizer extends PureComponent {
                   const order = this.copyStateOrder(prev);
                   const matrix = this.copyStateMaze(prev);
 
-                  let delay = 0;
-
-                  Object.keys(visited).forEach((key) => {
-                    order[solution[key].i][solution[key].j] = {
-                      isAnimated: true,
-                      delay: `${delay}ms`,
-                    };
-                    matrix[solution[key].i][solution[key].j] = Config.BLOCK_TYPE.SOLUTION;
-
-                    delay += 400;
+                  result.solution.forEach((e) => {
+                    matrix[e.i][e.j] = Config.BLOCK_TYPE.SOLUTION;
                   });
+
+                  // Object.keys(visited).forEach((key) => {
+                  //   solution[key].forEach((solutionKey) => {
+                  //     order[solution[key][solutionKey].i][solution[key][solutionKey].j] = {
+                  //       isAnimated: true,
+                  //       delay: `${delay}ms`,
+                  //     };
+                  //     matrix[solution[key][solutionKey].i][solution[key][solutionKey].j] = Config.BLOCK_TYPE.SOLUTION;
+
+                  //     delay += 400;
+                  //   });
+                  // order[solution[key].i][solution[key].j] = {
+                  //   isAnimated: true,
+                  //   delay: `${delay}ms`,
+                  // };
+                  // matrix[solution[key].i][solution[key].j] = Config.BLOCK_TYPE.SOLUTION;
+
+                  // delay += 400;
+                  // });
 
                   return {
                     order,
                     matrix,
-                    totalDelay: delay,
                   };
                 });
               }, 1000);

@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import typy from "typy";
 import { withAlert } from "react-alert";
 import { compose } from "redux";
 import { connect } from "react-redux";
