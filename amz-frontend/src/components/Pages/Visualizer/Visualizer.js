@@ -49,7 +49,7 @@ class Visualizer extends PureComponent {
     this.isMounted = true;
     document.title = this.props.title;
     this.configure();
-    this.fetchPlainSolution();
+    // this.fetchPlainSolution();
     this.fetchMaze();
   }
 
