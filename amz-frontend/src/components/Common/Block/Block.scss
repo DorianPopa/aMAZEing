@@ -1,0 +1,67 @@
+@import "../../../base/config/Config.scss";
+.Block {
+  grid-column: span 1;
+  grid-row: span 1;
+  position: relative;
+
+  .overlay {
+    fill: rgba(0, 0, 0, 0.1);
+    opacity: 0;
+  }
+
+  &[data-hover="true"]:hover {
+    .overlay {
+      opacity: 1;
+    }
+  }
+
+  .triangle-left {
+    fill: rgba(0, 0, 0, 0);
+  }
+  .triangle-top {
+    fill: rgba(0, 0, 0, 0.1);
+  }
+  .triangle-right {
+    fill: rgba(0, 0, 0, 0.2);
+  }
+  .triangle-bottom {
+    fill: rgba(0, 0, 0, 0.3);
+  }
+
+  @mixin type($base: $colorPrimary) {
+    border: 1px solid $base;
+    .main {
+      fill: $base;
+    }
+  }
+
+  @include type($colorPrimary);
+
+  &[data-type="-1"] {
+    @include type($colorTable_Red1);
+  }
+  &[data-type="0"] {
+    border: 0.5px solid $colorBorder;
+    .main {
+      fill: #ffffff;
+    }
+    .triangle-left,
+    .triangle-bottom,
+    .triangle-right,
+    .triangle-top {
+      display: none;
+    }
+  }
+  &[data-type="1"] {
+    @include type($colorTable_Green1);
+  }
+  &[data-type="2"] {
+    @include type($colorTable_Red1);
+  }
+  &[data-type="3"] {
+    @include type($colorPrimary);
+  }
+  &[data-type="4"] {
+    @include type($colorTable_Orange1);
+  }
+}

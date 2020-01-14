@@ -1,0 +1,53 @@
+@import "../../../../base/config/Config.scss";
+
+$statCardHeight: 180px;
+
+.StatCard {
+  grid-column: span 1;
+  background-color: $colorSecondary;
+  height: $statCardHeight;
+
+  & > .content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    height: calc(100% - 2 * 20px);
+    width: calc(100% - 2 * 20px);
+
+    & > .edge {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-bottom: $statCardHeight solid $colorPrimary;
+      border-left: 30px solid transparent;
+    }
+
+    & > .title {
+      font-size: 14pt;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    & > .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      & > .value {
+        font-size: 36pt;
+        font-weight: 600;
+        color: #ffffff;
+      }
+    }
+
+    & > .bottom {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

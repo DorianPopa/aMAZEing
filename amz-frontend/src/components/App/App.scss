@@ -1,0 +1,59 @@
+@import "../../base/config/Config.scss";
+
+/**
+ * Normalizer
+ */
+
+html {
+  background: $colorBackground;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+
+  body {
+    background: $colorBackground;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    font-family: $fontPrimary;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  a {
+    -webkit-appearance: none;
+    text-decoration: none;
+
+    &:link {
+      text-decoration: none;
+    }
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  * {
+    font-family: $fontPrimary;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  i {
+    line-height: 1.4 !important;
+  }
+}

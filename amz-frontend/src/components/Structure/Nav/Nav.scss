@@ -1,0 +1,31 @@
+@import "../../../base/config/Config.scss";
+
+.Nav {
+  @include Container;
+  position: fixed;
+  z-index: $zIndexNav;
+  height: $sizeNavHeight;
+  width: 100%;
+  background-color: $colorSecondary;
+  box-shadow: none;
+
+  & > .content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 2 * 10px);
+    padding-left: 10px;
+    padding-right: 10px;
+
+    & > .logo {
+      height: $sizeNavHeight - 30px;
+      & > * {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+        margin-top: 6px;
+      }
+    }
+  }
+}

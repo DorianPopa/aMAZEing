@@ -1,0 +1,111 @@
+@import "../../../base/config/Config.scss";
+
+.Alert {
+  width: auto;
+  max-width: calc(100% - 2 * 10px);
+  min-width: 260px;
+  padding: 10px;
+  box-shadow: 0 15px 45px -12px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &[data-type="error"] {
+    background-color: rgba($colorTable_Red1, 0.9);
+    & > .left > .Icon > i,
+    & > .content,
+    & > .right > div[role="progressbar"],
+    & > .right > .button > .Icon > i {
+      color: #ffffff;
+    }
+  }
+  &[data-type="success"] {
+    background-color: rgba($colorTable_Green1, 0.9);
+    & > .left > .Icon > i,
+    & > .content,
+    & > .right > div[role="progressbar"],
+    & > .right > .button > .Icon > i {
+      color: #ffffff;
+    }
+  }
+  &[data-type="warn"] {
+    background-color: rgba($colorTable_Yellow1, 0.9);
+    & > .left > .Icon > i,
+    & > .content,
+    & > .right > div[role="progressbar"],
+    & > .right > .button > .Icon > i {
+      color: $colorDark;
+    }
+  }
+
+  & > .left {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > .Icon > i {
+      color: #ffffff;
+      font-size: 16pt;
+    }
+  }
+
+  & > .content {
+    flex: 1;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 11pt;
+    padding: 0 10px;
+  }
+
+  & > .right {
+    padding-right: 5px;
+
+    &[data-closable="false"] {
+      & > .button {
+        height: 14px;
+        width: 14px;
+        border-radius: 7px;
+        & > * {
+          display: none;
+        }
+      }
+    }
+
+    & > div[role="progressbar"] {
+      color: #ffffff;
+      height: 30px;
+      width: 30px;
+    }
+    & > .button {
+      height: 30px;
+      width: 30px;
+      border-radius: 15px;
+      background-color: rgba(255, 255, 255, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      color: #ffffff;
+      font-size: 14pt;
+      font-weight: 600;
+
+      transition: background-color 200ms;
+      cursor: pointer;
+
+      & > .Icon > i {
+        color: $colorDark;
+        font-size: 14pt;
+      }
+
+      &:hover,
+      &:active {
+        background-color: rgba(255, 255, 255, 0.5);
+        transition: background-color 200ms;
+      }
+    }
+  }
+}
