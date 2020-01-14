@@ -57,13 +57,18 @@ class Visualizer extends PureComponent {
   fetchMazeSolution = async () => {
     console.log("result", this.state.result);
 
+    const payload = {
+      name: "Not needed",
+      width: this.state.result.width,
+      height: this.state.result.height,
+      pointlist: this.state.result.state,
+    };
+
+    console.log("payload", payload);
+
     const response = await Network.fetchMazeSolution(
       this.props.store.user,
-      {
-        width: this.state.result.width,
-        height: this.state.result.height,
-        pointlist: this.state.result.pointlist,
-      },
+      payload,
       typy(this, "props.match.params.type").safeString,
     );
 

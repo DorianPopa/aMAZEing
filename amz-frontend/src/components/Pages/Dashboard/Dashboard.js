@@ -79,7 +79,7 @@ class Dashboard extends PureComponent {
                 }`}
               >
                 <div className="statCardPlayers">
-                  <p className="title">played by {this.props.store.profile.mazePlayers} users</p>
+                  <p className="title">played {this.props.store.profile.mazePlayers} times</p>
                 </div>
               </StatCard>
             </div>

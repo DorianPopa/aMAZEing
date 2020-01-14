@@ -79,10 +79,10 @@ class Leaderboards extends PureComponent {
                 <p>Name</p>
               </div>
               <div className="playedLabel label">
-                <p>Mazes Creates</p>
+                <p>Mazes Created</p>
               </div>
               <div className="playedLabel label">
-                <p>Superstar Score</p>
+                <p>Mazes Solved</p>
               </div>
               <div className="scoreLabel label">
                 <p>Accuracy</p>
@@ -104,7 +104,7 @@ class Leaderboards extends PureComponent {
                   <p>{player.ownMazesCount}</p>
                 </div>
                 <div className="played cell">
-                  <p>{player.ownMazesPlayersCount}</p>
+                  <p>{player.solvedMazesCount}</p>
                 </div>
                 <div className="score cell">
                   <p>{player.accuracy}%</p>
