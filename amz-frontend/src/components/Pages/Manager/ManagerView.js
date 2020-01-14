@@ -61,63 +61,6 @@ class ManagerView extends PureComponent {
     this.isMounted = false;
   }
 
-  fetchPlainSolution = async () => {
-    this.setState({ isPlainSolutionFired: true });
-    const response = await Network.fetchMazePlainSolution(
-      this.props.store.user,
-      typy(this, "props.match.params.id").safeString,
-    );
-
-    console.log(response);
-
-    const { status } = response;
-    const result = await response.json();
-
-    if (!this.isMounted) return;
-
-    switch (status) {
-      case Config.HTTP_STATUS.OK: {
-        const { name, playersCount } = result;
-        this.setState((prev) => {
-          const m = { ...prev.matrix };
-
-          result.solution.forEach((point) => {
-            m[typy(point, "i").safeNumber][typy(point, "j").safeNumber] = Config.BLOCK_TYPE.SOLUTION;
-          });
-
-          return {
-            isFetchFired: false,
-            data: {
-              matrix: m,
-              title: name,
-              playersCount,
-            },
-          };
-        });
-        break;
-      }
-      case Config.HTTP_STATUS.NOT_FOUND:
-      case Config.HTTP_STATUS.BAD_REQUEST: {
-        this.setState({ restrict: true });
-        this.props.alert.show("The maze you're looking for is not available.", {
-          type: "warn",
-          timeout: 3000,
-          isClosable: false,
-        });
-        setTimeout(() => {
-          this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);
-        }, 3000);
-        break;
-      }
-      case Config.HTTP_STATUS.UNAUHTORIZED: {
-        Network.EMERGENCY();
-        break;
-      }
-      default:
-        break;
-    }
-  };
-
   fetchMaze = async () => {
     this.setState({ isFetchFired: true });
     if (typy(this, "props.match.params.id").isNullOrUndefined) this.props.history.push(Config.ROUTE_PAGE_DASHBOARD);

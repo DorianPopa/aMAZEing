@@ -38,7 +38,7 @@ class ScoreDisplay extends PureComponent {
   }
 
   render() {
-    const { id, isOpen, score, onDismiss, onViewAlogorithm } = this.props;
+    const { id, isOpen, score, onDismiss } = this.props;
 
     return (
       <div className="ScoreDisplay" data-visible={isOpen}>
@@ -102,7 +102,6 @@ class ScoreDisplay extends PureComponent {
 
 ScoreDisplay.propTypes = {
   isOpen: PropTypes.bool,
-  onViewAlogorithm: PropTypes.func.isRequired,
   score: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onDismiss: PropTypes.func.isRequired,
   history: PropTypes.shape({

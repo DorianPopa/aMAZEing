@@ -129,6 +129,7 @@ class Config {
     SIMPLE: 3,
     SOLUTION: 4,
     SELF: 5,
+    VISITED: 6,
   };
 }
 

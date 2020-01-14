@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import typy from "typy";
 import { withAlert } from "react-alert";
-
+import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -61,15 +61,15 @@ class Dashboard extends PureComponent {
             <div className="cards">
               <StatCard
                 title="Your Accuracy"
-                value={`${this.props.store.profile.score} %`}
+                value={`${this.props.store.profile.score}%`}
                 onClick={() => {
                   console.log("Go to Leaderboards");
                 }}
               >
-                <div className="statCardButton">
+                <Link to={Config.ROUTE_PAGE_LEADERBOARDS} className="statCardButton">
                   <p className="title">See Leaderboards</p>
                   <Icon icon source="arrow_forward" family="round" />
-                </div>
+                </Link>
               </StatCard>
 
               <StatCard
