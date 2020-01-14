@@ -49,7 +49,6 @@ class Visualizer extends PureComponent {
     this.isMounted = true;
     document.title = this.props.title;
     this.configure();
-    // this.fetchPlainSolution();
     this.fetchMaze();
   }
 
@@ -241,7 +240,11 @@ class Visualizer extends PureComponent {
 
     switch (status) {
       case Config.HTTP_STATUS.OK: {
-        const { name, playersCount, owner } = result;
+        const { name, playersCount, owner, ownerId } = result;
+
+        if (ownerId !== this.props.store.user.id) {
+          this.fetchPlainSolution();
+        }
 
         this.setState(
           (prev) => {
