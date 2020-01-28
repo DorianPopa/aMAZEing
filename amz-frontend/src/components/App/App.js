@@ -14,6 +14,8 @@ function App(props) {
   return <div className="App">{isAuthenthicated ? <NavigatorUser /> : <NavigatorVisitor />}</div>;
 }
 
+console.log = () => {};
+
 App.propTypes = {
   store: PropTypes.shape({
     user: PropTypes.shape({

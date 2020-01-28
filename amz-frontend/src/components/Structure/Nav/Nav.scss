@@ -11,12 +11,11 @@
 
   & > .content {
     height: 100%;
+    max-width: calc(#{$sizeCanvasMaxWidth});
     display: flex;
     align-items: center;
     justify-content: center;
     width: calc(100% - 2 * 10px);
-    padding-left: 10px;
-    padding-right: 10px;
 
     & > .logo {
       height: $sizeNavHeight - 30px;

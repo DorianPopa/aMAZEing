@@ -4,6 +4,35 @@
   grid-row: span 1;
   position: relative;
 
+  @keyframes pop {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  &[data-animated="true"] {
+    animation-name: pop;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    transform-origin: center center;
+
+    .overlay {
+      opacity: 0;
+      fill: rgba(0, 0, 0, 0.3) !important;
+      // animation-name: pop;
+      // animation-duration: 1s;
+      // animation-fill-mode: forwards;
+      // animation-timing-function: ease-in-out;
+      // transform-origin: center center;
+    }
+  }
+
   .overlay {
     fill: rgba(0, 0, 0, 0.1);
     opacity: 0;
@@ -63,5 +92,31 @@
   }
   &[data-type="4"] {
     @include type($colorTable_Orange1);
+  }
+  &[data-type="5"] {
+    @include type($colorTable_Orange1);
+    &:after {
+      position: absolute;
+      content: "Y";
+      color: $colorDark;
+      font-size: 12pt;
+      z-index: 3;
+      opacity: 1;
+      fill: transparent;
+    }
+
+    .overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      opacity: 1;
+      position: relative;
+    }
+  }
+
+  &[data-type="6"] {
+    opacity: 0.4;
+    @include type(#aaaaaa);
   }
 }

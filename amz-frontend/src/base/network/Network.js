@@ -4,7 +4,7 @@ import { Store } from "../index";
 
 class Network {
   static fetchLeaderboards(user) {
-    const API = new URL(Config.API.LEADERBOARDS());
+    const API = new URL(Config.API.LEADERBOARD());
 
     return fetch(API, {
       headers: new Headers({
@@ -55,6 +55,19 @@ class Network {
     });
   }
 
+  static fetchMazeUserSolution(user, mazeId) {
+    const API = new URL(Config.API.MAZE_USER_SOLUTION(mazeId));
+
+    return fetch(API, {
+      headers: new Headers({
+        "content-type": "application/json",
+        Bearer: user.token,
+      }),
+      method: "GET",
+      contentType: "application/json",
+    });
+  }
+
   static fetchMazeSolution(user, maze, type) {
     let API = null;
     switch (type) {
@@ -81,6 +94,7 @@ class Network {
         "content-type": "application/json",
         Bearer: user.token,
       }),
+      body: JSON.stringify(maze),
       method: "POST",
       contentType: "application/json",
     });
@@ -93,7 +107,6 @@ class Network {
       headers: new Headers({
         "content-type": "application/json",
         Bearer: user.token,
-        // Authorization: `Bearer ${user.token}`,
       }),
       method: "GET",
       contentType: "application/json",
@@ -107,7 +120,6 @@ class Network {
       headers: new Headers({
         "content-type": "application/json",
         Bearer: user.token,
-        Authorization: `Bearer ${user.token}`,
       }),
       method: "POST",
       contentType: "application/json",
@@ -122,7 +134,6 @@ class Network {
       headers: new Headers({
         "content-type": "application/json",
         Bearer: user.token,
-        Authorization: `Bearer ${user.token}`,
       }),
       method: "POST",
       contentType: "application/json",

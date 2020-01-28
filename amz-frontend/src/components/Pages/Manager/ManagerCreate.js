@@ -134,6 +134,7 @@ class ManagerCreate extends PureComponent {
   }
 
   onSave = async () => {
+    if (this.state.isSavingFired) return;
     if (typy(this.state, "mazeName").isEmptyString) {
       this.props.alert.show("Please add a valid Maze name.", { type: "error" });
       this.setState({ mazeNameWarn: true });
@@ -233,9 +234,8 @@ class ManagerCreate extends PureComponent {
               <div className="title">
                 <h3>Info</h3>
               </div>
-              <div className="buttons">
-                <Button type="edged" theme="solution" title="Show solution" />
-              </div>
+
+              <div className="buttons">{/* <Button type="edged" theme="solution" title="Show solution" /> */}</div>
             </div>
           </div>
           <div className="panel">

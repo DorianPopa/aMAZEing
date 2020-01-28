@@ -66,11 +66,13 @@ MazeCard.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   index: PropTypes.number,
+  solved: PropTypes.bool,
   username: PropTypes.string,
 };
 
 MazeCard.defaultProps = {
   index: 0,
+  solved: false,
   username: "Tanase",
 };
 

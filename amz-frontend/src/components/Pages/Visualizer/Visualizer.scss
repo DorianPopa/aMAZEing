@@ -1,0 +1,147 @@
+@import "../../../base/config/Config.scss";
+
+$sizeManagerPanelWidth: 340px;
+$sizeManagerActionsHeight: 120px;
+
+.Visualizer {
+  @include Page;
+  & > .content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0;
+    width: 100%;
+    max-width: $sizeCanvasMaxWidth;
+    padding-top: $sizeNavHeight;
+
+    & > * {
+      height: calc(100vh - #{$sizeNavHeight}) !important;
+    }
+
+    & > .playground {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      overflow: hidden;
+      padding-right: 20px;
+
+      & > .title {
+        padding: 20px 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        & > h1 {
+          font-weight: 500;
+          font-size: 18pt;
+          color: $colorSecondary;
+          & > span {
+            color: $colorPrimary;
+          }
+        }
+      }
+      & > .board {
+        height: 580px;
+        width: 100%;
+        min-height: 0;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & > .container {
+          overflow: hidden;
+          max-width: 100%;
+          height: 100%;
+          width: 100%;
+          position: relative;
+          display: flex;
+          justify-content: center;
+
+          & > .background {
+            height: calc(100% - 2px);
+            width: calc(100% - 2px);
+
+            display: grid;
+            position: absolute;
+            background: #eeeeee;
+
+            border: 1px solid #eeeeee;
+
+            z-index: 1;
+
+            & > * {
+              grid-column: span 1;
+              grid-row: span 1;
+              background: $colorBackgroundCanvas;
+            }
+
+            &:after {
+              content: "";
+              position: absolute;
+              left: 0;
+              top: 0;
+              height: 100%;
+              width: 100%;
+              box-shadow: inset 0 0 15px rgba($colorSecondary, 0.2);
+              pointer-events: none;
+              z-index: 2;
+            }
+          }
+          & > .canvas {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            position: relative;
+            z-index: 2;
+          }
+        }
+      }
+      & > .actions {
+        position: relative;
+        width: 100%;
+        height: $sizeManagerActionsHeight;
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100vw;
+          height: 1px;
+          background-color: $colorBorder;
+        }
+
+        & > .title {
+          padding: 20px 0;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          & > h3 {
+            font-weight: 500;
+            font-size: 18pt;
+            color: $colorSecondary;
+          }
+        }
+
+        & > .buttons {
+          flex: 1;
+
+          & > .Button {
+            & > .content > .title {
+              min-width: 100px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
